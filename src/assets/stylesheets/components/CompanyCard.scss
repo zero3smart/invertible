@@ -1,0 +1,19 @@
+@import "../base/mixin";
+
+.fa {
+  &.fa-flag {
+    color: #639AE0;
+  }
+  &.fa-star {
+    color: #639AE0;
+  }
+  &.fa-users {
+    color: #639AE0;
+  }
+}
+
+.ui {
+  &.label {
+    background-color: $white-bg;
+  }
+}
