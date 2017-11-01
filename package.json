@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "2.5.0",
+    "react-chartjs-2": "2.0.5",
     "@amcharts/amcharts3-react": "^3.0.1",
     "amcharts3": "github:amcharts/amcharts3",
     "ammap3": "github:amcharts/ammap3",
@@ -32,7 +34,6 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-transition-group": "^15.6.2",
     "react-breadcrumbs": "^1.5.2",
-    "react-chartjs-2": "^2.6.4",
     "react-d3-map-choropleth": "0.5.1",
     "react-dom": "^15.6.1",
     "react-ladda": "^5.0.7",
