@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router'
+import { IndexLink } from 'react-router'
 
 class Sidebar extends Component {
 
@@ -23,10 +23,10 @@ class Sidebar extends Component {
         <nav className="sidebar-nav">
           <ul className="nav">
             <li className="nav-item">
-              <Link to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </Link>
+              <IndexLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </IndexLink>
             </li>
             <li className="nav-item">
-              <Link to={'/charts'} className="nav-link" activeClassName="active"><i className="icon-pie-chart"></i> Predictive CRM </Link>
+              <IndexLink to={'/charts'} className="nav-link" activeClassName="active"><i className="icon-pie-chart"></i> Predictive CRM </IndexLink>
             </li>
           </ul>
         </nav>
