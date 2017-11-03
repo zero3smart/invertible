@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
+import Breadcrumbs from 'react-breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Aside from './Aside';
 import Footer from './Footer';
 import '../assets/stylesheets/style.scss';
-
-import Breadcrumbs from 'react-breadcrumbs';
 
 class App extends Component {
   render() {
@@ -13,7 +12,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <div className="app-body">
-          <Sidebar {...this.props}/>
+          {/* <Sidebar {...this.props} /> */}
           <main className="main">
             <Breadcrumbs
               wrapperElement="ol"

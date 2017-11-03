@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { IndexLink } from 'react-router'
 
 class Sidebar extends Component {
-
   handleClick(e) {
     e.preventDefault();
     e.target.parentElement.classList.toggle('open');
@@ -18,15 +17,22 @@ class Sidebar extends Component {
 
   render() {
     return (
-
       <div className="sidebar">
         <nav className="sidebar-nav">
           <ul className="nav">
             <li className="nav-item">
-              <IndexLink to={'/dashboard'} className="nav-link" activeClassName="active"><i className="icon-speedometer"></i> Dashboard </IndexLink>
+              <IndexLink to={'/dashboard'}
+                         className="nav-link"
+                         activeClassName="active">
+                <i className="icon-speedometer"></i>Dashboard
+              </IndexLink>
             </li>
             <li className="nav-item">
-              <IndexLink to={'/charts'} className="nav-link" activeClassName="active"><i className="icon-pie-chart"></i> Predictive CRM </IndexLink>
+              <IndexLink to={'/charts'}
+                         className="nav-link"
+                         activeClassName="active">
+                <i className="icon-pie-chart"></i>Predictive CRM
+              </IndexLink>
             </li>
           </ul>
         </nav>
