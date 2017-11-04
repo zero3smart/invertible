@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { IndexLink } from 'react-router';
 
 class Header extends Component {
     sidebarToggle(e) {
@@ -23,16 +24,16 @@ class Header extends Component {
                 <a className="navbar-brand" href="#"></a>
                 <ul className="nav navbar-nav hidden-md-down">
                     <li className="nav-item px-1">
-                        <a className="nav-link" href="#">Dashboard</a>
+                        <IndexLink to="/dashboard" activeClassName="active" className="nav-link">Dashboard</IndexLink>
                     </li>
                     <li className="nav-item px-1">
-                        <a className="nav-link" href="#">Analysis</a>
+                        <IndexLink to="/analysis" activeClassName="active" className="nav-link">Analysis</IndexLink>
                     </li>
                     <li className="nav-item px-1">
-                        <a className="nav-link" href="#">Credentials</a>
+                        <IndexLink to="/credentials" activeClassName="active" className="nav-link">Credentials</IndexLink>
                     </li>
                     <li className="nav-item px-1">
-                        <a className="nav-link" href="#">SQL</a>
+                        <IndexLink to="/sql" activeClassName="active" className="nav-link">SQL</IndexLink>
                     </li>
                 </ul>
             </header>
