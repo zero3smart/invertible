@@ -14,14 +14,14 @@ class App extends Component {
         <div className="app-body">
           {/* <Sidebar {...this.props} /> */}
           <main className="main">
-            <Breadcrumbs
+            {/* <Breadcrumbs
               wrapperElement="ol"
               wrapperClass="breadcrumb"
               itemClass="breadcrumb-item"
               separator=""
               routes={this.props.routes}
               params={this.props.params}
-            />
+            /> */}
             <div className="container-fluid">
               {this.props.children}
             </div>

@@ -9,16 +9,16 @@ import rootReducer from './rootReducer';
 import routes from './routes';
 
 const store = createStore(
-  rootReducer,
-  compose(
-    applyMiddleware(thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )
+    rootReducer,
+    compose(
+        applyMiddleware(thunk),
+        window.devToolsExtension ? window.devToolsExtension() : f => f
+    )
 );
 
 render(
-  <Provider store={store}>
-    <Router history={browserHistory} routes={routes} />
-  </Provider>,document.getElementById('app')
+    <Provider store={store}>
+        <Router history={browserHistory} routes={routes} />
+    </Provider>, document.getElementById('app')
 );
 
