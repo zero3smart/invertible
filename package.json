@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chart.js": "2.5.0",
-    "react-chartjs-2": "2.0.5",
     "@amcharts/amcharts3-react": "^3.0.1",
     "amcharts3": "github:amcharts/amcharts3",
     "ammap3": "github:amcharts/ammap3",
@@ -21,6 +19,7 @@
     "bcrypt": "1.0.2",
     "bluebird": "3.5.0",
     "body-parser": "1.17.2",
+    "chart.js": "2.5.0",
     "classnames": "2.2.5",
     "d3": "^4.10.0",
     "d3-geo": "^1.6.4",
@@ -34,6 +33,7 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-transition-group": "^15.6.2",
     "react-breadcrumbs": "^1.5.2",
+    "react-chartjs-2": "2.0.5",
     "react-d3-map-choropleth": "0.5.1",
     "react-dom": "^15.6.1",
     "react-ladda": "^5.0.7",
@@ -47,7 +47,7 @@
     "redux-thunk": "2.2.0",
     "shortid": "2.2.8",
     "validator": "8.0.0",
-    "zingchart": "^2.6.1",
+    "zingchart": "^2.1.2",
     "zingchart-react": "^1.0.6"
   },
   "devDependencies": {
