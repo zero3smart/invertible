@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { IndexLink } from 'react-router';
 
 class Header extends Component {
+    constructor(props) {
+        super(props);
+        console.log(props.a);
+    }
     sidebarToggle(e) {
         e.preventDefault();
         document.body.classList.toggle('sidebar-hidden');
@@ -21,7 +25,7 @@ class Header extends Component {
         return (
             <header className="app-header navbar">
                 <button className="navbar-toggler mobile-sidebar-toggler hidden-lg-up" onClick={this.mobileSidebarToggle} type="button">&#9776;</button>
-                <a className="navbar-brand" href="#"></a>
+                <IndexLink to="/" activeClassName="active" className="navbar-brand"></IndexLink>
                 <ul className="nav navbar-nav hidden-md-down">
                     <li className="nav-item px-1">
                         <IndexLink to="/dashboard" activeClassName="active" className="nav-link">Dashboard</IndexLink>
@@ -40,5 +44,6 @@ class Header extends Component {
         )
     }
 }
+
 
 export default Header;

@@ -67,6 +67,9 @@ class Dashboard extends Component {
   render() {
     return (
         <div className="animated fadeIn">
+            <iframe src="https://ssastbury.shinyapps.io/invertible-shiny-dashboard/"
+                    style={{'border': 'none', 'width': '100%', 'height': '700px'}}>
+            </iframe>
             <div className="card-columns row">
                 <div className="card col-md-6">
                     <div className="card-header">
