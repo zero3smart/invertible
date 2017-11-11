@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Carousel } from 'react-responsive-carousel';
-import Comment from './Comment';
+import CommentBox from './CommentBox';
 
 class ChartDetail extends Component {
     constructor(props) {
@@ -8,15 +8,6 @@ class ChartDetail extends Component {
     }
 
     render() {
-        const comment = {
-            date: new Date(),
-            text: 'I hope you enjoy learning React!',
-            author: {
-                name: 'Hello Kitty',
-                avatarUrl: 'http://placekitten.com/g/64/64'
-            }
-        };
-
         return (
             <div className="row">
                 <div className="col-md-8">
@@ -48,10 +39,7 @@ class ChartDetail extends Component {
                     </Carousel>
                 </div>
                 <div className="col-md-4">
-                    <Comment
-                        date={comment.date}
-                        text={comment.text}
-                        author={comment.author} />
+                    <CommentBox />
                 </div>
             </div>
         );

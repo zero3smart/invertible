@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-function formatDate(date) {
-    return date.toLocaleDateString();
-}
+import Remarkable from 'remarkable';
 
 const Avatar = (props) => {
     return (
@@ -26,15 +23,27 @@ const UserInfo= (props) => {
 }
 
 class Comment extends Component {
+    formatDate(date) {
+        return date.toLocaleDateString();
+    }
+
+    rawMarkup() {
+        var md = new Remarkable();
+        var rawMarkup = md.render(this.props.children.toString());
+        return { __html: rawMarkup };
+    }
+
+
+
     render() {
         return (
             <div className="Comment">
                 <UserInfo user={this.props.author} />
                 <div className="Comment-text">
-                    {this.props.text}
+                    <span dangerouslySetInnerHTML={this.rawMarkup()} />
                 </div>
                 <div className="Comment-date">
-                    {formatDate(this.props.date)}
+                    {this.formatDate(this.props.date)}
                 </div>
             </div>
         );
@@ -42,7 +51,7 @@ class Comment extends Component {
 }
 
 Comment.propTypes = {
-    text: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
     author: PropTypes.shape({
         avatarUrl: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired
