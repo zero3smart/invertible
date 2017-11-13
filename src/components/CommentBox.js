@@ -78,9 +78,9 @@ class CommentBox extends Component {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                {/* <CommentList data={this.state.dataset} />
-                <CommentForm onCommentSubmit={this.handleCommentSubmit} /> */}
-                <div className="" ref={ el => this.commentsContainer = el } />
+                <CommentList data={this.state.dataset} />
+                <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+                {/* <div className="" ref={ el => this.commentsContainer = el } /> */}
             </div>
         );
     }
