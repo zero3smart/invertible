@@ -26,7 +26,7 @@ class Analysis extends Component {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="analysis-container">
                 <div className="offset-md-8 col-md-4">
                     <form className="navbar-form" role="search">
                         <div className="input-group add-on">

@@ -1,3 +1,5 @@
+@import "bootstrap-variables";
+@import "bootstrap_src/variables";
 // Core Admin Variables
 
 $enable-sidebar-nav-rounded: false;
@@ -178,3 +180,8 @@ $footer-borders: (
 
 $card-icon-bg:                      transparent;
 $card-icon-color:                   $body-color;
+
+
+//Analysis
+
+$search-container-bg: #fff;

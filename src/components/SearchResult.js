@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+// import '../assets/stylesheets/style.scss';
+import '../assets/stylesheets/components/SearchResult.scss';
 
 class SearchResult extends Component {
     constructor(props) {
@@ -35,8 +37,10 @@ class SearchResult extends Component {
 
         return (
             <div className="search-container">
-                <div className="col-md-4 list-group">
-                    {filteredList}
+                <div className="col-md-4">
+                    <div className="list-group">
+                        {filteredList}
+                    </div>
                 </div>
             </div>
         );
