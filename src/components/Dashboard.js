@@ -64,97 +64,97 @@ var heatmapValues = {
 };
 
 class Dashboard extends Component {
-  render() {
-    return (
-        <div className="animated fadeIn">
-            <iframe src="https://ssastbury.shinyapps.io/invertible-shiny-dashboard/"
-                    style={{'border': 'none', 'width': '100%', 'height': '700px'}}>
-            </iframe>
-            <div className="card-columns row">
-                <div className="card col-md-6">
-                    <div className="card-header">
-                        Line Chart
-                        <div className="card-actions">
-                            <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                        </div>
-                    </div>
-                    <IndexLink to="/chart-detail" activeClassName="active">
-                        <div className="card-block">
-                            <div className="chart-wrapper">
-                                {/* line chart */}
-                                <LineChart id="linechart" height="300" width="400" series={lineValues} legend="true" theme="light" title="Hello Line Chart" />
+    render() {
+        return (
+            <div className="animated fadeIn">
+                <iframe src="https://ssastbury.shinyapps.io/invertible-shiny-dashboard/"
+                        style={{'border': 'none', 'width': '100%', 'height': '700px'}}>
+                </iframe>
+                <div className="card-columns row">
+                    <div className="card col-md-6">
+                        <div className="card-header">
+                            Line Chart
+                            <div className="card-actions">
+                                <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
                             </div>
                         </div>
-                    </IndexLink>
-                </div>
-                <div className="card col-md-6">
-                    <div className="card-header">
-                        Bar Chart
-                        <div className="card-actions">
-                            <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                        </div>
+                        <IndexLink to="/chart-detail" activeClassName="active">
+                            <div className="card-block">
+                                <div className="chart-wrapper">
+                                    {/* line chart */}
+                                    <LineChart id="linechart" height="300" width="400" series={lineValues} legend="true" theme="light" title="Hello Line Chart" />
+                                </div>
+                            </div>
+                        </IndexLink>
                     </div>
-                    <IndexLink to="/chart-detail" activeClassName="active">
-                        <div className="card-block">
-                            <div className="chart-wrapper">
-                                {/* Bar chart*/}
-                                <BarChart id="barchart" height="300" width="400" series={barValues} legend="true" theme="dark" title="Hello Bar Chart" />
+                    <div className="card col-md-6">
+                        <div className="card-header">
+                            Bar Chart
+                            <div className="card-actions">
+                                <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
                             </div>
                         </div>
-                    </IndexLink>
-                </div>
-                <div className="card col-md-6">
-                    <div className="card-header">
-                        Area Chart
-                        <div className="card-actions">
-                            <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                        </div>
+                        <IndexLink to="/chart-detail" activeClassName="active">
+                            <div className="card-block">
+                                <div className="chart-wrapper">
+                                    {/* Bar chart*/}
+                                    <BarChart id="barchart" height="300" width="400" series={barValues} legend="true" theme="dark" title="Hello Bar Chart" />
+                                </div>
+                            </div>
+                        </IndexLink>
                     </div>
-                    <IndexLink to="/chart-detail" activeClassName="active">
-                        <div className="card-block">
-                            <div className="chart-wrapper">
-                                {/* Area chart */}
-                                <AreaChart id="areachart" height="300" width="400" series={areaValues} legend="true" theme="slate" title="Hello Area Chart" />
+                    <div className="card col-md-6">
+                        <div className="card-header">
+                            Area Chart
+                            <div className="card-actions">
+                                <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
                             </div>
                         </div>
-                    </IndexLink>
-                </div>
-                <div className="card col-md-6">
-                    <div className="card-header">
-                        Scatter Chart
-                        <div className="card-actions">
-                            <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                        </div>
+                        <IndexLink to="/chart-detail" activeClassName="active">
+                            <div className="card-block">
+                                <div className="chart-wrapper">
+                                    {/* Area chart */}
+                                    <AreaChart id="areachart" height="300" width="400" series={areaValues} legend="true" theme="slate" title="Hello Area Chart" />
+                                </div>
+                            </div>
+                        </IndexLink>
                     </div>
-                    <IndexLink to="/chart-detail" activeClassName="active">
-                        <div className="card-block">
-                            <div className="chart-wrapper">
-                                {/* Scatter chart */}
-                                <ScatterChart id="scatterchart" height="300" width="400" series={scatterValues} legend="true" theme="light" title="Hello Scatter Chart" />
+                    <div className="card col-md-6">
+                        <div className="card-header">
+                            Scatter Chart
+                            <div className="card-actions">
+                                <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
                             </div>
                         </div>
-                    </IndexLink>
-                </div>
-                <div className="card col-md-6">
-                    <div className="card-header">
-                        Pie Chart
-                        <div className="card-actions">
-                            <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                        </div>
+                        <IndexLink to="/chart-detail" activeClassName="active">
+                            <div className="card-block">
+                                <div className="chart-wrapper">
+                                    {/* Scatter chart */}
+                                    <ScatterChart id="scatterchart" height="300" width="400" series={scatterValues} legend="true" theme="light" title="Hello Scatter Chart" />
+                                </div>
+                            </div>
+                        </IndexLink>
                     </div>
-                    <IndexLink to="/chart-detail" activeClassName="active">
-                        <div className="card-block">
-                            <div className="chart-wrapper">
-                                {/* Pie chart */}
-                                <PieChart id="piechart" height="300" width="400" series={pieValues} legend="true" theme="light" title="Hello Pie Chart" />
+                    <div className="card col-md-6">
+                        <div className="card-header">
+                            Pie Chart
+                            <div className="card-actions">
+                                <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
                             </div>
                         </div>
-                    </IndexLink>
+                        <IndexLink to="/chart-detail" activeClassName="active">
+                            <div className="card-block">
+                                <div className="chart-wrapper">
+                                    {/* Pie chart */}
+                                    <PieChart id="piechart" height="300" width="400" series={pieValues} legend="true" theme="light" title="Hello Pie Chart" />
+                                </div>
+                            </div>
+                        </IndexLink>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
-  }
+        )
+    }
 }
 
 export default Dashboard;
