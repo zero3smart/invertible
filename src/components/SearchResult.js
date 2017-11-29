@@ -37,10 +37,8 @@ class SearchResult extends Component {
 
         return (
             <div className="search-container">
-                <div className="col-md-4">
-                    <div className="list-group">
-                        {filteredList}
-                    </div>
+                <div className="list-group">
+                    {filteredList}
                 </div>
             </div>
         );

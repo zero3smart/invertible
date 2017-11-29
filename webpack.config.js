@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const dotenv = require('dotenv').config();
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 module.exports = {
   devtool: 'inline-sourcemap',
@@ -45,7 +47,14 @@ module.exports = {
       'process.env': {
         API_URL: JSON.stringify(process.env.API_URL)
       }
-    })/*,
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: 'node_modules/pdfjs-dist/cmaps/',
+        to: 'cmaps/'
+      }
+    ])
+    /*,
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       compress: {
