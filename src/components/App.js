@@ -10,7 +10,7 @@ class App extends Component {
     render() {
         return (
             <div className="app">
-                <Header a />
+                <Header />
                 <div className="app-body">
                     {/* <Sidebar {...this.props} /> */}
                     <main className="main">
