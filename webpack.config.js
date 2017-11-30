@@ -47,13 +47,7 @@ module.exports = {
       'process.env': {
         API_URL: JSON.stringify(process.env.API_URL)
       }
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: 'node_modules/pdfjs-dist/cmaps/',
-        to: 'cmaps/'
-      }
-    ])
+    })
     /*,
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
