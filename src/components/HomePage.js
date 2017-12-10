@@ -7,7 +7,6 @@ class HomePage extends React.Component {
     render() {
         return (
             <div className="home-container">
-                {/* {this.props.isAuthenticated ? <Dashboard /> : null} */}
                 <Dashboard1 />
             </div>
         );

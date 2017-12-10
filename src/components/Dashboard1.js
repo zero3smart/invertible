@@ -69,9 +69,6 @@ class Dashboard1 extends Component {
     render() {
         return (
             <div className="animated fadeIn">
-                {/* <iframe src="https://ssastbury.shinyapps.io/invertible-shiny-dashboard/"
-                        style={{'border': 'none', 'width': '100%', 'height': '700px'}}>
-                </iframe> */}
                 <div className="row">
                     <div className="col-md-8">
                         <div className="card-columns row">
@@ -86,7 +83,7 @@ class Dashboard1 extends Component {
                                     <div className="card-block">
                                         <div className="chart-wrapper">
                                             {/* line chart */}
-                                            <LineChart id="linechart" height="300" width="400" series={lineValues} legend="true" theme="light" title="Hello Line Chart" />
+                                            <LineChart id="linechart" height="300" width="400" series={lineValues} legend="true" title="Hello Line Chart" />
                                         </div>
                                     </div>
                                 </IndexLink>
@@ -102,7 +99,7 @@ class Dashboard1 extends Component {
                                     <div className="card-block">
                                         <div className="chart-wrapper">
                                             {/* Bar chart*/}
-                                            <BarChart id="barchart" height="300" width="400" series={barValues} legend="true" theme="dark" title="Hello Bar Chart" />
+                                            <BarChart id="barchart" height="300" width="400" series={barValues} legend="true" title="Hello Bar Chart" />
                                         </div>
                                     </div>
                                 </IndexLink>
@@ -118,7 +115,7 @@ class Dashboard1 extends Component {
                                     <div className="card-block">
                                         <div className="chart-wrapper">
                                             {/* Area chart */}
-                                            <AreaChart id="areachart" height="300" width="400" series={areaValues} legend="true" theme="slate" title="Hello Area Chart" />
+                                            <AreaChart id="areachart" height="300" width="400" series={areaValues} legend="true" title="Hello Area Chart" />
                                         </div>
                                     </div>
                                 </IndexLink>
@@ -134,7 +131,7 @@ class Dashboard1 extends Component {
                                     <div className="card-block">
                                         <div className="chart-wrapper">
                                             {/* Scatter chart */}
-                                            <ScatterChart id="scatterchart" height="300" width="400" series={scatterValues} legend="true" theme="light" title="Hello Scatter Chart" />
+                                            <ScatterChart id="scatterchart" height="300" width="400" series={scatterValues} legend="true" title="Hello Scatter Chart" />
                                         </div>
                                     </div>
                                 </IndexLink>
@@ -150,7 +147,7 @@ class Dashboard1 extends Component {
                                     <div className="card-block">
                                         <div className="chart-wrapper">
                                             {/* Pie chart */}
-                                            <PieChart id="piechart" height="300" width="400" series={pieValues} legend="true" theme="light" title="Hello Pie Chart" />
+                                            <PieChart id="piechart" height="300" width="400" series={pieValues} legend="true" title="Hello Pie Chart" />
                                         </div>
                                     </div>
                                 </IndexLink>

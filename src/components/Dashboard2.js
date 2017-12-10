@@ -6,6 +6,7 @@ import Trending from './Trending';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import '../assets/stylesheets/components/Dashboard2.scss';
 
 var lineValues = [
     { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] },
@@ -96,26 +97,39 @@ class Dashboard2 extends Component {
             <div className="dashboard2-container">
                 <h6>Current Period</h6>
                 <div className="row">
+                    <div className="col-md-3">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <DatePicker
+                                    selected={this.state.startDate}
+                                    onChange={this.handleStartDateChange}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <DatePicker
+                                    selected={this.state.endDate}
+                                    onChange={this.handleEndDateChange}
+                                    className="form-control"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-5">
+                        <div id="group1" className="btn-group" role="group" data-toggle="buttons-radio">
+                            <button className="btn btn-default active" data-toggle="tab">Sessions</button>
+                            <button className="btn btn-default" data-toggle="tab">Transactions</button>
+                            <button className="btn btn-default" data-toggle="tab">BounceRate</button>
+                            <button className="btn btn-default" data-toggle="tab">ConversionRate</button>
+                            <button className="btn btn-default" data-toggle="tab">TimeSpent</button>
+                        </div>
+                    </div>
                     <div className="col-md-4">
-                        <div style={{float: 'left'}}>
-                            <DatePicker
-                                selected={this.state.startDate}
-                                onChange={this.handleStartDateChange}
-                                className="form-control"
-                            />
-                        </div>
-                        <div style={{float: 'left',
-                                    backgroundColor: '#FFF',
-                                    border: '1px solid #C1C2C3',
-                                    padding: '5px'}}>
-                            <span>to</span>
-                        </div>
-                        <div style={{float: 'left'}}>
-                            <DatePicker
-                                selected={this.state.endDate}
-                                onChange={this.handleEndDateChange}
-                                className="form-control"
-                            />
+                        <div id="group2" className="btn-group" role="group" data-toggle="buttons-radio">
+                            <button className="btn btn-default active" data-toggle="tab">Total</button>
+                            <button className="btn btn-default" data-toggle="tab">Device</button>
+                            <button className="btn btn-default" data-toggle="tab">Channel</button>
+                            <button className="btn btn-default" data-toggle="tab">LandingPage</button>
                         </div>
                     </div>
                 </div>
