@@ -8,40 +8,30 @@ import moment from 'moment';
 import classnames from 'classnames';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
+import AmCharts from '@amcharts/amcharts3-react';
 
-var lineValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] },
-    { text: "Second Series", values: [18, 12, 7, 14, 1, 19, 4] },
-    { text: "Third Series", values: [0, 1, 12, 12, 4, 6, 17] },
-    { text: "Fourth Series", values: [18, 22, 17, 4, 1, 9, 4] },
-    { text: "Fifth Series", values: [4, 2, 7, 3, 23, 7, 2] },
-    { text: "Sixth Series", values: [10, 6, 8, 2, 6, 3, 9] }
-];
+var rawDataValues = [{
+    "date": "20170516",
+    "value": -0.307
+}, {
+    "date": "20170813",
+    "value": -0.168
+}, {
+    "date": "20170915",
+    "value": -0.168
+}];
 
-var barValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] }
-];
-
-var areaValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] },
-    { text: "Second Series", values: [18, 12, 7, 14, 1, 19, 4] },
-    { text: "Third Series", values: [0, 1, 12, 12, 4, 6, 17] },
-    { text: "Fourth Series", values: [18, 22, 17, 4, 1, 9, 4] }
-];
-
-var scatterValues = [
-    { text: "First Series", values: [[5, 2], [8, 1], [2, 6], [9, 1]] },
-    { text: "Second Series", values: [[8, 3], [2, 8], [6, 9], [3, 5]] },
-    { text: "Third Series", values: [[18, 3], [22, 8], [16, 9], [13, 5]] },
-    { text: "Fourth Series", values: [[18, 3], [12, 8], [26, 9], [32, 5]] }
-];
-
-var pieValues = [
-    { text: "First Slice", values: [10] },
-    { text: "Second Slice", values: [20] },
-    { text: "Third Slice", values: [30] },
-    { text: "Fourth Slice", values: [40] }
-];
+var rawDataGraph = [{
+    "id": "g1",
+    "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
+    "bullet": "round",
+    "bulletSize": 8,
+    "lineColor": "#d1655d",
+    "lineThickness": 2,
+    "negativeLineColor": "#637bb6",
+    "type": "smoothedLine",
+    "valueField": "value"
+}];
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -195,7 +185,56 @@ class Dashboard2 extends Component {
 
                     <div className="clear"></div>
                     <div className="tab-content">
-                        <div role="tabpanel" className="tab-pane fade in active" id="raw-data">...</div>
+                        <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
+                            <div className="col-md-6">
+                                <AmCharts.React
+                                    style={{
+                                        width: "100%",
+                                        height: "500px"
+                                    }}
+                                    options={{
+                                        "type": "serial",
+                                        "theme": "light",
+                                        "graphs": rawDataGraph,
+                                        "dataProvider": rawDataValues,
+                                        "chartScrollbar": {
+                                            "graph": "g1",
+                                            "gridAlpha": 0,
+                                            "color": "#888888",
+                                            "scrollbarHeight": 55,
+                                            "backgroundAlpha": 0,
+                                            "selectedBackgroundAlpha": 0.1,
+                                            "selectedBackgroundColor": "#888888",
+                                            "graphFillAlpha": 0,
+                                            "autoGridCount": true,
+                                            "selectedGraphFillAlpha": 0,
+                                            "graphLineAlpha": 0.2,
+                                            "graphLineColor": "#c2c2c2",
+                                            "selectedGraphLineColor": "#888888",
+                                            "selectedGraphLineAlpha": 1
+                                        },
+                                        "chartCursor": {
+                                            "categoryBalloonDateFormat": "MM DD",
+                                            "cursorAlpha": 0,
+                                            "valueLineEnabled": true,
+                                            "valueLineBalloonEnabled": true,
+                                            "valueLineAlpha": 0.5,
+                                            "fullWidth": true
+                                        },
+                                        "dataDateFormat": "YYYYMMDD",
+                                        "categoryField": "date",
+                                        "categoryAxis": {
+                                            "minPeriod": "DD",
+                                            "parseDates": true,
+                                            "minorGridAlpha": 0.1,
+                                            "minorGridEnabled": true
+                                        },
+                                        "export": {
+                                            "enabled": true
+                                        }
+                                }} />
+                            </div>
+                        </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
                     </div>
                 </div>
