@@ -1,6 +1,16 @@
-.btn-group1 {
+.dashboard2-container {
+
+}
+
+.btn-group1, .btn-group2 {
     label {
-        background: #e5e5e5;
+        background: #f4f4f4;
         border-color: #adadad;
+        &.active {
+            background: #e5e5e5;
+        }
+        input[type="radio"] {
+            -webkit-appearance: none;
+        }
     }
 }

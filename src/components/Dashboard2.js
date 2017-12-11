@@ -49,15 +49,21 @@ class Dashboard2 extends Component {
         this.state = {
             startDate: moment(),
             endDate: moment(),
-            group1Active: 'Sessions'
+            group1Active: 'Sessions',
+            group2Active: 'Total'
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
-        this.setActive = this.setActive.bind(this);
+        this.setGroup1Active = this.setGroup1Active.bind(this);
+        this.setGroup2Active = this.setGroup2Active.bind(this);
     }
 
-    setActive(e) {
+    setGroup1Active(e) {
         this.setState({group1Active : e.target.value});
+    }
+
+    setGroup2Active(e) {
+        this.setState({ group2Active: e.target.value });
     }
 
     handleStartDateChange(date) {
@@ -95,66 +101,83 @@ class Dashboard2 extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5">
                         <div className="btn-group1">
-                            <label className="btn btn-default">
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'Sessions' })}>
                                 <input type="radio"
-                                    className={classnames('btn', 'btn-default', {'active' : this.state.group1Active == 'Sessions'})}
                                     name="group1"
                                     value="Sessions"
-                                    onChange={this.setActive} />
+                                    className="btn btn-default"
+                                    defaultChecked={true}
+                                    onChange={this.setGroup1Active} />
                                 Sessions
                             </label>
-                            <label className="btn btn-default">
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'Transactions' })}>
                                 <input type="radio"
-                                    className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'Transactions' })}
                                     name="group1"
                                     value="Transactions"
-                                    onChange={this.setActive} />
+                                    className="btn btn-default"
+                                    onChange={this.setGroup1Active} />
                                 Transactions
                             </label>
-                            <label className="btn btn-default">
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'BounceRate' })}>
                                 <input type="radio"
-                                    className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'BounceRate' })}
                                     name="group1"
                                     value="BounceRate"
-                                    onChange={this.setActive} />
+                                    className="btn btn-default"
+                                    onChange={this.setGroup1Active} />
                                 BounceRate
                             </label>
-                            <label className="btn btn-default">
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'ConversionRate' })}>
                                 <input type="radio"
-                                    className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'ConversionRate' })}
                                     name="group1"
                                     value="ConversionRate"
-                                    onChange={this.setActive} />
+                                    className="btn btn-default"
+                                    onChange={this.setGroup1Active} />
                                 ConversionRate
                             </label>
-                            <label className="btn btn-default">
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'TimeSpent' })}>
                                 <input type="radio"
-                                    className={classnames('btn', 'btn-default', { 'active': this.state.group1Active == 'TimeSpent' })}
                                     name="group1"
                                     value="TimeSpent"
-                                    onChange={this.setActive} />
+                                    className="btn btn-default"
+                                    onChange={this.setGroup1Active} />
                                 TimeSpent
                             </label>
                         </div>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <div className="btn-group2">
-                            <label className="btn btn-default">
-                                <input type="radio" className="btn btn-default" name="group2" value="Total" />
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group2Active == 'Total' })}>
+                                <input type="radio"
+                                    className="btn btn-default"
+                                    name="group2"
+                                    value="Total"
+                                    onChange={this.setGroup2Active} />
                                 Total
                             </label>
-                            <label className="btn btn-default">
-                                <input type="radio" className="btn btn-default" name="group2" value="Device" />
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group2Active == 'Device' })}>
+                                <input type="radio"
+                                    className="btn btn-default"
+                                    name="group2"
+                                    value="Device"
+                                    onChange={this.setGroup2Active} />
                                 Device
                             </label>
-                            <label className="btn btn-default">
-                                <input type="radio" className="btn btn-default" name="group2" value="Channel" />
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group2Active == 'Channel' })}>
+                                <input type="radio"
+                                    className="btn btn-default"
+                                    name="group2"
+                                    value="Channel"
+                                    onChange={this.setGroup2Active} />
                                 Channel
                             </label>
-                            <label className="btn btn-default">
-                                <input type="radio" className="btn btn-default" name="group2" value="LandingPage" />
+                            <label className={classnames('btn', 'btn-default', { 'active': this.state.group2Active == 'LandingPage' })}>
+                                <input type="radio"
+                                    className="btn btn-default"
+                                    name="group2"
+                                    value="LandingPage"
+                                    onChange={this.setGroup2Active} />
                                 LandingPage
                             </label>
                         </div>
