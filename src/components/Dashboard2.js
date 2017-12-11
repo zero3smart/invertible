@@ -8,40 +8,141 @@ import moment from 'moment';
 import classnames from 'classnames';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
+import AmCharts from '@amcharts/amcharts3-react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import SmartDataTable from 'react-smart-data-table'
 
-var lineValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] },
-    { text: "Second Series", values: [18, 12, 7, 14, 1, 19, 4] },
-    { text: "Third Series", values: [0, 1, 12, 12, 4, 6, 17] },
-    { text: "Fourth Series", values: [18, 22, 17, 4, 1, 9, 4] },
-    { text: "Fifth Series", values: [4, 2, 7, 3, 23, 7, 2] },
-    { text: "Sixth Series", values: [10, 6, 8, 2, 6, 3, 9] }
-];
+var rawDataValuesOne = [{
+    "date": "20170516",
+    "value": -0.307
+}, {
+    "date": "20170813",
+    "value": -0.168
+}, {
+    "date": "20170915",
+    "value": -0.168
+}];
 
-var barValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] }
-];
+var rawDataValuesTwo = [{
+    "date": "20170516",
+    "value": -0.307
+}, {
+    "date": "20170813",
+    "value": -0.168
+}, {
+    "date": "20170915",
+    "value": -0.168
+}];
 
-var areaValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] },
-    { text: "Second Series", values: [18, 12, 7, 14, 1, 19, 4] },
-    { text: "Third Series", values: [0, 1, 12, 12, 4, 6, 17] },
-    { text: "Fourth Series", values: [18, 22, 17, 4, 1, 9, 4] }
-];
+var rawDataGraphOne = [{
+    "id": "g1",
+    "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
+    "bullet": "round",
+    "bulletSize": 8,
+    "lineColor": "#d1655d",
+    "lineThickness": 2,
+    "negativeLineColor": "#637bb6",
+    "type": "smoothedLine",
+    "valueField": "value"
+}];
 
-var scatterValues = [
-    { text: "First Series", values: [[5, 2], [8, 1], [2, 6], [9, 1]] },
-    { text: "Second Series", values: [[8, 3], [2, 8], [6, 9], [3, 5]] },
-    { text: "Third Series", values: [[18, 3], [22, 8], [16, 9], [13, 5]] },
-    { text: "Fourth Series", values: [[18, 3], [12, 8], [26, 9], [32, 5]] }
-];
-
-var pieValues = [
-    { text: "First Slice", values: [10] },
-    { text: "Second Slice", values: [20] },
-    { text: "Third Slice", values: [30] },
-    { text: "Fourth Slice", values: [40] }
-];
+var analysisResult = [{
+    id: 1,
+    total: 1,
+    sessions: 152432,
+    transactions: 0,
+    bounceRate: 70,
+    conversionRate: 0,
+    averageTimeSpentOnSite: 27
+}, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }];
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -56,6 +157,10 @@ class Dashboard2 extends Component {
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
+    }
+
+    rateFormatter(cell, row) {
+        return cell + '%';
     }
 
     setGroup1Active(e) {
@@ -195,7 +300,123 @@ class Dashboard2 extends Component {
 
                     <div className="clear"></div>
                     <div className="tab-content">
-                        <div role="tabpanel" className="tab-pane fade in active" id="raw-data">...</div>
+                        <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <AmCharts.React
+                                        style={{
+                                            width: "100%",
+                                            height: "500px"
+                                        }}
+                                        options={{
+                                            "type": "serial",
+                                            "theme": "light",
+                                            "graphs": rawDataGraphOne,
+                                            "dataProvider": rawDataValuesOne,
+                                            "chartScrollbar": {
+                                                "graph": "g1",
+                                                "gridAlpha": 0,
+                                                "color": "#888888",
+                                                "scrollbarHeight": 55,
+                                                "backgroundAlpha": 0,
+                                                "selectedBackgroundAlpha": 0.1,
+                                                "selectedBackgroundColor": "#888888",
+                                                "graphFillAlpha": 0,
+                                                "autoGridCount": true,
+                                                "selectedGraphFillAlpha": 0,
+                                                "graphLineAlpha": 0.2,
+                                                "graphLineColor": "#c2c2c2",
+                                                "selectedGraphLineColor": "#888888",
+                                                "selectedGraphLineAlpha": 1
+                                            },
+                                            "chartCursor": {
+                                                "categoryBalloonDateFormat": "MM DD",
+                                                "cursorAlpha": 0,
+                                                "valueLineEnabled": true,
+                                                "valueLineBalloonEnabled": true,
+                                                "valueLineAlpha": 0.5,
+                                                "fullWidth": true
+                                            },
+                                            "dataDateFormat": "YYYYMMDD",
+                                            "categoryField": "date",
+                                            "categoryAxis": {
+                                                "minPeriod": "DD",
+                                                "parseDates": true,
+                                                "minorGridAlpha": 0.1,
+                                                "minorGridEnabled": true
+                                            },
+                                            "export": {
+                                                "enabled": true
+                                            }
+                                    }} />
+                                </div>
+                                <div className="col-md-6">
+                                    <AmCharts.React
+                                        style={{
+                                            width: "100%",
+                                            height: "500px"
+                                        }}
+                                        options={{
+                                            "type": "serial",
+                                            "theme": "light",
+                                            "dataProvider": rawDataValuesTwo,
+                                            "valueAxes": [{
+                                                "gridColor": "#FFFFFF",
+                                                "gridAlpha": 0.2,
+                                                "dashLength": 0
+                                            }],
+                                            "gridAboveGraphs": true,
+                                            "startDuration": 1,
+                                            "graphs": [{
+                                                "balloonText": "[[category]]: <b>[[value]]</b>",
+                                                "fillAlphas": 0.8,
+                                                "lineAlpha": 0.2,
+                                                "type": "column",
+                                                "valueField": "value"
+                                            }],
+                                            "chartCursor": {
+                                                "categoryBalloonEnabled": false,
+                                                "cursorAlpha": 0,
+                                                "zoomable": false
+                                            },
+                                            "categoryField": "date",
+                                            "categoryAxis": {
+                                                "gridPosition": "start",
+                                                "gridAlpha": 0,
+                                                "tickPosition": "start",
+                                                "tickLength": 20
+                                            },
+                                            "export": {
+                                                "enabled": true
+                                            }
+                                        }} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <button className="btn btn-default">
+                                    <i className="fa fa-download" aria-hidden="true"></i>
+                                    &nbsp;Export Table
+                                </button>
+                            </div>
+                            <div className="table-block">
+                                {/* <BootstrapTable data={analysisResult} striped={true} hover={true}>
+                                    <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
+                                    <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="averageTimeSpentOnSite" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
+                                </BootstrapTable> */}
+                                <SmartDataTable
+                                    data={analysisResult}
+                                    name='test-table'
+                                    className='ui compact selectable table'
+                                    sortable
+                                    perPage="4"
+                                />,
+                            </div>
+                        </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
                     </div>
                 </div>
