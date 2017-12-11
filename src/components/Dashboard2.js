@@ -10,7 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 
-var rawDataValues = [{
+var rawDataValuesOne = [{
     "date": "20170516",
     "value": -0.307
 }, {
@@ -21,7 +21,18 @@ var rawDataValues = [{
     "value": -0.168
 }];
 
-var rawDataGraph = [{
+var rawDataValuesTwo = [{
+    "date": "20170516",
+    "value": -0.307
+}, {
+    "date": "20170813",
+    "value": -0.168
+}, {
+    "date": "20170915",
+    "value": -0.168
+}];
+
+var rawDataGraphOne = [{
     "id": "g1",
     "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
     "bullet": "round",
@@ -186,6 +197,7 @@ class Dashboard2 extends Component {
                     <div className="clear"></div>
                     <div className="tab-content">
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
+                            <div className="row">
                             <div className="col-md-6">
                                 <AmCharts.React
                                     style={{
@@ -195,8 +207,8 @@ class Dashboard2 extends Component {
                                     options={{
                                         "type": "serial",
                                         "theme": "light",
-                                        "graphs": rawDataGraph,
-                                        "dataProvider": rawDataValues,
+                                        "graphs": rawDataGraphOne,
+                                        "dataProvider": rawDataValuesOne,
                                         "chartScrollbar": {
                                             "graph": "g1",
                                             "gridAlpha": 0,
@@ -233,6 +245,48 @@ class Dashboard2 extends Component {
                                             "enabled": true
                                         }
                                 }} />
+                            </div>
+                            <div className="col-md-6">
+                                <AmCharts.React
+                                    style={{
+                                        width: "100%",
+                                        height: "500px"
+                                    }}
+                                    options={{
+                                        "type": "serial",
+                                        "theme": "light",
+                                        "dataProvider": rawDataValuesTwo,
+                                        "valueAxes": [{
+                                            "gridColor": "#FFFFFF",
+                                            "gridAlpha": 0.2,
+                                            "dashLength": 0
+                                        }],
+                                        "gridAboveGraphs": true,
+                                        "startDuration": 1,
+                                        "graphs": [{
+                                            "balloonText": "[[category]]: <b>[[value]]</b>",
+                                            "fillAlphas": 0.8,
+                                            "lineAlpha": 0.2,
+                                            "type": "column",
+                                            "valueField": "value"
+                                        }],
+                                        "chartCursor": {
+                                            "categoryBalloonEnabled": false,
+                                            "cursorAlpha": 0,
+                                            "zoomable": false
+                                        },
+                                        "categoryField": "date",
+                                        "categoryAxis": {
+                                            "gridPosition": "start",
+                                            "gridAlpha": 0,
+                                            "tickPosition": "start",
+                                            "tickLength": 20
+                                        },
+                                        "export": {
+                                            "enabled": true
+                                        }
+                                    }} />
+                            </div>
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
