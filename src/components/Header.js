@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, IndexLink } from 'react-router';
+import { IndexLink, Link } from 'react-router';
 import { connect } from 'react-redux';
 import { logout } from '../actions/authActions';
 
@@ -48,22 +48,22 @@ class Header extends Component {
         return (
             <header className="app-header navbar">
                 <button className="navbar-toggler mobile-sidebar-toggler hidden-lg-up" onClick={this.mobileSidebarToggle} type="button">&#9776;</button>
-                <IndexLink to="/" activeClassName="active" className="navbar-brand"></IndexLink>
+                <Link to="/" activeClassName="active" onlyActiveOnIndex={true} className="navbar-brand"></Link>
                 <ul className="nav navbar-nav hidden-md-down">
                     <li className="nav-item px-1">
-                        <IndexLink to="/dashboard1" activeClassName="active" className="nav-link">Dashboard1</IndexLink>
+                        <Link to="/dashboard1" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Dashboard1</Link>
                     </li>
                     <li className="nav-item px-1">
-                        <IndexLink to="/dashboard2" activeClassName="active" className="nav-link">Frilly</IndexLink>
+                        <Link to="/dashboard2" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Frilly</Link>
                     </li>
                     <li className="nav-item px-1">
-                        <IndexLink to="/analysis" activeClassName="active" className="nav-link">Analysis</IndexLink>
+                        <Link to="/analysis" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Analysis</Link>
                     </li>
                     <li className="nav-item px-1">
-                        <IndexLink to="/credentials" activeClassName="active" className="nav-link">Credentials</IndexLink>
+                        <Link to="/credentials" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Credentials</Link>
                     </li>
                     <li className="nav-item px-1">
-                        <IndexLink to="/sql" activeClassName="active" className="nav-link">SQL</IndexLink>
+                        <Link to="/sql" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">SQL</Link>
                     </li>
                     <li className="nav-item px-1">
                         {isAuthenticated ? userLinks : guestLinks}
