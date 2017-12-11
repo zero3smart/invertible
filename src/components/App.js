@@ -25,9 +25,7 @@ class App extends Component {
                         routes={this.props.routes}
                         params={this.props.params}
                         /> */}
-                        <div className="container-fluid">
-                            {this.props.children}
-                        </div>
+                        {this.props.children}
                     </main>
                     {/* <Aside /> */}
                 </div>

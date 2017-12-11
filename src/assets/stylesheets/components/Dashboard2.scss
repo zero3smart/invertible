@@ -1,5 +1,13 @@
 .dashboard2-container {
-
+    background: #fff;
+    .nav-item {
+        .nav-link {
+            background: #fff;
+            &.active {
+                border-top: 2px solid #477fbe;
+            }
+        }
+    }
 }
 
 .btn-group1, .btn-group2 {

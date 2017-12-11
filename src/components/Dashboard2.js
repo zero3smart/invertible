@@ -183,6 +183,22 @@ class Dashboard2 extends Component {
                         </div>
                     </div>
                 </div>
+                <div className="">
+                    <ul className="nav nav-tabs" role="tablist">
+                        <li className="nav-item">
+                            <a className="nav-link active" href="#raw-data" role="tab" data-toggle="tab">Raw data</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#percentage-changes" role="tab" data-toggle="tab">Percentage Changes</a>
+                        </li>
+                    </ul>
+
+                    <div className="clear"></div>
+                    <div className="tab-content">
+                        <div role="tabpanel" className="tab-pane fade in active" id="raw-data">...</div>
+                        <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
+                    </div>
+                </div>
             </div>
         )
     }
