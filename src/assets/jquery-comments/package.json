@@ -1,0 +1,89 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "jquery-comments",
+        "scope": null,
+        "escapedName": "jquery-comments",
+        "name": "jquery-comments",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/home/skyblue/Workspaces/willian_work/invertible/Invertible"
+    ]
+  ],
+  "_from": "jquery-comments@latest",
+  "_id": "jquery-comments@1.0.1",
+  "_inCache": true,
+  "_location": "/jquery-comments",
+  "_nodeVersion": "0.12.2",
+  "_npmUser": {
+    "name": "jjtykkyl",
+    "email": "joona@viima.com"
+  },
+  "_npmVersion": "2.7.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "jquery-comments",
+    "scope": null,
+    "escapedName": "jquery-comments",
+    "name": "jquery-comments",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/jquery-comments/-/jquery-comments-1.0.1.tgz",
+  "_shasum": "618c0cd7d1df3ca8d2a240872b27bf4391706153",
+  "_shrinkwrap": null,
+  "_spec": "jquery-comments",
+  "_where": "/home/skyblue/Workspaces/willian_work/invertible/Invertible",
+  "author": {
+    "name": "Joona Tykkylainen"
+  },
+  "bugs": {
+    "url": "https://github.com/Viima/jquery-comments/issues"
+  },
+  "dependencies": {
+    "jquery": ">=1.9.0"
+  },
+  "description": "jQuery plugin for implementing an out-of-the-box commenting solution to any web application with an existing backend",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "618c0cd7d1df3ca8d2a240872b27bf4391706153",
+    "tarball": "https://registry.npmjs.org/jquery-comments/-/jquery-comments-1.0.1.tgz"
+  },
+  "gitHead": "4d61d021b0378d5aabf3fb377e00dd98bd1de88c",
+  "homepage": "https://www.viima.com/",
+  "keywords": [
+    "jquery",
+    "javascript",
+    "plugin",
+    "commenting",
+    "discussion",
+    "conversation"
+  ],
+  "license": "MIT",
+  "main": "js/jquery-comments.js",
+  "maintainers": [
+    {
+      "name": "jjtykkyl",
+      "email": "joona@viima.com"
+    }
+  ],
+  "name": "jquery-comments",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viima/jquery-comments.git"
+  },
+  "scripts": {},
+  "title": "jquery-comments",
+  "version": "1.0.1"
+}
