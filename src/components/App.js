@@ -6,6 +6,7 @@ import Aside from './Aside';
 import Footer from './Footer';
 import FlashMessagesList from './flash/FlashMessagesList';
 import '../assets/stylesheets/style.scss';
+import '../assets/stylesheets/components/App.scss';
 
 class App extends Component {
     render() {

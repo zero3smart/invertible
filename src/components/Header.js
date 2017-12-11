@@ -54,7 +54,7 @@ class Header extends Component {
                         <IndexLink to="/dashboard1" activeClassName="active" className="nav-link">Dashboard1</IndexLink>
                     </li>
                     <li className="nav-item px-1">
-                        <IndexLink to="/dashboard2" activeClassName="active" className="nav-link">Dashboard2</IndexLink>
+                        <IndexLink to="/dashboard2" activeClassName="active" className="nav-link">Frilly</IndexLink>
                     </li>
                     <li className="nav-item px-1">
                         <IndexLink to="/analysis" activeClassName="active" className="nav-link">Analysis</IndexLink>
