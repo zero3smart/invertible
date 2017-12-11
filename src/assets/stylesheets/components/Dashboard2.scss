@@ -1,0 +1,24 @@
+.dashboard2-container {
+    background: #fff;
+    .nav-item {
+        .nav-link {
+            background: #fff;
+            &.active {
+                border-top: 2px solid #477fbe;
+            }
+        }
+    }
+}
+
+.btn-group1, .btn-group2 {
+    label {
+        background: #f4f4f4;
+        border-color: #adadad;
+        &.active {
+            background: #e5e5e5;
+        }
+        input[type="radio"] {
+            -webkit-appearance: none;
+        }
+    }
+}

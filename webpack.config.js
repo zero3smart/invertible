@@ -3,8 +3,10 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const dotenv = require('dotenv').config();
 
+const dist = path.resolve(__dirname, 'public');
+
 module.exports = {
-  devtool: 'inline-sourcemap',
+  devtool: 'inline-source-map',
   entry: [
     path.join(__dirname, '/src/index.js')
   ],
@@ -33,8 +35,8 @@ module.exports = {
       template: 'src/index.html',
       inject: 'body',
       favicon: 'public/favicon.ico',
-      hash: true,
-      cache: true
+      hash: false,
+      cache: false
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
@@ -45,7 +47,8 @@ module.exports = {
       'process.env': {
         API_URL: JSON.stringify(process.env.API_URL)
       }
-    })/*,
+    })
+    /*,
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       compress: {

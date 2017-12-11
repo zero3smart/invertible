@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "server": "webpack-dev-server --env .env --watch --colors",
+    "server": "webpack-dev-server --env .env --watch --colors --inline --hot",
     "build": "webpack --config webpack.config.js"
   },
   "keywords": [],
@@ -21,12 +21,16 @@
     "body-parser": "1.17.2",
     "chart.js": "2.5.0",
     "classnames": "2.2.5",
+    "clean-webpack-plugin": "^0.1.17",
     "d3": "^4.10.0",
     "d3-geo": "^1.6.4",
     "dotenv": "^4.0.0",
     "fs": "0.0.1-security",
+    "jquery": "^3.2.1",
+    "jquery-comments": "^1.0.1",
     "jsonwebtoken": "7.4.3",
     "lodash": "4.17.4",
+    "moment": "^2.19.3",
     "path": "0.12.7",
     "rc-slider": "^8.3.5",
     "react": "15.6.1",
@@ -36,6 +40,7 @@
     "react-chartjs-2": "2.0.5",
     "react-chat-window": "^1.0.5",
     "react-d3-map-choropleth": "0.5.1",
+    "react-datepicker": "^0.61.0",
     "react-dom": "^15.6.1",
     "react-ladda": "^5.0.7",
     "react-redux": "5.0.5",
@@ -50,6 +55,7 @@
     "remarkable": "^1.7.1",
     "shortid": "2.2.8",
     "validator": "8.0.0",
+    "webpack-hot-middleware": "^2.21.0",
     "zingchart": "^2.1.2",
     "zingchart-react": "^1.0.6"
   },
@@ -77,7 +83,6 @@
     "url-loader": "0.5.9",
     "webpack": "3.5.5",
     "webpack-dev-middleware": "1.11.0",
-    "webpack-dev-server": "2.7.1",
-    "webpack-hot-middleware": "2.18.2"
+    "webpack-dev-server": "2.7.1"
   }
 }
