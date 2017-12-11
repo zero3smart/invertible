@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import SmartDataTable from 'react-smart-data-table'
 
 var rawDataValuesOne = [{
     "date": "20170516",
@@ -45,15 +46,103 @@ var rawDataGraphOne = [{
     "valueField": "value"
 }];
 
-var products = [{
+var analysisResult = [{
     id: 1,
-    name: "Item name 1",
-    price: 100
+    total: 1,
+    sessions: 152432,
+    transactions: 0,
+    bounceRate: 70,
+    conversionRate: 0,
+    averageTimeSpentOnSite: 27
 }, {
-    id: 2,
-    name: "Item name 2",
-    price: 100
-}];
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }, {
+        id: 1,
+        total: 1,
+        sessions: 152432,
+        transactions: 0,
+        bounceRate: 70,
+        conversionRate: 0,
+        averageTimeSpentOnSite: 27
+    }];
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -70,8 +159,8 @@ class Dashboard2 extends Component {
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
 
-    priceFormatter(cell, row) {
-        return '<i class="fa fa-usd" aria-hidden="true"></i> ' + cell;
+    rateFormatter(cell, row) {
+        return cell + '%';
     }
 
     setGroup1Active(e) {
@@ -309,12 +398,23 @@ class Dashboard2 extends Component {
                                     &nbsp;Export Table
                                 </button>
                             </div>
-                            <div className="">
-                                <BootstrapTable data={products} striped={true} hover={true}>
-                                    <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="name" dataSort={true}>Product Name</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="price" dataFormat={this.priceFormatter}>Product Price</TableHeaderColumn>
-                                </BootstrapTable>
+                            <div className="table-block">
+                                {/* <BootstrapTable data={analysisResult} striped={true} hover={true}>
+                                    <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
+                                    <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="averageTimeSpentOnSite" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
+                                </BootstrapTable> */}
+                                <SmartDataTable
+                                    data={analysisResult}
+                                    name='test-table'
+                                    className='ui compact selectable table'
+                                    sortable
+                                    perPage="4"
+                                />,
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>

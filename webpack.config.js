@@ -67,6 +67,13 @@ module.exports = {
         loaders: ['babel-loader']
       },
       {
+        test: /\.(js|jsx)$/,
+        include: [
+          /node_modules\/react-smart-data-table/
+        ],
+        loaders: ["babel-loader"]
+      },
+      {
         test: /\.css$/,
         include: [
           /node_modules/
