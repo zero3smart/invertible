@@ -54,7 +54,7 @@ class Header extends Component {
                         <Link to="/dashboard1" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Dashboard1</Link>
                     </li>
                     <li className="nav-item px-1">
-                        <Link to="/dashboard2" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Frilly</Link>
+                        <Link to="/dashboard2" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Dashboard2</Link>
                     </li>
                     <li className="nav-item px-1">
                         <Link to="/analysis" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Analysis</Link>

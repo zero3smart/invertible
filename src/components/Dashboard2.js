@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 var rawDataValuesOne = [{
     "date": "20170516",
@@ -44,6 +45,16 @@ var rawDataGraphOne = [{
     "valueField": "value"
 }];
 
+var products = [{
+    id: 1,
+    name: "Item name 1",
+    price: 100
+}, {
+    id: 2,
+    name: "Item name 2",
+    price: 100
+}];
+
 class Dashboard2 extends Component {
     constructor(props) {
         super(props);
@@ -57,6 +68,10 @@ class Dashboard2 extends Component {
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
+    }
+
+    priceFormatter(cell, row) {
+        return '<i class="fa fa-usd" aria-hidden="true"></i> ' + cell;
     }
 
     setGroup1Active(e) {
@@ -198,95 +213,108 @@ class Dashboard2 extends Component {
                     <div className="tab-content">
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
                             <div className="row">
-                            <div className="col-md-6">
-                                <AmCharts.React
-                                    style={{
-                                        width: "100%",
-                                        height: "500px"
-                                    }}
-                                    options={{
-                                        "type": "serial",
-                                        "theme": "light",
-                                        "graphs": rawDataGraphOne,
-                                        "dataProvider": rawDataValuesOne,
-                                        "chartScrollbar": {
-                                            "graph": "g1",
-                                            "gridAlpha": 0,
-                                            "color": "#888888",
-                                            "scrollbarHeight": 55,
-                                            "backgroundAlpha": 0,
-                                            "selectedBackgroundAlpha": 0.1,
-                                            "selectedBackgroundColor": "#888888",
-                                            "graphFillAlpha": 0,
-                                            "autoGridCount": true,
-                                            "selectedGraphFillAlpha": 0,
-                                            "graphLineAlpha": 0.2,
-                                            "graphLineColor": "#c2c2c2",
-                                            "selectedGraphLineColor": "#888888",
-                                            "selectedGraphLineAlpha": 1
-                                        },
-                                        "chartCursor": {
-                                            "categoryBalloonDateFormat": "MM DD",
-                                            "cursorAlpha": 0,
-                                            "valueLineEnabled": true,
-                                            "valueLineBalloonEnabled": true,
-                                            "valueLineAlpha": 0.5,
-                                            "fullWidth": true
-                                        },
-                                        "dataDateFormat": "YYYYMMDD",
-                                        "categoryField": "date",
-                                        "categoryAxis": {
-                                            "minPeriod": "DD",
-                                            "parseDates": true,
-                                            "minorGridAlpha": 0.1,
-                                            "minorGridEnabled": true
-                                        },
-                                        "export": {
-                                            "enabled": true
-                                        }
-                                }} />
-                            </div>
-                            <div className="col-md-6">
-                                <AmCharts.React
-                                    style={{
-                                        width: "100%",
-                                        height: "500px"
-                                    }}
-                                    options={{
-                                        "type": "serial",
-                                        "theme": "light",
-                                        "dataProvider": rawDataValuesTwo,
-                                        "valueAxes": [{
-                                            "gridColor": "#FFFFFF",
-                                            "gridAlpha": 0.2,
-                                            "dashLength": 0
-                                        }],
-                                        "gridAboveGraphs": true,
-                                        "startDuration": 1,
-                                        "graphs": [{
-                                            "balloonText": "[[category]]: <b>[[value]]</b>",
-                                            "fillAlphas": 0.8,
-                                            "lineAlpha": 0.2,
-                                            "type": "column",
-                                            "valueField": "value"
-                                        }],
-                                        "chartCursor": {
-                                            "categoryBalloonEnabled": false,
-                                            "cursorAlpha": 0,
-                                            "zoomable": false
-                                        },
-                                        "categoryField": "date",
-                                        "categoryAxis": {
-                                            "gridPosition": "start",
-                                            "gridAlpha": 0,
-                                            "tickPosition": "start",
-                                            "tickLength": 20
-                                        },
-                                        "export": {
-                                            "enabled": true
-                                        }
+                                <div className="col-md-6">
+                                    <AmCharts.React
+                                        style={{
+                                            width: "100%",
+                                            height: "500px"
+                                        }}
+                                        options={{
+                                            "type": "serial",
+                                            "theme": "light",
+                                            "graphs": rawDataGraphOne,
+                                            "dataProvider": rawDataValuesOne,
+                                            "chartScrollbar": {
+                                                "graph": "g1",
+                                                "gridAlpha": 0,
+                                                "color": "#888888",
+                                                "scrollbarHeight": 55,
+                                                "backgroundAlpha": 0,
+                                                "selectedBackgroundAlpha": 0.1,
+                                                "selectedBackgroundColor": "#888888",
+                                                "graphFillAlpha": 0,
+                                                "autoGridCount": true,
+                                                "selectedGraphFillAlpha": 0,
+                                                "graphLineAlpha": 0.2,
+                                                "graphLineColor": "#c2c2c2",
+                                                "selectedGraphLineColor": "#888888",
+                                                "selectedGraphLineAlpha": 1
+                                            },
+                                            "chartCursor": {
+                                                "categoryBalloonDateFormat": "MM DD",
+                                                "cursorAlpha": 0,
+                                                "valueLineEnabled": true,
+                                                "valueLineBalloonEnabled": true,
+                                                "valueLineAlpha": 0.5,
+                                                "fullWidth": true
+                                            },
+                                            "dataDateFormat": "YYYYMMDD",
+                                            "categoryField": "date",
+                                            "categoryAxis": {
+                                                "minPeriod": "DD",
+                                                "parseDates": true,
+                                                "minorGridAlpha": 0.1,
+                                                "minorGridEnabled": true
+                                            },
+                                            "export": {
+                                                "enabled": true
+                                            }
                                     }} />
+                                </div>
+                                <div className="col-md-6">
+                                    <AmCharts.React
+                                        style={{
+                                            width: "100%",
+                                            height: "500px"
+                                        }}
+                                        options={{
+                                            "type": "serial",
+                                            "theme": "light",
+                                            "dataProvider": rawDataValuesTwo,
+                                            "valueAxes": [{
+                                                "gridColor": "#FFFFFF",
+                                                "gridAlpha": 0.2,
+                                                "dashLength": 0
+                                            }],
+                                            "gridAboveGraphs": true,
+                                            "startDuration": 1,
+                                            "graphs": [{
+                                                "balloonText": "[[category]]: <b>[[value]]</b>",
+                                                "fillAlphas": 0.8,
+                                                "lineAlpha": 0.2,
+                                                "type": "column",
+                                                "valueField": "value"
+                                            }],
+                                            "chartCursor": {
+                                                "categoryBalloonEnabled": false,
+                                                "cursorAlpha": 0,
+                                                "zoomable": false
+                                            },
+                                            "categoryField": "date",
+                                            "categoryAxis": {
+                                                "gridPosition": "start",
+                                                "gridAlpha": 0,
+                                                "tickPosition": "start",
+                                                "tickLength": 20
+                                            },
+                                            "export": {
+                                                "enabled": true
+                                            }
+                                        }} />
+                                </div>
                             </div>
+                            <div className="row">
+                                <button className="btn btn-default">
+                                    <i className="fa fa-download" aria-hidden="true"></i>
+                                    &nbsp;Export Table
+                                </button>
+                            </div>
+                            <div className="">
+                                <BootstrapTable data={products} striped={true} hover={true}>
+                                    <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="name" dataSort={true}>Product Name</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="price" dataFormat={this.priceFormatter}>Product Price</TableHeaderColumn>
+                                </BootstrapTable>
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
