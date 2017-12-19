@@ -9,6 +9,7 @@ export function setAnalytics(analytics) {
 }
 
 export function fetchAnalytics(startDate, endDate) {
+    debugger;
     return dispatch => {
         return axios.get(process.env.API_URL + '/g_analytics/' + startDate + '/' + endDate).then(res => {
             if (res.status !== 200) {

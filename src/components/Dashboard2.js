@@ -151,7 +151,7 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(new Date('2017-06-02T10:00:00')),
+            startDate: moment(new Date('2017-12-01T10:00:00')),
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
@@ -164,17 +164,14 @@ class Dashboard2 extends Component {
     }
 
     componentDidMount() {
-        debugger;
         let startDate = this.state.startDate.format('YYYYMMDD').replace(/-/gi, '');
         let endDate = this.state.endDate.format('YYYYMMDD').replace(/-/gi, '');
 
-        // console.log(startDate);
+        this.props.fetchAnalytics(startDate, endDate).then(res => {
+            this.setState({ loading: false });
+        }, err => {
 
-        // this.props.fetchAnalytics().then(res => {
-        //     this.setState({ loading: false });
-        // }, err => {
-
-        // });
+        });
     }
 
     rateFormatter(cell, row) {
