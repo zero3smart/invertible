@@ -11,6 +11,9 @@ import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import SmartDataTable from 'react-smart-data-table'
+import { connect } from 'react-redux';
+import { fetchAnalytics } from '../actions/analyticsActions';
+import PropTypes from 'prop-types';
 
 var rawDataValuesOne = [{
     "date": "20170516",
@@ -148,15 +151,30 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(),
+            startDate: moment(new Date('2017-06-02T10:00:00')),
             endDate: moment(),
             group1Active: 'Sessions',
-            group2Active: 'Total'
+            group2Active: 'Total',
+            loading: true
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
+    }
+
+    componentDidMount() {
+        debugger;
+        let startDate = this.state.startDate.format('YYYYMMDD').replace(/-/gi, '');
+        let endDate = this.state.endDate.format('YYYYMMDD').replace(/-/gi, '');
+
+        // console.log(startDate);
+
+        // this.props.fetchAnalytics().then(res => {
+        //     this.setState({ loading: false });
+        // }, err => {
+
+        // });
     }
 
     rateFormatter(cell, row) {
@@ -413,7 +431,7 @@ class Dashboard2 extends Component {
                                     name='test-table'
                                     className='ui compact selectable table'
                                     sortable
-                                    perPage="4"
+                                    perPage={4}
                                 />,
                             </div>
                         </div>
@@ -425,4 +443,14 @@ class Dashboard2 extends Component {
     }
 }
 
-export default Dashboard2;
+Dashboard2.propTypes = {
+    analytics: PropTypes.array.isRequired
+}
+
+function mapStateToProps(state) {
+    return {
+        analytics: state.analytics
+    };
+}
+
+export default connect(mapStateToProps, { fetchAnalytics })(Dashboard2);
