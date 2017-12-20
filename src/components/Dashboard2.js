@@ -152,7 +152,7 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(new Date('2017-12-01T10:00:00')),
+            startDate: moment(new Date('2017-06-01T10:00:00')),
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
@@ -179,7 +179,6 @@ class Dashboard2 extends Component {
     }
 
     fetchAnalyticsData() {
-        debugger;
         let startDate = this.state.startDate.format('YYYYMMDD').replace(/-/gi, '');
         let endDate = this.state.endDate.format('YYYYMMDD').replace(/-/gi, '');
 
@@ -229,10 +228,7 @@ class Dashboard2 extends Component {
         const { analytics } = this.props.analytics;
 
         const loading = (
-            <div className="ui segment">
-                <div className="ui active loader"></div>
-                <p></p>
-            </div>
+            <div className="ui active inline loader"></div>
         );
 
         const smoothChart = (
@@ -263,7 +259,7 @@ class Dashboard2 extends Component {
                         "selectedGraphLineAlpha": 1
                     },
                     "chartCursor": {
-                        "categoryBalloonDateFormat": "MM DD",
+                        "categoryBalloonDateFormat": "MMM YYYY",
                         "cursorAlpha": 0,
                         "valueLineEnabled": true,
                         "valueLineBalloonEnabled": true,
@@ -273,7 +269,7 @@ class Dashboard2 extends Component {
                     "dataDateFormat": "YYYYMMDD",
                     "categoryField": "date",
                     "categoryAxis": {
-                        "minPeriod": "DD",
+                        "minPeriod": "MM",
                         "parseDates": true,
                         "minorGridAlpha": 0.1,
                         "minorGridEnabled": true
