@@ -14,6 +14,7 @@ import SmartDataTable from 'react-smart-data-table'
 import { connect } from 'react-redux';
 import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 var rawDataValuesOne = [{
     "date": "20170516",
@@ -155,6 +156,7 @@ class Dashboard2 extends Component {
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
+            rawDataValuesOne: rawDataValuesOne,
             loading: true
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -163,15 +165,34 @@ class Dashboard2 extends Component {
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
 
-    componentDidMount() {
+    setAnalyticsValues() {
+        let value = this.state.group1Active.toLowerCase();
+
+        let rawDataValuesOne = this.props.analytics.map(elm => {
+            let rObj = {};
+            rObj["date"] = elm.date;
+            rObj["value"] = elm[value];
+            return rObj;
+        });
+
+        this.setState({ rawDataValuesOne: rawDataValuesOne });
+    }
+
+    fetchAnalyticsData() {
+        debugger;
         let startDate = this.state.startDate.format('YYYYMMDD').replace(/-/gi, '');
         let endDate = this.state.endDate.format('YYYYMMDD').replace(/-/gi, '');
 
         this.props.fetchAnalytics(startDate, endDate).then(res => {
+            this.setAnalyticsValues();
             this.setState({ loading: false });
         }, err => {
 
         });
+    }
+
+    componentDidMount() {
+        this.fetchAnalyticsData();
     }
 
     rateFormatter(cell, row) {
@@ -180,6 +201,7 @@ class Dashboard2 extends Component {
 
     setGroup1Active(e) {
         this.setState({group1Active : e.target.value});
+        this.setAnalyticsValues();
     }
 
     setGroup2Active(e) {
@@ -189,16 +211,79 @@ class Dashboard2 extends Component {
     handleStartDateChange(date) {
         this.setState({
             startDate: date
+        }, () => {
+            console.log(date.format('YYYYMMDD'));
+            this.fetchAnalyticsData();
         });
     }
 
     handleEndDateChange(date) {
         this.setState({
             endDate: date
+        }, () => {
+            this.fetchAnalyticsData();
         });
     }
 
     render() {
+        const { analytics } = this.props.analytics;
+
+        const loading = (
+            <div className="ui segment">
+                <div className="ui active loader"></div>
+                <p></p>
+            </div>
+        );
+
+        const smoothChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "500px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "graphs": rawDataGraphOne,
+                    "dataProvider": this.state.rawDataValuesOne,
+                    "chartScrollbar": {
+                        "graph": "g1",
+                        "gridAlpha": 0,
+                        "color": "#888888",
+                        "scrollbarHeight": 55,
+                        "backgroundAlpha": 0,
+                        "selectedBackgroundAlpha": 0.1,
+                        "selectedBackgroundColor": "#888888",
+                        "graphFillAlpha": 0,
+                        "autoGridCount": true,
+                        "selectedGraphFillAlpha": 0,
+                        "graphLineAlpha": 0.2,
+                        "graphLineColor": "#c2c2c2",
+                        "selectedGraphLineColor": "#888888",
+                        "selectedGraphLineAlpha": 1
+                    },
+                    "chartCursor": {
+                        "categoryBalloonDateFormat": "MM DD",
+                        "cursorAlpha": 0,
+                        "valueLineEnabled": true,
+                        "valueLineBalloonEnabled": true,
+                        "valueLineAlpha": 0.5,
+                        "fullWidth": true
+                    },
+                    "dataDateFormat": "YYYYMMDD",
+                    "categoryField": "date",
+                    "categoryAxis": {
+                        "minPeriod": "DD",
+                        "parseDates": true,
+                        "minorGridAlpha": 0.1,
+                        "minorGridEnabled": true
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
         return (
             <div className="dashboard2-container">
                 <h6>Current Period</h6>
@@ -318,52 +403,7 @@ class Dashboard2 extends Component {
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
                             <div className="row">
                                 <div className="col-md-6">
-                                    <AmCharts.React
-                                        style={{
-                                            width: "100%",
-                                            height: "500px"
-                                        }}
-                                        options={{
-                                            "type": "serial",
-                                            "theme": "light",
-                                            "graphs": rawDataGraphOne,
-                                            "dataProvider": rawDataValuesOne,
-                                            "chartScrollbar": {
-                                                "graph": "g1",
-                                                "gridAlpha": 0,
-                                                "color": "#888888",
-                                                "scrollbarHeight": 55,
-                                                "backgroundAlpha": 0,
-                                                "selectedBackgroundAlpha": 0.1,
-                                                "selectedBackgroundColor": "#888888",
-                                                "graphFillAlpha": 0,
-                                                "autoGridCount": true,
-                                                "selectedGraphFillAlpha": 0,
-                                                "graphLineAlpha": 0.2,
-                                                "graphLineColor": "#c2c2c2",
-                                                "selectedGraphLineColor": "#888888",
-                                                "selectedGraphLineAlpha": 1
-                                            },
-                                            "chartCursor": {
-                                                "categoryBalloonDateFormat": "MM DD",
-                                                "cursorAlpha": 0,
-                                                "valueLineEnabled": true,
-                                                "valueLineBalloonEnabled": true,
-                                                "valueLineAlpha": 0.5,
-                                                "fullWidth": true
-                                            },
-                                            "dataDateFormat": "YYYYMMDD",
-                                            "categoryField": "date",
-                                            "categoryAxis": {
-                                                "minPeriod": "DD",
-                                                "parseDates": true,
-                                                "minorGridAlpha": 0.1,
-                                                "minorGridEnabled": true
-                                            },
-                                            "export": {
-                                                "enabled": true
-                                            }
-                                    }} />
+                                    { this.state.loading ? loading : smoothChart }
                                 </div>
                                 <div className="col-md-6">
                                     <AmCharts.React
