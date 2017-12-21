@@ -272,7 +272,15 @@ class Dashboard2 extends Component {
                         "minPeriod": "MM",
                         "parseDates": true,
                         "minorGridAlpha": 0.1,
-                        "minorGridEnabled": true
+                        "minorGridEnabled": true,
+                        "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
+                            { "period": "ss", "format": "JJ:NN:SS" },
+                            { "period": "mm", "format": "JJ:NN" },
+                            { "period": "hh", "format": "JJ:NN" },
+                            { "period": "DD", "format": "MMM DD" },
+                            { "period": "WW", "format": "MMM DD" },
+                            { "period": "MM", "format": "MMM YYYY" },
+                            { "period": "YYYY", "format": "YYYY" }]
                     },
                     "export": {
                         "enabled": true
