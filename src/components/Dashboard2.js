@@ -228,7 +228,7 @@ class Dashboard2 extends Component {
         const { analytics } = this.props.analytics;
 
         const loading = (
-            <div className="ui active inline loader"></div>
+            <div className="ui active centered inline loader"></div>
         );
 
         const smoothChart = (
