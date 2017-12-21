@@ -16,17 +16,6 @@ import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-var rawDataValuesOne = [{
-    "date": "20170516",
-    "value": -0.307
-}, {
-    "date": "20170813",
-    "value": -0.168
-}, {
-    "date": "20170915",
-    "value": -0.168
-}];
-
 var rawDataValuesTwo = [{
     "date": "20170516",
     "value": -0.307
