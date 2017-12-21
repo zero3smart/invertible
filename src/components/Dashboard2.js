@@ -42,8 +42,8 @@ var rawDataGraphOne = [{
     "id": "g1",
     "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
     "bullet": "round",
-    "bulletSize": 8,
-    "lineColor": "#d1655d",
+    "bulletSize": 4,
+    "lineColor": "#3962B7",
     "lineThickness": 2,
     "negativeLineColor": "#637bb6",
     "type": "smoothedLine",
@@ -169,22 +169,9 @@ class Dashboard2 extends Component {
         let value = this.state.group1Active.toLowerCase();
         let { analytics } = this.props;
 
-        // let rawDataValuesOne = analytics.map(elm => {
-        //     let rObj = {};
-        //     rObj["date"] = elm.date;
-        //     rObj["value"] = elm[value];
-        //     return rObj;
-        // });
-
-        // let rawDataValuesOne = _.reduce(analytics, (sum, elm) => {
-        //     return sum + elm[value];
-        // })
-
-        var rawDataValuesOne =
-            _(analytics)
+        var rawDataValuesOne = _(analytics)
                 .groupBy('date')
                 .map((objs, key) => {
-                    debugger;
                     return {
                         'date': key,
                         'value': _.sumBy(objs, (s) => {
