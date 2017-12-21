@@ -167,13 +167,32 @@ class Dashboard2 extends Component {
 
     setAnalyticsValues() {
         let value = this.state.group1Active.toLowerCase();
+        let { analytics } = this.props;
 
-        let rawDataValuesOne = this.props.analytics.map(elm => {
-            let rObj = {};
-            rObj["date"] = elm.date;
-            rObj["value"] = elm[value];
-            return rObj;
-        });
+        // let rawDataValuesOne = analytics.map(elm => {
+        //     let rObj = {};
+        //     rObj["date"] = elm.date;
+        //     rObj["value"] = elm[value];
+        //     return rObj;
+        // });
+
+        // let rawDataValuesOne = _.reduce(analytics, (sum, elm) => {
+        //     return sum + elm[value];
+        // })
+
+        var rawDataValuesOne =
+            _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    debugger;
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.sessions, 10);
+                        })
+                    };
+                })
+                .value();
 
         this.setState({ rawDataValuesOne: rawDataValuesOne });
     }
@@ -225,7 +244,7 @@ class Dashboard2 extends Component {
     }
 
     render() {
-        const { analytics } = this.props.analytics;
+
 
         const loading = (
             <div className="ui active centered inline loader"></div>
@@ -269,7 +288,7 @@ class Dashboard2 extends Component {
                     "dataDateFormat": "YYYYMMDD",
                     "categoryField": "date",
                     "categoryAxis": {
-                        "minPeriod": "MM",
+                        "minPeriod": "DD",
                         "parseDates": true,
                         "minorGridAlpha": 0.1,
                         "minorGridEnabled": true,
