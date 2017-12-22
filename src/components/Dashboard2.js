@@ -145,7 +145,7 @@ class Dashboard2 extends Component {
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
-            rawDataValuesOne: rawDataValuesOne,
+            rawDataValuesOne: [],
             loading: true
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
