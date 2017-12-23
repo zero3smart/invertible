@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { core as ZingChart, line as LineChart, area as AreaChart, pie as PieChart, bar as BarChart, scatter as ScatterChart } from 'zingchart-react';
 import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
@@ -10,7 +9,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import SmartDataTable from 'react-smart-data-table'
+import SmartDataTable from 'react-smart-data-table';
 import { connect } from 'react-redux';
 import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
@@ -146,7 +145,14 @@ class Dashboard2 extends Component {
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
-            loading: true
+            loading: true,
+            filterValues: {
+                'Sessions': 'sessions',
+                'Transactions': 'transactions',
+                'BounceRate': 'bounces',
+                'ConversionRate': 'conversionrate',
+                'TimeSpent': 'timespent'
+            }
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
