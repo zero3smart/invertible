@@ -15,17 +15,6 @@ import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-var rawDataValuesTwo = [{
-    "date": "20170516",
-    "value": -0.307
-}, {
-    "date": "20170813",
-    "value": -0.168
-}, {
-    "date": "20170915",
-    "value": -0.168
-}];
-
 var rawDataGraphOne = [{
     "id": "g1",
     "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
@@ -47,8 +36,9 @@ class Dashboard2 extends Component {
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
+            rawDataValuesTwo: [],
             loading: true,
-            filterValues: {
+            reportMappings: {
                 'Sessions': 'sessions',
                 'Transactions': 'transactions',
                 'BounceRate': 'bounces',
@@ -73,7 +63,7 @@ class Dashboard2 extends Component {
     }
 
     setAnalyticsValues() {
-        let value = this.state.filterValues[this.state.group1Active];
+        let value = this.state.reportMappings[this.state.group1Active];
         let { analytics } = this.props;
 
         if (this.state.group1Active === 'Sessions' || this.state.group1Active === 'Transactions') {
@@ -148,8 +138,6 @@ class Dashboard2 extends Component {
             totalDuration += parseInt(element["ga:sessionduration"], 10);
         });
 
-
-
         reportOptions.sessions = this.numberWithCommas(totalSessions);
         reportOptions.transactions = this.numberWithCommas(totalTransactions);
         reportOptions.bounceRate = this.rateFormatter(this.numberWithCommas(totalBounces / totalVisits * 100));
@@ -159,9 +147,57 @@ class Dashboard2 extends Component {
         let analysisResult = [];
         analysisResult.push(reportOptions);
 
+        //Get reports data for barchart
+        debugger;
+        if (this.state.group2Active === 'Total') {
+            var rawDataValuesTwo = [
+                {
+                    "category": "Total",
+                    "value": totalSessions
+                }
+            ];
+        } else if (this.state.group2Active === 'Device') {
+            var rawDataValuesTwo = _(analytics)
+                .groupBy('category')
+                .map((objs, key) => {
+                    return {
+                        'category': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.sessions, 10);
+                        })
+                    };
+                })
+                .value();
+        } else if (this.state.group2Active === 'Channel') {
+            var rawDataValuesTwo = _(analytics)
+                .groupBy('medium')
+                .map((objs, key) => {
+                    return {
+                        'category': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.sessions, 10);
+                        })
+                    };
+                })
+                .value();
+        } else if (this.state.group2Active === 'LandingPage') {
+            var rawDataValuesTwo = _(analytics)
+                .groupBy('landingpath')
+                .map((objs, key) => {
+                    return {
+                        'category': key.substring(0, 5),
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.sessions, 10);
+                        })
+                    };
+                })
+                .value();
+        }
+
         this.setState({ analysisResult });
         this.setState({ reportOptions });
         this.setState({ rawDataValuesOne: rawDataValuesOne });
+        this.setState({ rawDataValuesTwo: rawDataValuesTwo });
     }
 
     numberWithCommas(x) {
@@ -195,7 +231,9 @@ class Dashboard2 extends Component {
     }
 
     setGroup2Active(e) {
-        this.setState({ group2Active: e.target.value });
+        this.setState({ group2Active: e.target.value }, () => {
+            this.setAnalyticsValues();
+        });
     }
 
     handleStartDateChange(date) {
@@ -289,7 +327,7 @@ class Dashboard2 extends Component {
                 options={{
                     "type": "serial",
                     "theme": "light",
-                    "dataProvider": rawDataValuesTwo,
+                    "dataProvider": this.state.rawDataValuesTwo,
                     "valueAxes": [{
                         "gridColor": "#FFFFFF",
                         "gridAlpha": 0.2,
@@ -309,12 +347,13 @@ class Dashboard2 extends Component {
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "date",
+                    "categoryField": "category",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "gridAlpha": 0,
                         "tickPosition": "start",
-                        "tickLength": 20
+                        "tickLength": 20,
+                        "labelRotation": 90,
                     },
                     "export": {
                         "enabled": true
