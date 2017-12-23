@@ -164,7 +164,8 @@ class Dashboard2 extends Component {
         let value = this.state.filterValues[this.state.group1Active];
         let { analytics } = this.props;
 
-        var rawDataValuesOne = _(analytics)
+        if (this.state.group1Active === 'Sessions' || this.state.group1Active === 'Transactions') {
+            var rawDataValuesOne = _(analytics)
                 .groupBy('date')
                 .map((objs, key) => {
                     return {
@@ -175,6 +176,35 @@ class Dashboard2 extends Component {
                     };
                 })
                 .value();
+        } else if (this.state.group1Active === 'BounceRate') {
+            var rawDataValuesOne = _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.bounces, 10);
+                        }) / _.sumBy(objs, (s) => {
+                            return parseInt(s.visits, 10);
+                        })
+                    };
+                })
+                .value();
+        } else if (this.state.group1Active === 'ConversionRate') {
+            var rawDataValuesOne = _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s[value], 10);
+                        })
+                    };
+                })
+                .value();
+        } else {
+
+        }
 
         this.setState({ rawDataValuesOne: rawDataValuesOne });
     }
