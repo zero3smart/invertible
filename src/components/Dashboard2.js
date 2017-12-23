@@ -148,7 +148,6 @@ class Dashboard2 extends Component {
         analysisResult.push(reportOptions);
 
         //Get reports data for barchart
-        debugger;
         if (this.state.group2Active === 'Total') {
             var rawDataValuesTwo = [
                 {
@@ -493,23 +492,24 @@ class Dashboard2 extends Component {
                                 </button>
                             </div>
                             <div className="table-block">
-                                {/* <BootstrapTable data={analysisResult} striped={true} hover={true}>
+                                {!this.state.loading &&
+                                <BootstrapTable data={this.state.analysisResult} striped={true} hover={true}>
                                     <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
                                     <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
                                     <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
                                     <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="averageTimeSpentOnSite" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
-                                </BootstrapTable> */}
-                                {!this.state.loading &&
+                                    <TableHeaderColumn dataField="bounceRate" dataSort={true}>Bounce Rate</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="conversionRate" dataSort={true}>Conversion Rate</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="averageTime" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
+                                </BootstrapTable> }
+                                {/* {!this.state.loading &&
                                 <SmartDataTable
                                     data={this.state.analysisResult}
                                     name='test-table'
                                     className='ui compact selectable table'
                                     sortable
                                     perPage={4}
-                                />}
+                                />} */}
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
