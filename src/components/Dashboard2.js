@@ -15,17 +15,6 @@ import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-var rawDataValuesTwo = [{
-    "date": "20170516",
-    "value": -0.307
-}, {
-    "date": "20170813",
-    "value": -0.168
-}, {
-    "date": "20170915",
-    "value": -0.168
-}];
-
 var rawDataGraphOne = [{
     "id": "g1",
     "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
@@ -42,18 +31,19 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(new Date('2017-06-01T10:00:00')),
+            startDate: moment(new Date('2017-12-15T10:00:00')),
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
+            rawDataValuesTwo: [],
             loading: true,
-            filterValues: {
+            reportMappings: {
                 'Sessions': 'sessions',
                 'Transactions': 'transactions',
-                'BounceRate': 'bounces',
-                'ConversionRate': 'conversionrate',
-                'TimeSpent': 'timespent'
+                'BounceRate': 'bounceRate',
+                'ConversionRate': 'conversionRate',
+                'TimeSpent': 'averageTime'
             },
             reportOptions: {
                 id: "",
@@ -72,8 +62,16 @@ class Dashboard2 extends Component {
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
 
+    convertObjectToComma(obj) {
+        for (var key in obj) {
+            obj[key] = this.numberWithCommas(obj[key]);
+        }
+
+        return obj;
+    }
+
     setAnalyticsValues() {
-        let value = this.state.filterValues[this.state.group1Active];
+        let value = this.state.reportMappings[this.state.group1Active];
         let { analytics } = this.props;
 
         if (this.state.group1Active === 'Sessions' || this.state.group1Active === 'Transactions') {
@@ -135,10 +133,10 @@ class Dashboard2 extends Component {
         let reportOptions = { ...this.state.reportOptions };
 
         let totalSessions = 0,
-        totalTransactions = 0,
-        totalBounces = 0,
-        totalVisits = 0,
-        totalDuration = 0;
+            totalTransactions = 0,
+            totalBounces = 0,
+            totalVisits = 0,
+            totalDuration = 0;
 
         analytics.forEach((element) => {
             totalSessions += parseInt(element.sessions, 10);
@@ -148,20 +146,67 @@ class Dashboard2 extends Component {
             totalDuration += parseInt(element["ga:sessionduration"], 10);
         });
 
+        reportOptions.sessions = totalSessions;
+        reportOptions.transactions = totalTransactions;
+        reportOptions.bounceRate = totalBounces / totalVisits * 100;
+        reportOptions.conversionRate = totalTransactions / totalVisits * 100;
+        reportOptions.averageTime = totalDuration / totalVisits / 86400;
 
-
-        reportOptions.sessions = this.numberWithCommas(totalSessions);
-        reportOptions.transactions = this.numberWithCommas(totalTransactions);
-        reportOptions.bounceRate = this.rateFormatter(this.numberWithCommas(totalBounces / totalVisits * 100));
-        reportOptions.conversionRate = this.rateFormatter(this.numberWithCommas(totalTransactions / totalVisits * 100));
-        reportOptions.averageTime = this.numberWithCommas(totalDuration / totalVisits / 86400);
+        //Get reports data for barchart
+        debugger;
+        if (this.state.group2Active === 'Total') {
+            var rawDataValuesTwo = [
+                {
+                    "category": "Total",
+                    "value": parseInt(reportOptions[value], 10)
+                }
+            ];
+        } else if (this.state.group2Active === 'Device') {
+            var rawDataValuesTwo = _(analytics)
+                .groupBy('category')
+                .map((objs, key) => {
+                    return {
+                        'category': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s[value], 10);
+                        })
+                    };
+                })
+                .value();
+        } else if (this.state.group2Active === 'Channel') {
+            var rawDataValuesTwo = _(analytics)
+                .groupBy('medium')
+                .map((objs, key) => {
+                    return {
+                        'category': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s[value], 10);
+                        })
+                    };
+                })
+                .value();
+        } else if (this.state.group2Active === 'LandingPage') {
+            var rawDataValuesTwo = _(analytics)
+                .groupBy('landingpath')
+                .map((objs, key) => {
+                    return {
+                        'category': key.substring(0, 5),
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s[value], 10);
+                        })
+                    };
+                })
+                .value();
+        }
 
         let analysisResult = [];
-        analysisResult.push(reportOptions);
+        debugger;
+        analysisResult.push(this.convertObjectToComma(reportOptions));
 
         this.setState({ analysisResult });
         this.setState({ reportOptions });
         this.setState({ rawDataValuesOne: rawDataValuesOne });
+        this.setState({ rawDataValuesTwo: rawDataValuesTwo });
     }
 
     numberWithCommas(x) {
@@ -189,13 +234,15 @@ class Dashboard2 extends Component {
     }
 
     setGroup1Active(e) {
-        this.setState({group1Active : e.target.value}, () => {
+        this.setState({ group1Active: e.target.value }, () => {
             this.setAnalyticsValues();
         });
     }
 
     setGroup2Active(e) {
-        this.setState({ group2Active: e.target.value });
+        this.setState({ group2Active: e.target.value }, () => {
+            this.setAnalyticsValues();
+        });
     }
 
     handleStartDateChange(date) {
@@ -231,6 +278,9 @@ class Dashboard2 extends Component {
                     "theme": "light",
                     "graphs": rawDataGraphOne,
                     "dataProvider": this.state.rawDataValuesOne,
+                    "titles": [{
+                        "text": this.state.group1Active
+                    }],
                     "chartScrollbar": {
                         "graph": "g1",
                         "gridAlpha": 0,
@@ -263,13 +313,59 @@ class Dashboard2 extends Component {
                         "minorGridAlpha": 0.1,
                         "minorGridEnabled": true,
                         "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
-                            { "period": "ss", "format": "JJ:NN:SS" },
-                            { "period": "mm", "format": "JJ:NN" },
-                            { "period": "hh", "format": "JJ:NN" },
-                            { "period": "DD", "format": "MMM DD" },
-                            { "period": "WW", "format": "MMM DD" },
-                            { "period": "MM", "format": "MMM YYYY" },
-                            { "period": "YYYY", "format": "YYYY" }]
+                        { "period": "ss", "format": "JJ:NN:SS" },
+                        { "period": "mm", "format": "JJ:NN" },
+                        { "period": "hh", "format": "JJ:NN" },
+                        { "period": "DD", "format": "MMM DD" },
+                        { "period": "WW", "format": "MMM DD" },
+                        { "period": "MM", "format": "MMM YYYY" },
+                        { "period": "YYYY", "format": "YYYY" }]
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const barChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "500px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "dataProvider": this.state.rawDataValuesTwo,
+                    "titles": [{
+                        "text": this.state.group2Active
+                    }],
+                    "valueAxes": [{
+                        "gridColor": "#FFFFFF",
+                        "gridAlpha": 0.2,
+                        "dashLength": 0
+                    }],
+                    "gridAboveGraphs": true,
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "[[category]]: <b>[[value]]</b>",
+                        "fillAlphas": 0.8,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "category",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "gridAlpha": 0,
+                        "tickPosition": "start",
+                        "tickLength": 20,
+                        "labelRotation": 90,
                     },
                     "export": {
                         "enabled": true
@@ -396,48 +492,10 @@ class Dashboard2 extends Component {
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
                             <div className="row">
                                 <div className="col-md-6">
-                                    { this.state.loading ? loading : smoothChart }
+                                    {this.state.loading ? loading : smoothChart}
                                 </div>
                                 <div className="col-md-6">
-                                    <AmCharts.React
-                                        style={{
-                                            width: "100%",
-                                            height: "500px"
-                                        }}
-                                        options={{
-                                            "type": "serial",
-                                            "theme": "light",
-                                            "dataProvider": rawDataValuesTwo,
-                                            "valueAxes": [{
-                                                "gridColor": "#FFFFFF",
-                                                "gridAlpha": 0.2,
-                                                "dashLength": 0
-                                            }],
-                                            "gridAboveGraphs": true,
-                                            "startDuration": 1,
-                                            "graphs": [{
-                                                "balloonText": "[[category]]: <b>[[value]]</b>",
-                                                "fillAlphas": 0.8,
-                                                "lineAlpha": 0.2,
-                                                "type": "column",
-                                                "valueField": "value"
-                                            }],
-                                            "chartCursor": {
-                                                "categoryBalloonEnabled": false,
-                                                "cursorAlpha": 0,
-                                                "zoomable": false
-                                            },
-                                            "categoryField": "date",
-                                            "categoryAxis": {
-                                                "gridPosition": "start",
-                                                "gridAlpha": 0,
-                                                "tickPosition": "start",
-                                                "tickLength": 20
-                                            },
-                                            "export": {
-                                                "enabled": true
-                                            }
-                                        }} />
+                                    {this.state.loading ? loading : barChart}
                                 </div>
                             </div>
                             <div className="row">
@@ -447,23 +505,24 @@ class Dashboard2 extends Component {
                                 </button>
                             </div>
                             <div className="table-block">
-                                {/* <BootstrapTable data={analysisResult} striped={true} hover={true}>
-                                    <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
-                                    <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="averageTimeSpentOnSite" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
-                                </BootstrapTable> */}
                                 {!this.state.loading &&
+                                    <BootstrapTable data={this.state.analysisResult} striped={true} hover={true}>
+                                        <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
+                                        <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="averageTime" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
+                                    </BootstrapTable>}
+                                {/* {!this.state.loading &&
                                 <SmartDataTable
                                     data={this.state.analysisResult}
                                     name='test-table'
                                     className='ui compact selectable table'
                                     sortable
                                     perPage={4}
-                                />}
+                                />} */}
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
