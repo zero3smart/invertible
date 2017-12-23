@@ -38,104 +38,6 @@ var rawDataGraphOne = [{
     "valueField": "value"
 }];
 
-var analysisResult = [{
-    id: 1,
-    total: 1,
-    sessions: 152432,
-    transactions: 0,
-    bounceRate: 70,
-    conversionRate: 0,
-    averageTimeSpentOnSite: 27
-}, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }, {
-        id: 1,
-        total: 1,
-        sessions: 152432,
-        transactions: 0,
-        bounceRate: 70,
-        conversionRate: 0,
-        averageTimeSpentOnSite: 27
-    }];
-
 class Dashboard2 extends Component {
     constructor(props) {
         super(props);
@@ -152,7 +54,17 @@ class Dashboard2 extends Component {
                 'BounceRate': 'bounces',
                 'ConversionRate': 'conversionrate',
                 'TimeSpent': 'timespent'
-            }
+            },
+            reportOptions: {
+                id: "",
+                total: "",
+                sessions: "",
+                transactions: "",
+                bounceRate: "",
+                conversionRate: "",
+                averageTime: ""
+            },
+            analysisResult: []
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
@@ -164,7 +76,8 @@ class Dashboard2 extends Component {
         let value = this.state.filterValues[this.state.group1Active];
         let { analytics } = this.props;
 
-        var rawDataValuesOne = _(analytics)
+        if (this.state.group1Active === 'Sessions' || this.state.group1Active === 'Transactions') {
+            var rawDataValuesOne = _(analytics)
                 .groupBy('date')
                 .map((objs, key) => {
                     return {
@@ -175,8 +88,84 @@ class Dashboard2 extends Component {
                     };
                 })
                 .value();
+        } else if (this.state.group1Active === 'BounceRate') {
+            var rawDataValuesOne = _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.bounces, 10);
+                        }) / _.sumBy(objs, (s) => {
+                            return parseInt(s.visits, 10);
+                        })
+                    };
+                })
+                .value();
+        } else if (this.state.group1Active === 'ConversionRate') {
+            var rawDataValuesOne = _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s.transactions, 10);
+                        }) / _.sumBy(objs, (s) => {
+                            return parseInt(s.visits, 10);
+                        })
+                    };
+                })
+                .value();
+        } else {
+            var rawDataValuesOne = _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s["ga:sessionduration"], 10);
+                        }) / _.sumBy(objs, (s) => {
+                            return parseInt(s.sessions, 10);
+                        })
+                    };
+                })
+                .value();
+        }
 
+        let reportOptions = { ...this.state.reportOptions };
+
+        let totalSessions = 0,
+        totalTransactions = 0,
+        totalBounces = 0,
+        totalVisits = 0,
+        totalDuration = 0;
+
+        analytics.forEach((element) => {
+            totalSessions += parseInt(element.sessions, 10);
+            totalTransactions += parseInt(element.transactions, 10);
+            totalBounces += parseInt(element.bounces, 10);
+            totalVisits += parseInt(element.visits, 10);
+            totalDuration += parseInt(element["ga:sessionduration"], 10);
+        });
+
+
+
+        reportOptions.sessions = this.numberWithCommas(totalSessions);
+        reportOptions.transactions = this.numberWithCommas(totalTransactions);
+        reportOptions.bounceRate = this.rateFormatter(this.numberWithCommas(totalBounces / totalVisits * 100));
+        reportOptions.conversionRate = this.rateFormatter(this.numberWithCommas(totalTransactions / totalVisits * 100));
+        reportOptions.averageTime = this.numberWithCommas(totalDuration / totalVisits / 86400);
+
+        let analysisResult = [];
+        analysisResult.push(reportOptions);
+
+        this.setState({ analysisResult });
+        this.setState({ reportOptions });
         this.setState({ rawDataValuesOne: rawDataValuesOne });
+    }
+
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     fetchAnalyticsData() {
@@ -195,7 +184,7 @@ class Dashboard2 extends Component {
         this.fetchAnalyticsData();
     }
 
-    rateFormatter(cell, row) {
+    rateFormatter(cell) {
         return cell + '%';
     }
 
@@ -227,8 +216,6 @@ class Dashboard2 extends Component {
     }
 
     render() {
-
-
         const loading = (
             <div className="ui active centered inline loader"></div>
         );
@@ -469,13 +456,14 @@ class Dashboard2 extends Component {
                                     <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
                                     <TableHeaderColumn dataField="averageTimeSpentOnSite" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
                                 </BootstrapTable> */}
+                                {!this.state.loading &&
                                 <SmartDataTable
-                                    data={analysisResult}
+                                    data={this.state.analysisResult}
                                     name='test-table'
                                     className='ui compact selectable table'
                                     sortable
                                     perPage={4}
-                                />,
+                                />}
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
