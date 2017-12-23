@@ -161,7 +161,7 @@ class Dashboard2 extends Component {
     }
 
     setAnalyticsValues() {
-        let value = this.state.group1Active.toLowerCase();
+        let value = this.state.filterValues[this.state.group1Active];
         let { analytics } = this.props;
 
         var rawDataValuesOne = _(analytics)
@@ -170,7 +170,7 @@ class Dashboard2 extends Component {
                     return {
                         'date': key,
                         'value': _.sumBy(objs, (s) => {
-                            return parseInt(s.sessions, 10);
+                            return parseInt(s[value], 10);
                         })
                     };
                 })
@@ -200,8 +200,9 @@ class Dashboard2 extends Component {
     }
 
     setGroup1Active(e) {
-        this.setState({group1Active : e.target.value});
-        this.setAnalyticsValues();
+        this.setState({group1Active : e.target.value}, () => {
+            this.setAnalyticsValues();
+        });
     }
 
     setGroup2Active(e) {
