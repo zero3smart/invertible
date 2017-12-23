@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { core as ZingChart, line as LineChart, area as AreaChart, pie as PieChart, bar as BarChart, scatter as ScatterChart } from 'zingchart-react';
 import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
@@ -10,21 +9,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import SmartDataTable from 'react-smart-data-table'
+import SmartDataTable from 'react-smart-data-table';
 import { connect } from 'react-redux';
 import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
-
-var rawDataValuesOne = [{
-    "date": "20170516",
-    "value": -0.307
-}, {
-    "date": "20170813",
-    "value": -0.168
-}, {
-    "date": "20170915",
-    "value": -0.168
-}];
+import _ from 'lodash';
 
 var rawDataValuesTwo = [{
     "date": "20170516",
@@ -41,8 +30,8 @@ var rawDataGraphOne = [{
     "id": "g1",
     "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
     "bullet": "round",
-    "bulletSize": 8,
-    "lineColor": "#d1655d",
+    "bulletSize": 4,
+    "lineColor": "#3962B7",
     "lineThickness": 2,
     "negativeLineColor": "#637bb6",
     "type": "smoothedLine",
@@ -151,11 +140,19 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(new Date('2017-12-01T10:00:00')),
+            startDate: moment(new Date('2017-06-01T10:00:00')),
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
-            loading: true
+            rawDataValuesOne: [],
+            loading: true,
+            filterValues: {
+                'Sessions': 'sessions',
+                'Transactions': 'transactions',
+                'BounceRate': 'bounces',
+                'ConversionRate': 'conversionrate',
+                'TimeSpent': 'timespent'
+            }
         };
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
@@ -163,15 +160,39 @@ class Dashboard2 extends Component {
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
 
-    componentDidMount() {
+    setAnalyticsValues() {
+        let value = this.state.filterValues[this.state.group1Active];
+        let { analytics } = this.props;
+
+        var rawDataValuesOne = _(analytics)
+                .groupBy('date')
+                .map((objs, key) => {
+                    return {
+                        'date': key,
+                        'value': _.sumBy(objs, (s) => {
+                            return parseInt(s[value], 10);
+                        })
+                    };
+                })
+                .value();
+
+        this.setState({ rawDataValuesOne: rawDataValuesOne });
+    }
+
+    fetchAnalyticsData() {
         let startDate = this.state.startDate.format('YYYYMMDD').replace(/-/gi, '');
         let endDate = this.state.endDate.format('YYYYMMDD').replace(/-/gi, '');
 
         this.props.fetchAnalytics(startDate, endDate).then(res => {
+            this.setAnalyticsValues();
             this.setState({ loading: false });
         }, err => {
 
         });
+    }
+
+    componentDidMount() {
+        this.fetchAnalyticsData();
     }
 
     rateFormatter(cell, row) {
@@ -179,7 +200,9 @@ class Dashboard2 extends Component {
     }
 
     setGroup1Active(e) {
-        this.setState({group1Active : e.target.value});
+        this.setState({group1Active : e.target.value}, () => {
+            this.setAnalyticsValues();
+        });
     }
 
     setGroup2Active(e) {
@@ -189,16 +212,84 @@ class Dashboard2 extends Component {
     handleStartDateChange(date) {
         this.setState({
             startDate: date
+        }, () => {
+            console.log(date.format('YYYYMMDD'));
+            this.fetchAnalyticsData();
         });
     }
 
     handleEndDateChange(date) {
         this.setState({
             endDate: date
+        }, () => {
+            this.fetchAnalyticsData();
         });
     }
 
     render() {
+
+
+        const loading = (
+            <div className="ui active centered inline loader"></div>
+        );
+
+        const smoothChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "500px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "graphs": rawDataGraphOne,
+                    "dataProvider": this.state.rawDataValuesOne,
+                    "chartScrollbar": {
+                        "graph": "g1",
+                        "gridAlpha": 0,
+                        "color": "#888888",
+                        "scrollbarHeight": 55,
+                        "backgroundAlpha": 0,
+                        "selectedBackgroundAlpha": 0.1,
+                        "selectedBackgroundColor": "#888888",
+                        "graphFillAlpha": 0,
+                        "autoGridCount": true,
+                        "selectedGraphFillAlpha": 0,
+                        "graphLineAlpha": 0.2,
+                        "graphLineColor": "#c2c2c2",
+                        "selectedGraphLineColor": "#888888",
+                        "selectedGraphLineAlpha": 1
+                    },
+                    "chartCursor": {
+                        "categoryBalloonDateFormat": "MMM YYYY",
+                        "cursorAlpha": 0,
+                        "valueLineEnabled": true,
+                        "valueLineBalloonEnabled": true,
+                        "valueLineAlpha": 0.5,
+                        "fullWidth": true
+                    },
+                    "dataDateFormat": "YYYYMMDD",
+                    "categoryField": "date",
+                    "categoryAxis": {
+                        "minPeriod": "DD",
+                        "parseDates": true,
+                        "minorGridAlpha": 0.1,
+                        "minorGridEnabled": true,
+                        "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
+                            { "period": "ss", "format": "JJ:NN:SS" },
+                            { "period": "mm", "format": "JJ:NN" },
+                            { "period": "hh", "format": "JJ:NN" },
+                            { "period": "DD", "format": "MMM DD" },
+                            { "period": "WW", "format": "MMM DD" },
+                            { "period": "MM", "format": "MMM YYYY" },
+                            { "period": "YYYY", "format": "YYYY" }]
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
         return (
             <div className="dashboard2-container">
                 <h6>Current Period</h6>
@@ -318,52 +409,7 @@ class Dashboard2 extends Component {
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
                             <div className="row">
                                 <div className="col-md-6">
-                                    <AmCharts.React
-                                        style={{
-                                            width: "100%",
-                                            height: "500px"
-                                        }}
-                                        options={{
-                                            "type": "serial",
-                                            "theme": "light",
-                                            "graphs": rawDataGraphOne,
-                                            "dataProvider": rawDataValuesOne,
-                                            "chartScrollbar": {
-                                                "graph": "g1",
-                                                "gridAlpha": 0,
-                                                "color": "#888888",
-                                                "scrollbarHeight": 55,
-                                                "backgroundAlpha": 0,
-                                                "selectedBackgroundAlpha": 0.1,
-                                                "selectedBackgroundColor": "#888888",
-                                                "graphFillAlpha": 0,
-                                                "autoGridCount": true,
-                                                "selectedGraphFillAlpha": 0,
-                                                "graphLineAlpha": 0.2,
-                                                "graphLineColor": "#c2c2c2",
-                                                "selectedGraphLineColor": "#888888",
-                                                "selectedGraphLineAlpha": 1
-                                            },
-                                            "chartCursor": {
-                                                "categoryBalloonDateFormat": "MM DD",
-                                                "cursorAlpha": 0,
-                                                "valueLineEnabled": true,
-                                                "valueLineBalloonEnabled": true,
-                                                "valueLineAlpha": 0.5,
-                                                "fullWidth": true
-                                            },
-                                            "dataDateFormat": "YYYYMMDD",
-                                            "categoryField": "date",
-                                            "categoryAxis": {
-                                                "minPeriod": "DD",
-                                                "parseDates": true,
-                                                "minorGridAlpha": 0.1,
-                                                "minorGridEnabled": true
-                                            },
-                                            "export": {
-                                                "enabled": true
-                                            }
-                                    }} />
+                                    { this.state.loading ? loading : smoothChart }
                                 </div>
                                 <div className="col-md-6">
                                     <AmCharts.React
