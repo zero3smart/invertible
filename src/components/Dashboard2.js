@@ -42,7 +42,7 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(new Date('2017-06-01T10:00:00')),
+            startDate: moment(new Date('2017-12-15T10:00:00')),
             endDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
@@ -231,6 +231,9 @@ class Dashboard2 extends Component {
                     "theme": "light",
                     "graphs": rawDataGraphOne,
                     "dataProvider": this.state.rawDataValuesOne,
+                    "titles": [{
+                        "text": this.state.group1Active
+                    }],
                     "chartScrollbar": {
                         "graph": "g1",
                         "gridAlpha": 0,
@@ -270,6 +273,48 @@ class Dashboard2 extends Component {
                             { "period": "WW", "format": "MMM DD" },
                             { "period": "MM", "format": "MMM YYYY" },
                             { "period": "YYYY", "format": "YYYY" }]
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const barChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "500px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "dataProvider": rawDataValuesTwo,
+                    "valueAxes": [{
+                        "gridColor": "#FFFFFF",
+                        "gridAlpha": 0.2,
+                        "dashLength": 0
+                    }],
+                    "gridAboveGraphs": true,
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "[[category]]: <b>[[value]]</b>",
+                        "fillAlphas": 0.8,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "date",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "gridAlpha": 0,
+                        "tickPosition": "start",
+                        "tickLength": 20
                     },
                     "export": {
                         "enabled": true
@@ -399,45 +444,7 @@ class Dashboard2 extends Component {
                                     { this.state.loading ? loading : smoothChart }
                                 </div>
                                 <div className="col-md-6">
-                                    <AmCharts.React
-                                        style={{
-                                            width: "100%",
-                                            height: "500px"
-                                        }}
-                                        options={{
-                                            "type": "serial",
-                                            "theme": "light",
-                                            "dataProvider": rawDataValuesTwo,
-                                            "valueAxes": [{
-                                                "gridColor": "#FFFFFF",
-                                                "gridAlpha": 0.2,
-                                                "dashLength": 0
-                                            }],
-                                            "gridAboveGraphs": true,
-                                            "startDuration": 1,
-                                            "graphs": [{
-                                                "balloonText": "[[category]]: <b>[[value]]</b>",
-                                                "fillAlphas": 0.8,
-                                                "lineAlpha": 0.2,
-                                                "type": "column",
-                                                "valueField": "value"
-                                            }],
-                                            "chartCursor": {
-                                                "categoryBalloonEnabled": false,
-                                                "cursorAlpha": 0,
-                                                "zoomable": false
-                                            },
-                                            "categoryField": "date",
-                                            "categoryAxis": {
-                                                "gridPosition": "start",
-                                                "gridAlpha": 0,
-                                                "tickPosition": "start",
-                                                "tickLength": 20
-                                            },
-                                            "export": {
-                                                "enabled": true
-                                            }
-                                        }} />
+                                    { this.state.loading ? loading : barChart }
                                 </div>
                             </div>
                             <div className="row">
