@@ -41,9 +41,9 @@ class Dashboard2 extends Component {
             reportMappings: {
                 'Sessions': 'sessions',
                 'Transactions': 'transactions',
-                'BounceRate': 'bounces',
-                'ConversionRate': 'conversionrate',
-                'TimeSpent': 'timespent'
+                'BounceRate': 'bounceRate',
+                'ConversionRate': 'conversionRate',
+                'TimeSpent': 'averageTime'
             },
             reportOptions: {
                 id: "",
@@ -60,6 +60,14 @@ class Dashboard2 extends Component {
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
+    }
+
+    convertObjectToComma(obj) {
+        for (var key in obj) {
+            obj[key] = this.numberWithCommas(obj[key]);
+        }
+
+        return obj;
     }
 
     setAnalyticsValues() {
@@ -125,10 +133,10 @@ class Dashboard2 extends Component {
         let reportOptions = { ...this.state.reportOptions };
 
         let totalSessions = 0,
-        totalTransactions = 0,
-        totalBounces = 0,
-        totalVisits = 0,
-        totalDuration = 0;
+            totalTransactions = 0,
+            totalBounces = 0,
+            totalVisits = 0,
+            totalDuration = 0;
 
         analytics.forEach((element) => {
             totalSessions += parseInt(element.sessions, 10);
@@ -138,21 +146,19 @@ class Dashboard2 extends Component {
             totalDuration += parseInt(element["ga:sessionduration"], 10);
         });
 
-        reportOptions.sessions = this.numberWithCommas(totalSessions);
-        reportOptions.transactions = this.numberWithCommas(totalTransactions);
-        reportOptions.bounceRate = this.rateFormatter(this.numberWithCommas(totalBounces / totalVisits * 100));
-        reportOptions.conversionRate = this.rateFormatter(this.numberWithCommas(totalTransactions / totalVisits * 100));
-        reportOptions.averageTime = this.numberWithCommas(totalDuration / totalVisits / 86400);
-
-        let analysisResult = [];
-        analysisResult.push(reportOptions);
+        reportOptions.sessions = totalSessions;
+        reportOptions.transactions = totalTransactions;
+        reportOptions.bounceRate = totalBounces / totalVisits * 100;
+        reportOptions.conversionRate = totalTransactions / totalVisits * 100;
+        reportOptions.averageTime = totalDuration / totalVisits / 86400;
 
         //Get reports data for barchart
+        debugger;
         if (this.state.group2Active === 'Total') {
             var rawDataValuesTwo = [
                 {
                     "category": "Total",
-                    "value": totalSessions
+                    "value": parseInt(reportOptions[value], 10)
                 }
             ];
         } else if (this.state.group2Active === 'Device') {
@@ -162,7 +168,7 @@ class Dashboard2 extends Component {
                     return {
                         'category': key,
                         'value': _.sumBy(objs, (s) => {
-                            return parseInt(s.sessions, 10);
+                            return parseInt(s[value], 10);
                         })
                     };
                 })
@@ -174,7 +180,7 @@ class Dashboard2 extends Component {
                     return {
                         'category': key,
                         'value': _.sumBy(objs, (s) => {
-                            return parseInt(s.sessions, 10);
+                            return parseInt(s[value], 10);
                         })
                     };
                 })
@@ -186,12 +192,16 @@ class Dashboard2 extends Component {
                     return {
                         'category': key.substring(0, 5),
                         'value': _.sumBy(objs, (s) => {
-                            return parseInt(s.sessions, 10);
+                            return parseInt(s[value], 10);
                         })
                     };
                 })
                 .value();
         }
+
+        let analysisResult = [];
+        debugger;
+        analysisResult.push(this.convertObjectToComma(reportOptions));
 
         this.setState({ analysisResult });
         this.setState({ reportOptions });
@@ -224,7 +234,7 @@ class Dashboard2 extends Component {
     }
 
     setGroup1Active(e) {
-        this.setState({group1Active : e.target.value}, () => {
+        this.setState({ group1Active: e.target.value }, () => {
             this.setAnalyticsValues();
         });
     }
@@ -303,13 +313,13 @@ class Dashboard2 extends Component {
                         "minorGridAlpha": 0.1,
                         "minorGridEnabled": true,
                         "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
-                            { "period": "ss", "format": "JJ:NN:SS" },
-                            { "period": "mm", "format": "JJ:NN" },
-                            { "period": "hh", "format": "JJ:NN" },
-                            { "period": "DD", "format": "MMM DD" },
-                            { "period": "WW", "format": "MMM DD" },
-                            { "period": "MM", "format": "MMM YYYY" },
-                            { "period": "YYYY", "format": "YYYY" }]
+                        { "period": "ss", "format": "JJ:NN:SS" },
+                        { "period": "mm", "format": "JJ:NN" },
+                        { "period": "hh", "format": "JJ:NN" },
+                        { "period": "DD", "format": "MMM DD" },
+                        { "period": "WW", "format": "MMM DD" },
+                        { "period": "MM", "format": "MMM YYYY" },
+                        { "period": "YYYY", "format": "YYYY" }]
                     },
                     "export": {
                         "enabled": true
@@ -327,6 +337,9 @@ class Dashboard2 extends Component {
                     "type": "serial",
                     "theme": "light",
                     "dataProvider": this.state.rawDataValuesTwo,
+                    "titles": [{
+                        "text": this.state.group2Active
+                    }],
                     "valueAxes": [{
                         "gridColor": "#FFFFFF",
                         "gridAlpha": 0.2,
@@ -479,10 +492,10 @@ class Dashboard2 extends Component {
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
                             <div className="row">
                                 <div className="col-md-6">
-                                    { this.state.loading ? loading : smoothChart }
+                                    {this.state.loading ? loading : smoothChart}
                                 </div>
                                 <div className="col-md-6">
-                                    { this.state.loading ? loading : barChart }
+                                    {this.state.loading ? loading : barChart}
                                 </div>
                             </div>
                             <div className="row">
@@ -493,15 +506,15 @@ class Dashboard2 extends Component {
                             </div>
                             <div className="table-block">
                                 {!this.state.loading &&
-                                <BootstrapTable data={this.state.analysisResult} striped={true} hover={true}>
-                                    <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
-                                    <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="bounceRate" dataSort={true}>Bounce Rate</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="conversionRate" dataSort={true}>Conversion Rate</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="averageTime" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
-                                </BootstrapTable> }
+                                    <BootstrapTable data={this.state.analysisResult} striped={true} hover={true}>
+                                        <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
+                                        <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
+                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
+                                        <TableHeaderColumn dataField="averageTime" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
+                                    </BootstrapTable>}
                                 {/* {!this.state.loading &&
                                 <SmartDataTable
                                     data={this.state.analysisResult}
