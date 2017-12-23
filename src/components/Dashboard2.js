@@ -197,7 +197,9 @@ class Dashboard2 extends Component {
                     return {
                         'date': key,
                         'value': _.sumBy(objs, (s) => {
-                            return parseInt(s[value], 10);
+                            return parseInt(s.transactions, 10);
+                        }) / _.sumBy(objs, (s) => {
+                            return parseInt(s.visits, 10);
                         })
                     };
                 })
