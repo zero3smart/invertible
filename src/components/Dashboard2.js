@@ -43,7 +43,11 @@ class Dashboard2 extends Component {
                 'Transactions': 'transactions',
                 'BounceRate': 'bounceRate',
                 'ConversionRate': 'conversionRate',
-                'TimeSpent': 'averageTime'
+                'TimeSpent': 'averageTime',
+                'Total': '',
+                'Device': 'category',
+                'Channel': 'medium',
+                'LandingPage': 'landingpath'
             },
             reportOptions: {
                 id: "",
@@ -70,28 +74,40 @@ class Dashboard2 extends Component {
         return obj;
     }
 
-    setAnalyticsValues() {
-        let value = this.state.reportMappings[this.state.group1Active];
+    getFilteredList(groupByAttr, value) {
+        let _filteredList = [];
         let { analytics } = this.props;
 
-        if (this.state.group1Active === 'Sessions' || this.state.group1Active === 'Transactions') {
-            var rawDataValuesOne = _(analytics)
-                .groupBy('date')
+        if (value === 'sessions' || value === 'transactions') {
+            _filteredList = _(analytics)
+                .groupBy(groupByAttr)
                 .map((objs, key) => {
+                    if (groupByAttr === '')
+                        key = 'Total';
+
+                    if (key.length > 10)
+                        key = key.substring(0, 10);
+
                     return {
-                        'date': key,
+                        'xValue': key,
                         'value': _.sumBy(objs, (s) => {
                             return parseInt(s[value], 10);
                         })
                     };
                 })
                 .value();
-        } else if (this.state.group1Active === 'BounceRate') {
-            var rawDataValuesOne = _(analytics)
-                .groupBy('date')
+        } else if (value === 'bounceRate') {
+            _filteredList = _(analytics)
+                .groupBy(groupByAttr)
                 .map((objs, key) => {
+                    if (groupByAttr === '')
+                        key = 'Total';
+
+                    if (key.length > 10)
+                        key = key.substring(0, 10);
+
                     return {
-                        'date': key,
+                        'xValue': key,
                         'value': _.sumBy(objs, (s) => {
                             return parseInt(s.bounces, 10);
                         }) / _.sumBy(objs, (s) => {
@@ -100,12 +116,18 @@ class Dashboard2 extends Component {
                     };
                 })
                 .value();
-        } else if (this.state.group1Active === 'ConversionRate') {
-            var rawDataValuesOne = _(analytics)
-                .groupBy('date')
+        } else if (value === 'conversionRate') {
+            _filteredList = _(analytics)
+                .groupBy(groupByAttr)
                 .map((objs, key) => {
+                    if (groupByAttr === '')
+                        key = 'Total';
+
+                    if (key.length > 10)
+                        key = key.substring(0, 10);
+
                     return {
-                        'date': key,
+                        'xValue': key,
                         'value': _.sumBy(objs, (s) => {
                             return parseInt(s.transactions, 10);
                         }) / _.sumBy(objs, (s) => {
@@ -114,12 +136,18 @@ class Dashboard2 extends Component {
                     };
                 })
                 .value();
-        } else {
-            var rawDataValuesOne = _(analytics)
-                .groupBy('date')
+        } else if (value === 'averageTime') {
+            _filteredList = _(analytics)
+                .groupBy(groupByAttr)
                 .map((objs, key) => {
+                    if (groupByAttr === '')
+                        key = 'Total';
+
+                    if (key.length > 10)
+                        key = key.substring(0, 10);
+
                     return {
-                        'date': key,
+                        'xValue': key,
                         'value': _.sumBy(objs, (s) => {
                             return parseInt(s["ga:sessionduration"], 10);
                         }) / _.sumBy(objs, (s) => {
@@ -129,6 +157,17 @@ class Dashboard2 extends Component {
                 })
                 .value();
         }
+
+        return _filteredList;
+    }
+
+    setAnalyticsValues() {
+        let value = this.state.reportMappings[this.state.group1Active];
+        let groupBy = this.state.reportMappings[this.state.group2Active];
+
+        let { analytics } = this.props;
+
+        var rawDataValuesOne = this.getFilteredList('date', value);
 
         let reportOptions = { ...this.state.reportOptions };
 
@@ -153,54 +192,19 @@ class Dashboard2 extends Component {
         reportOptions.averageTime = totalDuration / totalVisits / 86400;
 
         //Get reports data for barchart
-        debugger;
-        if (this.state.group2Active === 'Total') {
-            var rawDataValuesTwo = [
-                {
-                    "category": "Total",
-                    "value": parseInt(reportOptions[value], 10)
-                }
-            ];
-        } else if (this.state.group2Active === 'Device') {
-            var rawDataValuesTwo = _(analytics)
-                .groupBy('category')
-                .map((objs, key) => {
-                    return {
-                        'category': key,
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s[value], 10);
-                        })
-                    };
-                })
-                .value();
-        } else if (this.state.group2Active === 'Channel') {
-            var rawDataValuesTwo = _(analytics)
-                .groupBy('medium')
-                .map((objs, key) => {
-                    return {
-                        'category': key,
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s[value], 10);
-                        })
-                    };
-                })
-                .value();
-        } else if (this.state.group2Active === 'LandingPage') {
-            var rawDataValuesTwo = _(analytics)
-                .groupBy('landingpath')
-                .map((objs, key) => {
-                    return {
-                        'category': key.substring(0, 5),
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s[value], 10);
-                        })
-                    };
-                })
-                .value();
-        }
+        // if (this.state.group2Active === 'Total') {
+        //     var rawDataValuesTwo = [
+        //         {
+        //             "category": "Total",
+        //             "value": parseInt(reportOptions[value], 10)
+        //         }
+        //     ];
+        // } else {
+            debugger;
+            var rawDataValuesTwo = this.getFilteredList(groupBy, value);
+        //}
 
         let analysisResult = [];
-        debugger;
         analysisResult.push(this.convertObjectToComma(reportOptions));
 
         this.setState({ analysisResult });
@@ -306,7 +310,7 @@ class Dashboard2 extends Component {
                         "fullWidth": true
                     },
                     "dataDateFormat": "YYYYMMDD",
-                    "categoryField": "date",
+                    "categoryField": "xValue",
                     "categoryAxis": {
                         "minPeriod": "DD",
                         "parseDates": true,
@@ -359,7 +363,7 @@ class Dashboard2 extends Component {
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "category",
+                    "categoryField": "xValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "gridAlpha": 0,
