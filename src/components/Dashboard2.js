@@ -145,16 +145,48 @@ class Dashboard2 extends Component {
         else
             analysisResult = rawDataValuesTwo;
 
+
+
         this.$el.DataTable({
             destroy: true,
             data: analysisResult,
             columns: [
                 { "data": "xValue" },
-                { "data": "sessions" },
-                { "data": "transactions" },
-                { "data": "bounceRate" },
-                { "data": "conversionRate" },
-                { "data": "averageTime" }
+                {
+                    "data": "sessions",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',').display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "transactions",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',').display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "bounceRate",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "conversionRate",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "averageTime",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num;
+                    }
+                }
             ]
         });
 
