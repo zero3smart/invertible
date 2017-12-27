@@ -555,7 +555,8 @@ class Dashboard2 extends Component {
                             </div>
                             <div className="table-block">
                                 <div>
-                                    <table className="display"
+                                    <table className="ui celled table"
+                                        cellspacing="0"
                                         ref={(el) => this.analyticsTable = el}
                                         width="100%">
                                     </table>
