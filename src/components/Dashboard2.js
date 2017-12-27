@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
@@ -14,18 +15,7 @@ import { connect } from 'react-redux';
 import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
-var rawDataGraphOne = [{
-    "id": "g1",
-    "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
-    "bullet": "round",
-    "bulletSize": 4,
-    "lineColor": "#3962B7",
-    "lineThickness": 2,
-    "negativeLineColor": "#637bb6",
-    "type": "smoothedLine",
-    "valueField": "value"
-}];
+import '../assets/data-table/datatables';
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -50,7 +40,6 @@ class Dashboard2 extends Component {
                 'LandingPage': 'landingpath'
             },
             reportOptions: {
-                id: "",
                 total: "",
                 sessions: "",
                 transactions: "",
@@ -74,89 +63,45 @@ class Dashboard2 extends Component {
         return obj;
     }
 
-    getFilteredList(groupByAttr, value) {
+    getFilteredList(groupByAttr) {
         let _filteredList = [];
         let { analytics } = this.props;
 
-        if (value === 'sessions' || value === 'transactions') {
-            _filteredList = _(analytics)
-                .groupBy(groupByAttr)
-                .map((objs, key) => {
-                    if (groupByAttr === '')
-                        key = 'Total';
+        _filteredList = _(analytics)
+            .groupBy(groupByAttr)
+            .map((objs, key) => {
+                if (groupByAttr === '')
+                    key = 'Total';
 
-                    if (key.length > 10)
-                        key = key.substring(0, 10);
+                if (key.length > 10)
+                    key = key.substring(0, 10);
 
-                    return {
-                        'xValue': key,
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s[value], 10);
-                        })
-                    };
-                })
-                .value();
-        } else if (value === 'bounceRate') {
-            _filteredList = _(analytics)
-                .groupBy(groupByAttr)
-                .map((objs, key) => {
-                    if (groupByAttr === '')
-                        key = 'Total';
-
-                    if (key.length > 10)
-                        key = key.substring(0, 10);
-
-                    return {
-                        'xValue': key,
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s.bounces, 10);
-                        }) / _.sumBy(objs, (s) => {
-                            return parseInt(s.visits, 10);
-                        })
-                    };
-                })
-                .value();
-        } else if (value === 'conversionRate') {
-            _filteredList = _(analytics)
-                .groupBy(groupByAttr)
-                .map((objs, key) => {
-                    if (groupByAttr === '')
-                        key = 'Total';
-
-                    if (key.length > 10)
-                        key = key.substring(0, 10);
-
-                    return {
-                        'xValue': key,
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s.transactions, 10);
-                        }) / _.sumBy(objs, (s) => {
-                            return parseInt(s.visits, 10);
-                        })
-                    };
-                })
-                .value();
-        } else if (value === 'averageTime') {
-            _filteredList = _(analytics)
-                .groupBy(groupByAttr)
-                .map((objs, key) => {
-                    if (groupByAttr === '')
-                        key = 'Total';
-
-                    if (key.length > 10)
-                        key = key.substring(0, 10);
-
-                    return {
-                        'xValue': key,
-                        'value': _.sumBy(objs, (s) => {
-                            return parseInt(s["ga:sessionduration"], 10);
-                        }) / _.sumBy(objs, (s) => {
-                            return parseInt(s.sessions, 10);
-                        })
-                    };
-                })
-                .value();
-        }
+                return {
+                    'xValue': key,
+                    'sessions': _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }),
+                    'transactions': _.sumBy(objs, (s) => {
+                        return parseInt(s.transactions, 10);
+                    }),
+                    'bounceRate': _.sumBy(objs, (s) => {
+                        return parseInt(s.bounces, 10);
+                    }) / _.sumBy(objs, (s) => {
+                        return parseInt(s.visits, 10);
+                    }),
+                    'conversionRate': _.sumBy(objs, (s) => {
+                        return parseInt(s.transactions, 10);
+                    }) / _.sumBy(objs, (s) => {
+                        return parseInt(s.visits, 10);
+                    }),
+                    'averageTime': _.sumBy(objs, (s) => {
+                        return parseInt(s["ga:sessionduration"], 10);
+                    }) / _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    })
+                };
+            })
+            .value();
 
         return _filteredList;
     }
@@ -167,7 +112,7 @@ class Dashboard2 extends Component {
 
         let { analytics } = this.props;
 
-        var rawDataValuesOne = this.getFilteredList('date', value);
+        var rawDataValuesOne = this.getFilteredList('date');
 
         let reportOptions = { ...this.state.reportOptions };
 
@@ -192,20 +137,58 @@ class Dashboard2 extends Component {
         reportOptions.averageTime = totalDuration / totalVisits / 86400;
 
         //Get reports data for barchart
-        // if (this.state.group2Active === 'Total') {
-        //     var rawDataValuesTwo = [
-        //         {
-        //             "category": "Total",
-        //             "value": parseInt(reportOptions[value], 10)
-        //         }
-        //     ];
-        // } else {
-            debugger;
-            var rawDataValuesTwo = this.getFilteredList(groupBy, value);
-        //}
+        var rawDataValuesTwo = this.getFilteredList(groupBy);
 
         let analysisResult = [];
-        analysisResult.push(this.convertObjectToComma(reportOptions));
+        if (groupBy === 'total')
+            analysisResult.push(this.convertObjectToComma(reportOptions));
+        else
+            analysisResult = rawDataValuesTwo;
+
+
+
+        this.$el.DataTable({
+            destroy: true,
+            data: analysisResult,
+            columns: [
+                { "data": "xValue" },
+                {
+                    "data": "sessions",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',').display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "transactions",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',').display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "bounceRate",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "conversionRate",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "averageTime",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num;
+                    }
+                }
+            ]
+        });
 
         this.setState({ analysisResult });
         this.setState({ reportOptions });
@@ -230,6 +213,7 @@ class Dashboard2 extends Component {
     }
 
     componentDidMount() {
+        this.$el = $(this.analyticsTable);
         this.fetchAnalyticsData();
     }
 
@@ -280,7 +264,17 @@ class Dashboard2 extends Component {
                 options={{
                     "type": "serial",
                     "theme": "light",
-                    "graphs": rawDataGraphOne,
+                    "graphs": [{
+                        "id": "g1",
+                        "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
+                        "bullet": "round",
+                        "bulletSize": 4,
+                        "lineColor": "#3962B7",
+                        "lineThickness": 2,
+                        "negativeLineColor": "#637bb6",
+                        "type": "smoothedLine",
+                        "valueField": this.state.reportMappings[this.state.group1Active]
+                    }],
                     "dataProvider": this.state.rawDataValuesOne,
                     "titles": [{
                         "text": this.state.group1Active
@@ -356,7 +350,8 @@ class Dashboard2 extends Component {
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": this.state.reportMappings[this.state.group1Active],
+                        "lineColor": "#3962B7"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
@@ -509,7 +504,24 @@ class Dashboard2 extends Component {
                                 </button>
                             </div>
                             <div className="table-block">
-                                {!this.state.loading &&
+                                <div className="">
+                                    <table className="ui celled table"
+                                        cellSpacing="0"
+                                        ref={(el) => this.analyticsTable = el}
+                                        width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>{this.state.group2Active}</th>
+                                                <th>Sessions</th>
+                                                <th>Transactions</th>
+                                                <th>Bounce Rate</th>
+                                                <th>Conversion Rate</th>
+                                                <th>Average Time Spent on Site</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                {/* {!this.state.loading &&
                                     <BootstrapTable data={this.state.analysisResult} striped={true} hover={true}>
                                         <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
                                         <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
@@ -518,7 +530,7 @@ class Dashboard2 extends Component {
                                     <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
                                         <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
                                         <TableHeaderColumn dataField="averageTime" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
-                                    </BootstrapTable>}
+                                    </BootstrapTable>} */}
                                 {/* {!this.state.loading &&
                                 <SmartDataTable
                                     data={this.state.analysisResult}
