@@ -192,17 +192,7 @@ class Dashboard2 extends Component {
         reportOptions.averageTime = totalDuration / totalVisits / 86400;
 
         //Get reports data for barchart
-        // if (this.state.group2Active === 'Total') {
-        //     var rawDataValuesTwo = [
-        //         {
-        //             "category": "Total",
-        //             "value": parseInt(reportOptions[value], 10)
-        //         }
-        //     ];
-        // } else {
-            debugger;
-            var rawDataValuesTwo = this.getFilteredList(groupBy, value);
-        //}
+        var rawDataValuesTwo = this.getFilteredList(groupBy, value);
 
         let analysisResult = [];
         analysisResult.push(this.convertObjectToComma(reportOptions));
@@ -356,7 +346,8 @@ class Dashboard2 extends Component {
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "value",
+                        "lineColor": "#3962B7"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
