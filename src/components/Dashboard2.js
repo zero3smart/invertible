@@ -9,8 +9,6 @@ import classnames from 'classnames';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Dashboard2.scss';
 import AmCharts from '@amcharts/amcharts3-react';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import SmartDataTable from 'react-smart-data-table';
 import { connect } from 'react-redux';
 import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
@@ -73,11 +71,9 @@ class Dashboard2 extends Component {
                 if (groupByAttr === '')
                     key = 'Total';
 
-                if (key.length > 10)
-                    key = key.substring(0, 10);
-
                 return {
-                    'xValue': key,
+                    'xValue': key.substring(0, 10),
+                    'rValue': key,
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }),
@@ -151,7 +147,7 @@ class Dashboard2 extends Component {
             destroy: true,
             data: analysisResult,
             columns: [
-                { "data": "xValue" },
+                { "data": "rValue" },
                 {
                     "data": "sessions",
                     render: function (data, type, row, meta) {
@@ -521,24 +517,6 @@ class Dashboard2 extends Component {
                                         </thead>
                                     </table>
                                 </div>
-                                {/* {!this.state.loading &&
-                                    <BootstrapTable data={this.state.analysisResult} striped={true} hover={true}>
-                                        <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}></TableHeaderColumn>
-                                        <TableHeaderColumn dataField="total" dataSort={true}>Total</TableHeaderColumn>
-                                        <TableHeaderColumn dataField="sessions" dataSort={true}>Sessions</TableHeaderColumn>
-                                        <TableHeaderColumn dataField="transactions" dataSort={true}>Transactions</TableHeaderColumn>
-                                    <TableHeaderColumn dataField="bounceRate" dataSort={true} dataFormat={this.rateFormatter}>Bounce Rate</TableHeaderColumn>
-                                        <TableHeaderColumn dataField="conversionRate" dataSort={true} dataFormat={this.rateFormatter}>Conversion Rate</TableHeaderColumn>
-                                        <TableHeaderColumn dataField="averageTime" dataSort={true}>Average Time Spent On Site</TableHeaderColumn>
-                                    </BootstrapTable>} */}
-                                {/* {!this.state.loading &&
-                                <SmartDataTable
-                                    data={this.state.analysisResult}
-                                    name='test-table'
-                                    className='ui compact selectable table'
-                                    sortable
-                                    perPage={4}
-                                />} */}
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
