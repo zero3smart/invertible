@@ -41,6 +41,7 @@
     "react-breadcrumbs": "^1.5.2",
     "react-chartjs-2": "2.0.5",
     "react-chat-window": "^1.0.5",
+    "react-csv": "^1.0.8",
     "react-d3-map-choropleth": "0.5.1",
     "react-datepicker": "^0.61.0",
     "react-dom": "^15.6.1",

@@ -14,6 +14,7 @@ import { fetchAnalytics } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import '../assets/data-table/datatables';
+import { CSVLink } from 'react-csv';
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -494,10 +495,13 @@ class Dashboard2 extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <button className="btn btn-default">
+                                <CSVLink data={this.state.analysisResult}
+                                    filename={"my-file.csv"}
+                                    className="btn btn-default"
+                                    target="_blank">
                                     <i className="fa fa-download" aria-hidden="true"></i>
                                     &nbsp;Export Table
-                                </button>
+                                </CSVLink>
                             </div>
                             <div className="table-block">
                                 <div className="">
