@@ -73,7 +73,7 @@ class Dashboard2 extends Component {
                     key = 'Total';
 
                 return {
-                    'xValue': key.substring(0, 10),
+                    'xValue': key.substring(0, 5),
                     'rValue': key,
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
