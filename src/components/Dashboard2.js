@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { IndexLink } from 'react-router';
-import CommentBox from './CommentBox';
-import Trending from './Trending';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import classnames from 'classnames';
@@ -15,6 +13,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import '../assets/data-table/datatables';
 import { CSVLink } from 'react-csv';
+import ChartTab from './ChartTab';
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -104,7 +103,6 @@ class Dashboard2 extends Component {
     }
 
     setAnalyticsValues() {
-        let value = this.state.reportMappings[this.state.group1Active];
         let groupBy = this.state.reportMappings[this.state.group2Active];
 
         let { analytics } = this.props;
@@ -142,9 +140,16 @@ class Dashboard2 extends Component {
         else
             analysisResult = rawDataValuesTwo;
 
+        this.initDataTable(this.$el, analysisResult);
 
+        this.setState({ analysisResult });
+        this.setState({ reportOptions });
+        this.setState({ rawDataValuesOne: rawDataValuesOne });
+        this.setState({ rawDataValuesTwo: rawDataValuesTwo });
+    }
 
-        this.$el.DataTable({
+    initDataTable(elm, analysisResult) {
+        elm.DataTable({
             destroy: true,
             data: analysisResult,
             columns: [
@@ -186,11 +191,6 @@ class Dashboard2 extends Component {
                 }
             ]
         });
-
-        this.setState({ analysisResult });
-        this.setState({ reportOptions });
-        this.setState({ rawDataValuesOne: rawDataValuesOne });
-        this.setState({ rawDataValuesTwo: rawDataValuesTwo });
     }
 
     numberWithCommas(x) {
@@ -523,7 +523,16 @@ class Dashboard2 extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" className="tab-pane fade" id="percentage-changes">bbb</div>
+                        <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
+                            <ChartTab isLoading={this.state.loading}
+                                analysisResult={this.state.analysisResult}
+                                group1Active={this.state.reportMappings[this.state.group1Active]}
+                                rawDataValuesOne={this.state.rawDataValuesOne}
+                                rawDataValuesTwo={this.state.rawDataValuesTwo}
+                                group2Active={this.state.group2Active}
+                                group1Mapping={this.state.reportMappings[this.state.group1Active]}
+                                fetchAnalyticsData={this.fetchAnalyticsData} />
+                        </div>
                     </div>
                 </div>
             </div>
