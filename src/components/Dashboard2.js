@@ -84,17 +84,17 @@ class Dashboard2 extends Component {
                         return parseInt(s.bounces, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.visits, 10);
-                    }),
+                    }) * 100,
                     'conversionRate': _.sumBy(objs, (s) => {
                         return parseInt(s.transactions, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.visits, 10);
-                    }),
+                    }) * 100,
                     'averageTime': _.sumBy(objs, (s) => {
-                        return parseInt(s["ga:sessionduration"], 10);
+                        return parseInt(s["sessionduration"], 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
-                    })
+                    }) / 60
                 };
             })
             .value();
@@ -122,7 +122,7 @@ class Dashboard2 extends Component {
             totalTransactions += parseInt(element.transactions, 10);
             totalBounces += parseInt(element.bounces, 10);
             totalVisits += parseInt(element.visits, 10);
-            totalDuration += parseInt(element["ga:sessionduration"], 10);
+            totalDuration += parseInt(element["sessionduration"], 10);
         });
 
         reportOptions.sessions = totalSessions;
