@@ -21,11 +21,17 @@ class Dashboard2 extends Component {
         this.state = {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
             currentEndDate: moment(),
+            priorStartDate: moment(new Date('2017-12-10T10:00:00')),
+            priorEndDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
             rawDataValuesTwo: [],
+            percentageValuesOne: [],
+            percentageValuesTwo: [],
             loading: true,
+            currentAnalytics: [],
+            priorAnalytics: [],
             reportMappings: {
                 'Sessions': 'sessions',
                 'Transactions': 'transactions',
@@ -45,10 +51,13 @@ class Dashboard2 extends Component {
                 conversionRate: "",
                 averageTime: ""
             },
-            analysisResult: []
+            rawDataReport: [],
+            percentageReport: []
         };
         this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+        this.handlePriorStartDateChange = this.handlePriorStartDateChange.bind(this);
+        this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
@@ -102,10 +111,12 @@ class Dashboard2 extends Component {
         return _filteredList;
     }
 
-    setAnalyticsValues() {
+    setRawDataValues() {
         let groupBy = this.state.reportMappings[this.state.group2Active];
 
         let { analytics } = this.props;
+
+        this.setState({ currentAnalytics: analytics });
 
         var rawDataValuesOne = this.getFilteredList('date');
 
@@ -129,24 +140,71 @@ class Dashboard2 extends Component {
         reportOptions.transactions = totalTransactions;
         reportOptions.bounceRate = totalBounces / totalVisits * 100;
         reportOptions.conversionRate = totalTransactions / totalVisits * 100;
-        reportOptions.averageTime = totalDuration / totalVisits / 86400;
+        reportOptions.averageTime = totalDuration / totalVisits / 60;
 
         //Get reports data for barchart
         var rawDataValuesTwo = this.getFilteredList(groupBy);
 
-        let analysisResult = [];
+        let rawDataReport = [];
         if (groupBy === 'total')
-            analysisResult.push(this.convertObjectToComma(reportOptions));
+            rawDataReport.push(this.convertObjectToComma(reportOptions));
         else
-            analysisResult = rawDataValuesTwo;
+            rawDataReport = rawDataValuesTwo;
 
-        this.initDataTable($(this.rawDataTable), analysisResult);
-        this.initDataTable($(this.percentageTable), analysisResult);
+        this.initDataTable($(this.rawDataTable), rawDataReport);
 
-        this.setState({ analysisResult });
+        this.setState({ rawDataReport });
         this.setState({ reportOptions });
         this.setState({ rawDataValuesOne: rawDataValuesOne });
         this.setState({ rawDataValuesTwo: rawDataValuesTwo });
+    }
+
+    setPercentageValues() {
+        let groupBy = this.state.reportMappings[this.state.group2Active];
+
+        let { analytics } = this.props;
+
+        this.setState({ priorAnalytics: analytics });
+
+        var percentageValuesOne = this.getFilteredList('date');
+
+        let reportOptions = { ...this.state.reportOptions };
+
+        let totalSessions = 0,
+            totalTransactions = 0,
+            totalBounces = 0,
+            totalVisits = 0,
+            totalDuration = 0;
+
+        analytics.forEach((element) => {
+            totalSessions += parseInt(element.sessions, 10);
+            totalTransactions += parseInt(element.transactions, 10);
+            totalBounces += parseInt(element.bounces, 10);
+            totalVisits += parseInt(element.visits, 10);
+            totalDuration += parseInt(element["sessionduration"], 10);
+        });
+
+        reportOptions.sessions = totalSessions;
+        reportOptions.transactions = totalTransactions;
+        reportOptions.bounceRate = totalBounces / totalVisits * 100;
+        reportOptions.conversionRate = totalTransactions / totalVisits * 100;
+        reportOptions.averageTime = totalDuration / totalVisits / 60;
+
+        //Get reports data for barchart
+        var percentageValuesTwo = this.getFilteredList(groupBy);
+
+        let percentageReport = [];
+        if (groupBy === 'total')
+            percentageReport.push(this.convertObjectToComma(reportOptions));
+        else
+            percentageReport = percentageValuesTwo;
+
+        this.initDataTable($(this.percentageTable), percentageReport);
+
+        this.setState({ percentageReport });
+        this.setState({ reportOptions });
+        this.setState({ percentageValuesOne: percentageValuesOne });
+        this.setState({ percentageValuesTwo: percentageValuesTwo });
     }
 
     initDataTable(elm, analysisResult) {
@@ -202,8 +260,30 @@ class Dashboard2 extends Component {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
-        this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
-            this.setAnalyticsValues();
+        let priorStartDate = this.state.priorStartDate.format('YYYYMMDD').replace(/-/gi, '');
+        let priorEndDate = this.state.priorEndDate.format('YYYYMMDD').replace(/-/gi, '');
+
+        let p1 = new Promise((resolve, reject) => {
+            this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
+                this.setRawDataValues();
+                // this.setState({ loading: false });
+                resolve();
+            }, err => {
+                reject(err);
+            });
+        })
+
+        let p2 = new Promise((resolve, reject) => {
+            this.props.fetchAnalytics(priorStartDate, priorEndDate).then(res => {
+                this.setPercentageValues();
+                // this.setState({ loading: false });
+                resolve();
+            }, err => {
+                reject(err);
+            });
+        })
+
+        Promise.all([p1, p2]).then(() => {
             this.setState({ loading: false });
         }, err => {
 
@@ -221,13 +301,13 @@ class Dashboard2 extends Component {
 
     setGroup1Active(e) {
         this.setState({ group1Active: e.target.value }, () => {
-            this.setAnalyticsValues();
+            this.setRawDataValues();
         });
     }
 
     setGroup2Active(e) {
         this.setState({ group2Active: e.target.value }, () => {
-            this.setAnalyticsValues();
+            this.setRawDataValues();
         });
     }
 
@@ -243,6 +323,23 @@ class Dashboard2 extends Component {
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
+        }, () => {
+            this.fetchAnalyticsData();
+        });
+    }
+
+    handlePriorStartDateChange(date) {
+        this.setState({
+            priorStartDate: date
+        }, () => {
+            console.log(date.format('YYYYMMDD'));
+            this.fetchAnalyticsData();
+        });
+    }
+
+    handlePriorEndDateChange(date) {
+        this.setState({
+            priorEndDate: date
         }, () => {
             this.fetchAnalyticsData();
         });
@@ -496,7 +593,7 @@ class Dashboard2 extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <CSVLink data={this.state.analysisResult}
+                                <CSVLink data={this.state.rawDataReport}
                                     filename={"my-file.csv"}
                                     className="btn btn-default"
                                     target="_blank">
@@ -525,6 +622,27 @@ class Dashboard2 extends Component {
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
+                            <div className="col-md-5 offset-md-4">
+                                <div className="row">
+                                    <div className="col-md-3" style={{paddingTop: '6px'}}>
+                                        <span>Prior Period</span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <DatePicker
+                                            selected={this.state.priorStartDate}
+                                            onChange={this.handlePriorStartDateChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                    <div className="col-md-5">
+                                        <DatePicker
+                                            selected={this.state.priorEndDate}
+                                            onChange={this.handlePriorEndDateChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div className="row">
                                 <div className="col-md-6">
                                     {this.state.loading ? loading : smoothChart}
@@ -534,7 +652,7 @@ class Dashboard2 extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <CSVLink data={this.state.analysisResult}
+                                <CSVLink data={this.state.rawDataReport}
                                     filename={"my-file.csv"}
                                     className="btn btn-default"
                                     target="_blank">
