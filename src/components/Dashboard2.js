@@ -551,7 +551,7 @@ class Dashboard2 extends Component {
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
                             <div className="col-md-5 offset-md-4">
                                 <div className="row">
-                                    <div className="col-md-3">
+                                    <div className="col-md-3" style={{paddingTop: '6px'}}>
                                         <span>Prior Period</span>
                                     </div>
                                     <div className="col-md-4">
