@@ -19,8 +19,8 @@ class Dashboard2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment(new Date('2017-12-15T10:00:00')),
-            endDate: moment(),
+            currentStartDate: moment(new Date('2017-12-15T10:00:00')),
+            currentEndDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
@@ -47,8 +47,8 @@ class Dashboard2 extends Component {
             },
             analysisResult: []
         };
-        this.handleStartDateChange = this.handleStartDateChange.bind(this);
-        this.handleEndDateChange = this.handleEndDateChange.bind(this);
+        this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
+        this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
@@ -84,17 +84,17 @@ class Dashboard2 extends Component {
                         return parseInt(s.bounces, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.visits, 10);
-                    }),
+                    }) * 100,
                     'conversionRate': _.sumBy(objs, (s) => {
                         return parseInt(s.transactions, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.visits, 10);
-                    }),
+                    }) * 100,
                     'averageTime': _.sumBy(objs, (s) => {
-                        return parseInt(s["ga:sessionduration"], 10);
+                        return parseInt(s["sessionduration"], 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
-                    })
+                    }) / 60
                 };
             })
             .value();
@@ -122,7 +122,7 @@ class Dashboard2 extends Component {
             totalTransactions += parseInt(element.transactions, 10);
             totalBounces += parseInt(element.bounces, 10);
             totalVisits += parseInt(element.visits, 10);
-            totalDuration += parseInt(element["ga:sessionduration"], 10);
+            totalDuration += parseInt(element["sessionduration"], 10);
         });
 
         reportOptions.sessions = totalSessions;
@@ -140,7 +140,8 @@ class Dashboard2 extends Component {
         else
             analysisResult = rawDataValuesTwo;
 
-        this.initDataTable(this.$el, analysisResult);
+        this.initDataTable($(this.rawDataTable), analysisResult);
+        this.initDataTable($(this.percentageTable), analysisResult);
 
         this.setState({ analysisResult });
         this.setState({ reportOptions });
@@ -198,10 +199,10 @@ class Dashboard2 extends Component {
     }
 
     fetchAnalyticsData() {
-        let startDate = this.state.startDate.format('YYYYMMDD').replace(/-/gi, '');
-        let endDate = this.state.endDate.format('YYYYMMDD').replace(/-/gi, '');
+        let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
+        let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
-        this.props.fetchAnalytics(startDate, endDate).then(res => {
+        this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
             this.setAnalyticsValues();
             this.setState({ loading: false });
         }, err => {
@@ -210,7 +211,7 @@ class Dashboard2 extends Component {
     }
 
     componentDidMount() {
-        this.$el = $(this.analyticsTable);
+        //this.$el = $(this.rawDataTable);
         this.fetchAnalyticsData();
     }
 
@@ -230,18 +231,18 @@ class Dashboard2 extends Component {
         });
     }
 
-    handleStartDateChange(date) {
+    handleCurrentStartDateChange(date) {
         this.setState({
-            startDate: date
+            currentStartDate: date
         }, () => {
             console.log(date.format('YYYYMMDD'));
             this.fetchAnalyticsData();
         });
     }
 
-    handleEndDateChange(date) {
+    handleCurrentEndDateChange(date) {
         this.setState({
-            endDate: date
+            currentEndDate: date
         }, () => {
             this.fetchAnalyticsData();
         });
@@ -377,15 +378,15 @@ class Dashboard2 extends Component {
                         <div className="row">
                             <div className="col-md-6">
                                 <DatePicker
-                                    selected={this.state.startDate}
-                                    onChange={this.handleStartDateChange}
+                                    selected={this.state.currentStartDate}
+                                    onChange={this.handleCurrentStartDateChange}
                                     className="form-control"
                                 />
                             </div>
                             <div className="col-md-6">
                                 <DatePicker
-                                    selected={this.state.endDate}
-                                    onChange={this.handleEndDateChange}
+                                    selected={this.state.currentEndDate}
+                                    onChange={this.handleCurrentEndDateChange}
                                     className="form-control"
                                 />
                             </div>
@@ -507,7 +508,7 @@ class Dashboard2 extends Component {
                                 <div className="">
                                     <table className="ui celled table"
                                         cellSpacing="0"
-                                        ref={(el) => this.analyticsTable = el}
+                                        ref={(el) => this.rawDataTable = el}
                                         width="100%">
                                         <thead>
                                             <tr>
@@ -524,14 +525,42 @@ class Dashboard2 extends Component {
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
-                            <ChartTab isLoading={this.state.loading}
-                                analysisResult={this.state.analysisResult}
-                                group1Active={this.state.reportMappings[this.state.group1Active]}
-                                rawDataValuesOne={this.state.rawDataValuesOne}
-                                rawDataValuesTwo={this.state.rawDataValuesTwo}
-                                group2Active={this.state.group2Active}
-                                group1Mapping={this.state.reportMappings[this.state.group1Active]}
-                                fetchAnalyticsData={this.fetchAnalyticsData} />
+                            <div className="row">
+                                <div className="col-md-6">
+                                    {this.state.loading ? loading : smoothChart}
+                                </div>
+                                <div className="col-md-6">
+                                    {this.state.loading ? loading : barChart}
+                                </div>
+                            </div>
+                            <div className="row">
+                                <CSVLink data={this.state.analysisResult}
+                                    filename={"my-file.csv"}
+                                    className="btn btn-default"
+                                    target="_blank">
+                                    <i className="fa fa-download" aria-hidden="true"></i>
+                                    &nbsp;Export Table
+                                </CSVLink>
+                            </div>
+                            <div className="table-block">
+                                <div className="">
+                                    <table className="ui celled table"
+                                        cellSpacing="0"
+                                        ref={(el) => this.percentageTable = el}
+                                        width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>{this.state.group2Active}</th>
+                                                <th>Sessions</th>
+                                                <th>Transactions</th>
+                                                <th>Bounce Rate</th>
+                                                <th>Conversion Rate</th>
+                                                <th>Average Time Spent on Site</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
