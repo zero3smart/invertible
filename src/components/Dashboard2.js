@@ -21,6 +21,8 @@ class Dashboard2 extends Component {
         this.state = {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
             currentEndDate: moment(),
+            priorStartDate: moment(new Date('2017-12-15T10:00:00')),
+            priorEndDate: moment(),
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
@@ -49,6 +51,8 @@ class Dashboard2 extends Component {
         };
         this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+        this.handlePriorStartDateChange = this.handlePriorStartDateChange.bind(this);
+        this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
         this.setGroup1Active = this.setGroup1Active.bind(this);
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
@@ -129,7 +133,7 @@ class Dashboard2 extends Component {
         reportOptions.transactions = totalTransactions;
         reportOptions.bounceRate = totalBounces / totalVisits * 100;
         reportOptions.conversionRate = totalTransactions / totalVisits * 100;
-        reportOptions.averageTime = totalDuration / totalVisits / 86400;
+        reportOptions.averageTime = totalDuration / totalVisits / 60;
 
         //Get reports data for barchart
         var rawDataValuesTwo = this.getFilteredList(groupBy);
@@ -202,6 +206,9 @@ class Dashboard2 extends Component {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
+        let priorStartDate = this.state.priorStartDate.format('YYYYMMDD').replace(/-/gi, '');
+        let priorEndDate = this.state.priorEndDate.format('YYYYMMDD').replace(/-/gi, '');
+
         this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
             this.setAnalyticsValues();
             this.setState({ loading: false });
@@ -243,6 +250,23 @@ class Dashboard2 extends Component {
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
+        }, () => {
+            this.fetchAnalyticsData();
+        });
+    }
+
+    handlePriorStartDateChange(date) {
+        this.setState({
+            priorStartDate: date
+        }, () => {
+            console.log(date.format('YYYYMMDD'));
+            this.fetchAnalyticsData();
+        });
+    }
+
+    handlePriorEndDateChange(date) {
+        this.setState({
+            priorEndDate: date
         }, () => {
             this.fetchAnalyticsData();
         });
@@ -525,6 +549,27 @@ class Dashboard2 extends Component {
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
+                            <div className="col-md-5 offset-md-4">
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <span>Prior Period</span>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <DatePicker
+                                            selected={this.state.priorStartDate}
+                                            onChange={this.handlePriorStartDateChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                    <div className="col-md-5">
+                                        <DatePicker
+                                            selected={this.state.priorEndDate}
+                                            onChange={this.handlePriorEndDateChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                             <div className="row">
                                 <div className="col-md-6">
                                     {this.state.loading ? loading : smoothChart}
