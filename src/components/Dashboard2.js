@@ -22,7 +22,7 @@ class Dashboard2 extends Component {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
             currentEndDate: moment(),
             priorStartDate: moment(new Date('2017-12-10T10:00:00')),
-            priorEndDate: moment(),
+            priorEndDate: moment().add(-10, 'days'),
             group1Active: 'Sessions',
             group2Active: 'Total',
             rawDataValuesOne: [],
@@ -347,7 +347,7 @@ class Dashboard2 extends Component {
             <div className="ui active centered inline loader"></div>
         );
 
-        const smoothChart = (
+        const smoothChartForRawData = (
             <AmCharts.React
                 style={{
                     width: "100%",
@@ -417,7 +417,7 @@ class Dashboard2 extends Component {
                 }} />
         );
 
-        const barChart = (
+        const barChartForRawData = (
             <AmCharts.React
                 style={{
                     width: "100%",
@@ -427,6 +427,123 @@ class Dashboard2 extends Component {
                     "type": "serial",
                     "theme": "light",
                     "dataProvider": this.state.rawDataValuesTwo,
+                    "titles": [{
+                        "text": this.state.group2Active
+                    }],
+                    "valueAxes": [{
+                        "gridColor": "#FFFFFF",
+                        "gridAlpha": 0.2,
+                        "dashLength": 0
+                    }],
+                    "gridAboveGraphs": true,
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "[[category]]: <b>[[value]]</b>",
+                        "fillAlphas": 0.8,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": this.state.reportMappings[this.state.group1Active],
+                        "lineColor": "#3962B7"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "xValue",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "gridAlpha": 0,
+                        "tickPosition": "start",
+                        "tickLength": 20,
+                        "labelRotation": 90,
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const smoothChartForPercentage = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "500px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "graphs": [{
+                        "id": "g1",
+                        "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
+                        "bullet": "round",
+                        "bulletSize": 4,
+                        "lineColor": "#3962B7",
+                        "lineThickness": 2,
+                        "negativeLineColor": "#637bb6",
+                        "type": "smoothedLine",
+                        "valueField": this.state.reportMappings[this.state.group1Active]
+                    }],
+                    "dataProvider": this.state.percentageValuesOne,
+                    "titles": [{
+                        "text": this.state.group1Active
+                    }],
+                    "chartScrollbar": {
+                        "graph": "g1",
+                        "gridAlpha": 0,
+                        "color": "#888888",
+                        "scrollbarHeight": 55,
+                        "backgroundAlpha": 0,
+                        "selectedBackgroundAlpha": 0.1,
+                        "selectedBackgroundColor": "#888888",
+                        "graphFillAlpha": 0,
+                        "autoGridCount": true,
+                        "selectedGraphFillAlpha": 0,
+                        "graphLineAlpha": 0.2,
+                        "graphLineColor": "#c2c2c2",
+                        "selectedGraphLineColor": "#888888",
+                        "selectedGraphLineAlpha": 1
+                    },
+                    "chartCursor": {
+                        "categoryBalloonDateFormat": "MMM YYYY",
+                        "cursorAlpha": 0,
+                        "valueLineEnabled": true,
+                        "valueLineBalloonEnabled": true,
+                        "valueLineAlpha": 0.5,
+                        "fullWidth": true
+                    },
+                    "dataDateFormat": "YYYYMMDD",
+                    "categoryField": "xValue",
+                    "categoryAxis": {
+                        "minPeriod": "DD",
+                        "parseDates": true,
+                        "minorGridAlpha": 0.1,
+                        "minorGridEnabled": true,
+                        "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
+                        { "period": "ss", "format": "JJ:NN:SS" },
+                        { "period": "mm", "format": "JJ:NN" },
+                        { "period": "hh", "format": "JJ:NN" },
+                        { "period": "DD", "format": "MMM DD" },
+                        { "period": "WW", "format": "MMM DD" },
+                        { "period": "MM", "format": "MMM YYYY" },
+                        { "period": "YYYY", "format": "YYYY" }]
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const barChartForPercentage = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "500px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "dataProvider": this.state.percentageValuesTwo,
                     "titles": [{
                         "text": this.state.group2Active
                     }],
@@ -583,10 +700,10 @@ class Dashboard2 extends Component {
                         <div role="tabpanel" className="tab-pane fade in active show" id="raw-data">
                             <div className="row">
                                 <div className="col-md-6">
-                                    {this.state.loading ? loading : smoothChart}
+                                    {this.state.loading ? loading : smoothChartForRawData}
                                 </div>
                                 <div className="col-md-6">
-                                    {this.state.loading ? loading : barChart}
+                                    {this.state.loading ? loading : barChartForRawData}
                                 </div>
                             </div>
                             <div className="row">
@@ -642,14 +759,14 @@ class Dashboard2 extends Component {
                             </div>
                             <div className="row">
                                 <div className="col-md-6">
-                                    {this.state.loading ? loading : smoothChart}
+                                    {this.state.loading ? loading : smoothChartForPercentage}
                                 </div>
                                 <div className="col-md-6">
-                                    {this.state.loading ? loading : barChart}
+                                    {this.state.loading ? loading : barChartForPercentage}
                                 </div>
                             </div>
                             <div className="row">
-                                <CSVLink data={this.state.rawDataReport}
+                                <CSVLink data={this.state.percentageReport}
                                     filename={"my-file.csv"}
                                     className="btn btn-default"
                                     target="_blank">
