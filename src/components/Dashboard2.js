@@ -266,7 +266,6 @@ class Dashboard2 extends Component {
         let p1 = new Promise((resolve, reject) => {
             this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
                 this.setRawDataValues();
-                // this.setState({ loading: false });
                 resolve();
             }, err => {
                 reject(err);
@@ -276,7 +275,6 @@ class Dashboard2 extends Component {
         let p2 = new Promise((resolve, reject) => {
             this.props.fetchAnalytics(priorStartDate, priorEndDate).then(res => {
                 this.setPercentageValues();
-                // this.setState({ loading: false });
                 resolve();
             }, err => {
                 reject(err);
@@ -291,7 +289,6 @@ class Dashboard2 extends Component {
     }
 
     componentDidMount() {
-        //this.$el = $(this.rawDataTable);
         this.fetchAnalyticsData();
     }
 
