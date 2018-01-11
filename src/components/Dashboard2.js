@@ -13,7 +13,6 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import '../assets/data-table/datatables';
 import { CSVLink } from 'react-csv';
-import ChartTab from './ChartTab';
 
 class Dashboard2 extends Component {
     constructor(props) {
@@ -783,11 +782,16 @@ class Dashboard2 extends Component {
                                         <thead>
                                             <tr>
                                                 <th>{this.state.group2Active}</th>
-                                                <th>Sessions</th>
-                                                <th>Transactions</th>
-                                                <th>Bounce Rate</th>
-                                                <th>Conversion Rate</th>
-                                                <th>Average Time Spent on Site</th>
+                                                <th>sessions</th>
+                                                <th>sessions(%chg)</th>
+                                                <th>transactions</th>
+                                                <th>transactions(%chg)</th>
+                                                <th>bounceRate</th>
+                                                <th>bounceRate(%chg)</th>
+                                                <th>conversionRate</th>
+                                                <th>conversionRate(%chg)</th>
+                                                <th>timeSpent</th>
+                                                <th>timeSpent(%chg)</th>
                                             </tr>
                                         </thead>
                                     </table>
