@@ -17,10 +17,172 @@ var data1 = [
         "medium": "Mobile",
         "value": 8279
     }
-]
+];
+
+var data2 = [
+    {
+        "medium": "All Devices",
+        "value": 2,
+        "color": "#FF0F00"
+    },
+    {
+        "medium": "Desktop",
+        "value": -25,
+        "color": "#FF6600"
+    },
+    {
+        "medium": "Mobile",
+        "value": 14,
+        "color": "#FF9E01"
+    },
+    {
+        "medium": "Tablet",
+        "value": 139,
+        "color": "#FCD202"
+    }
+];
+
+var data3 = [
+    {
+        "medium": "All Devices",
+        "value": 46,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 45,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 46,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 55,
+        "color": "#FCD202"
+    }
+];
+
+var data4 = [
+    {
+        "medium": "All Devices",
+        "value": -10.4,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 9.6,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": -15.8,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 1.8,
+        "color": "#FCD202"
+    }
+];
+
+var data5 = [
+    {
+        "medium": "All Devices",
+        "value": 37,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 32,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 2,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 3,
+        "color": "#FCD202"
+    }
+];
+
+var data6 = [
+    {
+        "medium": "All Devices",
+        "value": 270,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 255,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 100,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 100,
+        "color": "#FCD202"
+    }
+];
+
+var data7 = [
+    {
+        "medium": "All Devices",
+        "value": 21895,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 16509,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 100,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 741,
+        "color": "#FCD202"
+    }
+];
+
+var data8 = [
+    {
+        "medium": "All Devices",
+        "value": 35,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 22,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 38,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 46,
+        "color": "#FCD202"
+    }
+];
+
 class Dashboard1 extends Component {
     render() {
-        const pieChart = (
+        const mediaSpendsChart = (
             <AmCharts.React
                 style={{
                     width: "100%",
@@ -56,8 +218,325 @@ class Dashboard1 extends Component {
                         }]
                     },
                     "dataProvider": data1,
+                    "titles": [{
+                        "text": "Media Spends"
+                    }],
                     "valueField": "value",
                     "titleField": "medium",
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const mediaSpendsChangeChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data2,
+                    "titles": [{
+                        "text": "Media Spends Change"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "unit": "%",
+                        "title": "Avg. Media Spends Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const bounceRateChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data3,
+                    "titles": [{
+                        "text": "Bounce Rate"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Bounce Rate"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const bounceRateChgChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data4,
+                    "titles": [{
+                        "text": "Bounce Rate Chg"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Bounce Rate Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const transactionsChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data5,
+                    "titles": [{
+                        "text": "Transactions"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Transactions"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const transactionsChgChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data6,
+                    "titles": [{
+                        "text": "Transactions Chg"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Transactions Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const visitsChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "dataProvider": data7,
+                    "titles": [{
+                        "text": "Visits"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "dashLength": 4,
+                        "position": "left"
+                    }],
+                    "graphs": [{
+                        "bulletSize": 14,
+                        "customBullet": "https://www.amcharts.com/lib/3/images/star.png?x",
+                        "customBulletField": "customBullet",
+                        "valueField": "value",
+                        "balloonText": "<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
+                    }],
+                    "marginTop": 20,
+                    "marginRight": 70,
+                    "marginLeft": 40,
+                    "marginBottom": 20,
+                    "chartCursor": {
+                        "graphBulletSize": 1.5,
+                        "zoomable": false,
+                        "valueZoomable": true,
+                        "cursorAlpha": 0,
+                        "valueLineEnabled": true,
+                        "valueLineBalloonEnabled": true,
+                        "valueLineAlpha": 0.2
+                    },
+                    "autoMargins": false,
+                    "categoryField": "medium",
+                    "valueScrollbar": {
+                        "offset": 30
+                    },
+                    "categoryAxis": {
+                        "axisAlpha": 0,
+                        "gridAlpha": 0,
+                        "inside": true,
+                        "tickLength": 0
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const visitsChgChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data8,
+                    "titles": [{
+                        "text": "Visits Chg"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Visits Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
                     "export": {
                         "enabled": true
                     }
@@ -70,7 +549,34 @@ class Dashboard1 extends Component {
                     <div className="col-md-8">
                         <div className="row">
                             <div className="col-md-6">
-                                {pieChart}
+                                {mediaSpendsChart}
+                            </div>
+                            <div className="col-md-6">
+                                {mediaSpendsChangeChart}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {bounceRateChart}
+                            </div>
+                            <div className="col-md-6">
+                                {bounceRateChgChart}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {transactionsChart}
+                            </div>
+                            <div className="col-md-6">
+                                {transactionsChgChart}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {visitsChart}
+                            </div>
+                            <div className="col-md-6">
+                                {visitsChgChart}
                             </div>
                         </div>
                     </div>
