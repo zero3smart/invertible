@@ -114,6 +114,8 @@ class Dashboard2 extends Component {
 
         let analytics = this.state.currentAnalytics;
 
+        debugger;
+
         var rawDataValuesOne = this.getFilteredList(analytics, 'date');
 
         let reportOptions = { ...this.state.currentReportOptions };
@@ -365,7 +367,7 @@ class Dashboard2 extends Component {
         let p1 = new Promise((resolve, reject) => {
             this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
                 let { analytics } = this.props;
-                this.setState({ priorAnalytics: analytics });
+                this.setState({ currentAnalytics: analytics });
 
                 resolve();
             }, err => {
@@ -376,7 +378,7 @@ class Dashboard2 extends Component {
         let p2 = new Promise((resolve, reject) => {
             this.props.fetchAnalytics(priorStartDate, priorEndDate).then(res => {
                 let { analytics } = this.props;
-                this.setState({ currentAnalytics: analytics });
+                this.setState({ priorAnalytics: analytics });
 
                 resolve();
             }, err => {
@@ -412,7 +414,6 @@ class Dashboard2 extends Component {
             }, err => {
 
             });
-
         });
     }
 
@@ -510,7 +511,7 @@ class Dashboard2 extends Component {
                         "selectedGraphLineAlpha": 1
                     },
                     "chartCursor": {
-                        "categoryBalloonDateFormat": "MMM YYYY",
+                        "categoryBalloonDateFormat": "MMM DD YYYY",
                         "cursorAlpha": 0,
                         "valueLineEnabled": true,
                         "valueLineBalloonEnabled": true,
@@ -627,7 +628,7 @@ class Dashboard2 extends Component {
                         "selectedGraphLineAlpha": 1
                     },
                     "chartCursor": {
-                        "categoryBalloonDateFormat": "MMM YYYY",
+                        "categoryBalloonDateFormat": "MMM DD YYYY",
                         "cursorAlpha": 0,
                         "valueLineEnabled": true,
                         "valueLineBalloonEnabled": true,
