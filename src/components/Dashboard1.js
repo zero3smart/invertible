@@ -1,156 +1,582 @@
 import React, { Component } from 'react';
-import { core as ZingChart, line as LineChart, area as AreaChart, pie as PieChart, bar as BarChart, scatter as ScatterChart } from 'zingchart-react';
+import AmCharts from '@amcharts/amcharts3-react';
 import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
 
-var lineValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] },
-    { text: "Second Series", values: [18, 12, 7, 14, 1, 19, 4] },
-    { text: "Third Series", values: [0, 1, 12, 12, 4, 6, 17] },
-    { text: "Fourth Series", values: [18, 22, 17, 4, 1, 9, 4] },
-    { text: "Fifth Series", values: [4, 2, 7, 3, 23, 7, 2] },
-    { text: "Sixth Series", values: [10, 6, 8, 2, 6, 3, 9] },
-];
-
-var barValues = [
-    { text: "First Series", values: [0, 1, 2, 2, 4, 6, 7] }
-];
-
-var areaValues = [
-    { text : "First Series", values : [0,1,2,2,4,6,7] },
-    { text : "Second Series", values : [18,12,7,14,1,19,4] },
-    { text : "Third Series", values : [0,1,12,12,4,6,17] },
-    { text : "Fourth Series", values : [18,22,17,4,1,9,4] },
-];
-
-var scatterValues = [
-    { text: "First Series", values: [[5, 2], [8, 1], [2, 6], [9, 1]] },
-    { text: "Second Series", values: [[8, 3], [2, 8], [6, 9], [3, 5]] },
-    { text: "Third Series", values: [[18, 3], [22, 8], [16, 9], [13, 5]] },
-    { text: "Fourth Series", values: [[18, 3], [12, 8], [26, 9], [32, 5]] },
-];
-
-var pieValues = [
-    { text: "First Slice", values: [10] },
-    { text: "Second Slice", values: [20] },
-    { text: "Third Slice", values: [30] },
-    { text: "Fourth Slice", values: [40] }
-];
-
-var heatmapValues = {
-    "type": "heatmap",
-    "plotarea": {
-        "margin": "dynamic"
+var data1 = [
+    {
+        "medium": "All Devices",
+        "value": 11372
     },
-    "plot": {
-        "aspect": "vertical"
+    {
+        "medium": "Desktop",
+        "value": 0
     },
-    "series": [
-        { "values": [59, 15, 5, 30, 60, 99, 28, 33, 34, 51, 12, 30, 15, 39, 15, 71, 23, 51, 29, 20] },
-        { "values": [34, 32, 87, 65, 9, 17, 40, 12, 17, 22, 13, 42, 46, 27, 42, 33, 17, 63, 47, 42] },
-        { "values": [90, 19, 50, 39, 12, 49, 14, 61, 59, 60, 23, 42, 52, 12, 34, 23, 16, 45, 32, 31] },
-        { "values": [23, 45, 12, 37, 31, 35, 64, 71, 63, 26, 12, 36, 37, 21, 74, 35, 26, 41, 23, 21] },
-        { "values": [43, 50, 59, 60, 61, 49, 23, 14, 51, 46, 21, 63, 24, 12, 42, 31, 33, 25, 12, 15] },
-        { "values": [51, 59, 12, 15, 29, 31, 52, 32, 41, 23, 15, 63, 12, 23, 51, 41, 23, 32, 31, 17] },
-        { "values": [12, 23, 26, 35, 54, 34, 35, 36, 37, 38, 23, 18, 48, 54, 52, 56, 60, 70, 43, 62] },
-        { "values": [15, 59, 60, 61, 15, 79, 11, 21, 6, 19, 3, 28, 17, 34, 5, 20, 13, 15, 16, 31] },
-        { "values": [61, 54, 37, 41, 36, 58, 42, 21, 12, 17, 32, 41, 64, 27, 48, 35, 42, 9, 41, 11] },
-        { "values": [24, 45, 12, 71, 60, 23, 33, 41, 53, 27, 35, 52, 23, 46, 42, 64, 35, 37, 51, 23] },
-        { "values": [63, 62, 23, 63, 54, 73, 26, 36, 47, 63, 23, 45, 75, 32, 45, 16, 35, 24, 52, 3] },
-        { "values": [22, 30, 11, 56, 85, 34, 75, 54, 76, 45, 36, 23, 74, 86, 88, 56, 49, 28, 34, 31] },
-        { "values": [23, 82, 68, 46, 58, 47, 68, 63, 43, 12, 36, 75, 77, 56, 45, 31, 90, 89, 31, 35] },
-        { "values": [16, 85, 86, 74, 54, 65, 73, 47, 30, 31, 34, 35, 58, 51, 64, 26, 23, 12, 43, 40] },
-        { "values": [12, 87, 36, 53, 62, 84, 45, 65, 73, 52, 34, 28, 25, 19, 30, 33, 37, 34, 63, 77] }
-    ]
-};
+    {
+        "medium": "Mobile",
+        "value": 8279
+    }
+];
+
+var data2 = [
+    {
+        "medium": "All Devices",
+        "value": 2,
+        "color": "#FF0F00"
+    },
+    {
+        "medium": "Desktop",
+        "value": -25,
+        "color": "#FF6600"
+    },
+    {
+        "medium": "Mobile",
+        "value": 14,
+        "color": "#FF9E01"
+    },
+    {
+        "medium": "Tablet",
+        "value": 139,
+        "color": "#FCD202"
+    }
+];
+
+var data3 = [
+    {
+        "medium": "All Devices",
+        "value": 46,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 45,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 46,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 55,
+        "color": "#FCD202"
+    }
+];
+
+var data4 = [
+    {
+        "medium": "All Devices",
+        "value": -10.4,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 9.6,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": -15.8,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 1.8,
+        "color": "#FCD202"
+    }
+];
+
+var data5 = [
+    {
+        "medium": "All Devices",
+        "value": 37,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 32,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 2,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 3,
+        "color": "#FCD202"
+    }
+];
+
+var data6 = [
+    {
+        "medium": "All Devices",
+        "value": 270,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 255,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 100,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 100,
+        "color": "#FCD202"
+    }
+];
+
+var data7 = [
+    {
+        "medium": "All Devices",
+        "value": 21895,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 16509,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 100,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 741,
+        "color": "#FCD202"
+    }
+];
+
+var data8 = [
+    {
+        "medium": "All Devices",
+        "value": 35,
+        "color": "#2A0CD0"
+    },
+    {
+        "medium": "Desktop",
+        "value": 22,
+        "color": "#CD0D74"
+    },
+    {
+        "medium": "Mobile",
+        "value": 38,
+        "color": "#0D8ECF"
+    },
+    {
+        "medium": "Tablet",
+        "value": 46,
+        "color": "#FCD202"
+    }
+];
 
 class Dashboard1 extends Component {
     render() {
+        const mediaSpendsChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "pie",
+                    "startDuration": 0,
+                    "theme": "light",
+                    "addClassNames": true,
+                    "innerRadius": "30%",
+                    "defs": {
+                        "filter": [{
+                            "id": "shadow",
+                            "width": "200%",
+                            "height": "200%",
+                            "feOffset": {
+                                "result": "offOut",
+                                "in": "SourceAlpha",
+                                "dx": 0,
+                                "dy": 0
+                            },
+                            "feGaussianBlur": {
+                                "result": "blurOut",
+                                "in": "offOut",
+                                "stdDeviation": 5
+                            },
+                            "feBlend": {
+                                "in": "SourceGraphic",
+                                "in2": "blurOut",
+                                "mode": "normal"
+                            }
+                        }]
+                    },
+                    "dataProvider": data1,
+                    "titles": [{
+                        "text": "Media Spends"
+                    }],
+                    "valueField": "value",
+                    "titleField": "medium",
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const mediaSpendsChangeChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data2,
+                    "titles": [{
+                        "text": "Media Spends Change"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "unit": "%",
+                        "title": "Avg. Media Spends Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const bounceRateChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data3,
+                    "titles": [{
+                        "text": "Bounce Rate"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Bounce Rate"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const bounceRateChgChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data4,
+                    "titles": [{
+                        "text": "Bounce Rate Chg"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Bounce Rate Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const transactionsChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data5,
+                    "titles": [{
+                        "text": "Transactions"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Transactions"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const transactionsChgChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data6,
+                    "titles": [{
+                        "text": "Transactions Chg"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Transactions Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const visitsChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "dataProvider": data7,
+                    "titles": [{
+                        "text": "Visits"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "dashLength": 4,
+                        "position": "left"
+                    }],
+                    "graphs": [{
+                        "bulletSize": 14,
+                        "customBullet": "https://www.amcharts.com/lib/3/images/star.png?x",
+                        "customBulletField": "customBullet",
+                        "valueField": "value",
+                        "balloonText": "<div style='margin:10px; text-align:left;'><span style='font-size:13px'>[[category]]</span><br><span style='font-size:18px'>Value:[[value]]</span>",
+                    }],
+                    "marginTop": 20,
+                    "marginRight": 70,
+                    "marginLeft": 40,
+                    "marginBottom": 20,
+                    "chartCursor": {
+                        "graphBulletSize": 1.5,
+                        "zoomable": false,
+                        "valueZoomable": true,
+                        "cursorAlpha": 0,
+                        "valueLineEnabled": true,
+                        "valueLineBalloonEnabled": true,
+                        "valueLineAlpha": 0.2
+                    },
+                    "autoMargins": false,
+                    "categoryField": "medium",
+                    "valueScrollbar": {
+                        "offset": 30
+                    },
+                    "categoryAxis": {
+                        "axisAlpha": 0,
+                        "gridAlpha": 0,
+                        "inside": true,
+                        "tickLength": 0
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
+        const visitsChgChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "300px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "marginRight": 70,
+                    "dataProvider": data8,
+                    "titles": [{
+                        "text": "Visits Chg"
+                    }],
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Visits Chg"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
+                    "export": {
+                        "enabled": true
+                    }
+                }} />
+        );
+
         return (
-            <div className="animated fadeIn">
+            <div className="">
                 <div className="row">
                     <div className="col-md-8">
-                        <div className="card-columns row">
-                            <div className="card col-md-6">
-                                <div className="card-header">
-                                    Line Chart
-                                    <div className="card-actions">
-                                        <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                                    </div>
-                                </div>
-                                <IndexLink to="/chart-detail" activeClassName="active">
-                                    <div className="card-block">
-                                        <div className="chart-wrapper">
-                                            {/* line chart */}
-                                            <LineChart id="linechart" height="300" width="400" series={lineValues} legend="true" title="Hello Line Chart" />
-                                        </div>
-                                    </div>
-                                </IndexLink>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {mediaSpendsChart}
                             </div>
-                            <div className="card col-md-6">
-                                <div className="card-header">
-                                    Bar Chart
-                                    <div className="card-actions">
-                                        <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                                    </div>
-                                </div>
-                                <IndexLink to="/chart-detail" activeClassName="active">
-                                    <div className="card-block">
-                                        <div className="chart-wrapper">
-                                            {/* Bar chart*/}
-                                            <BarChart id="barchart" height="300" width="400" series={barValues} legend="true" title="Hello Bar Chart" />
-                                        </div>
-                                    </div>
-                                </IndexLink>
+                            <div className="col-md-6">
+                                {mediaSpendsChangeChart}
                             </div>
-                            <div className="card col-md-6">
-                                <div className="card-header">
-                                    Area Chart
-                                    <div className="card-actions">
-                                        <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                                    </div>
-                                </div>
-                                <IndexLink to="/chart-detail" activeClassName="active">
-                                    <div className="card-block">
-                                        <div className="chart-wrapper">
-                                            {/* Area chart */}
-                                            <AreaChart id="areachart" height="300" width="400" series={areaValues} legend="true" title="Hello Area Chart" />
-                                        </div>
-                                    </div>
-                                </IndexLink>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {bounceRateChart}
                             </div>
-                            <div className="card col-md-6">
-                                <div className="card-header">
-                                    Scatter Chart
-                                    <div className="card-actions">
-                                        <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                                    </div>
-                                </div>
-                                <IndexLink to="/chart-detail" activeClassName="active">
-                                    <div className="card-block">
-                                        <div className="chart-wrapper">
-                                            {/* Scatter chart */}
-                                            <ScatterChart id="scatterchart" height="300" width="400" series={scatterValues} legend="true" title="Hello Scatter Chart" />
-                                        </div>
-                                    </div>
-                                </IndexLink>
+                            <div className="col-md-6">
+                                {bounceRateChgChart}
                             </div>
-                            <div className="card col-md-6">
-                                <div className="card-header">
-                                    Pie Chart
-                                    <div className="card-actions">
-                                        <a href="http://www.zingchart.com"><small className="text-muted">docs</small></a>
-                                    </div>
-                                </div>
-                                <IndexLink to="/chart-detail" activeClassName="active">
-                                    <div className="card-block">
-                                        <div className="chart-wrapper">
-                                            {/* Pie chart */}
-                                            <PieChart id="piechart" height="300" width="400" series={pieValues} legend="true" title="Hello Pie Chart" />
-                                        </div>
-                                    </div>
-                                </IndexLink>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {transactionsChart}
+                            </div>
+                            <div className="col-md-6">
+                                {transactionsChgChart}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                {visitsChart}
+                            </div>
+                            <div className="col-md-6">
+                                {visitsChgChart}
                             </div>
                         </div>
                     </div>
