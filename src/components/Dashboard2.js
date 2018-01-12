@@ -42,7 +42,7 @@ class Dashboard2 extends Component {
                 'Channel': 'medium',
                 'LandingPage': 'landingpath'
             },
-            reportOptions: {
+            currentReportOptions: {
                 total: "",
                 sessions: "",
                 transactions: "",
@@ -69,9 +69,8 @@ class Dashboard2 extends Component {
         return obj;
     }
 
-    getFilteredList(groupByAttr) {
+    getFilteredList(analytics, groupByAttr) {
         let _filteredList = [];
-        let { analytics } = this.props;
 
         _filteredList = _(analytics)
             .groupBy(groupByAttr)
@@ -113,13 +112,11 @@ class Dashboard2 extends Component {
     setRawDataValues() {
         let groupBy = this.state.reportMappings[this.state.group2Active];
 
-        let { analytics } = this.props;
+        let analytics = this.state.currentAnalytics;
 
-        this.setState({ currentAnalytics: analytics });
+        var rawDataValuesOne = this.getFilteredList(analytics, 'date');
 
-        var rawDataValuesOne = this.getFilteredList('date');
-
-        let reportOptions = { ...this.state.reportOptions };
+        let reportOptions = { ...this.state.currentReportOptions };
 
         let totalSessions = 0,
             totalTransactions = 0,
@@ -142,7 +139,7 @@ class Dashboard2 extends Component {
         reportOptions.averageTime = totalDuration / totalVisits / 60;
 
         //Get reports data for barchart
-        var rawDataValuesTwo = this.getFilteredList(groupBy);
+        var rawDataValuesTwo = this.getFilteredList(analytics, groupBy);
 
         let rawDataReport = [];
         if (groupBy === 'total')
@@ -150,10 +147,9 @@ class Dashboard2 extends Component {
         else
             rawDataReport = rawDataValuesTwo;
 
-        this.initDataTable($(this.rawDataTable), rawDataReport);
-
+        this.initDataTableForRawData($(this.rawDataTable), rawDataReport);
         this.setState({ rawDataReport });
-        this.setState({ reportOptions });
+        this.setState({ currentReportOptions : reportOptions });
         this.setState({ rawDataValuesOne: rawDataValuesOne });
         this.setState({ rawDataValuesTwo: rawDataValuesTwo });
     }
@@ -161,13 +157,14 @@ class Dashboard2 extends Component {
     setPercentageValues() {
         let groupBy = this.state.reportMappings[this.state.group2Active];
 
-        let { analytics } = this.props;
+        let analytics = this.state.priorAnalytics;
 
-        this.setState({ priorAnalytics: analytics });
+        debugger;
 
-        var percentageValuesOne = this.getFilteredList('date');
+        var percentageValuesOne = this.getFilteredList(analytics, 'date');
 
-        let reportOptions = { ...this.state.reportOptions };
+        let currentReportOptions = { ...this.state.currentReportOptions };
+        let priorReportOptions = {};
 
         let totalSessions = 0,
             totalTransactions = 0,
@@ -183,30 +180,52 @@ class Dashboard2 extends Component {
             totalDuration += parseInt(element["sessionduration"], 10);
         });
 
-        reportOptions.sessions = totalSessions;
-        reportOptions.transactions = totalTransactions;
-        reportOptions.bounceRate = totalBounces / totalVisits * 100;
-        reportOptions.conversionRate = totalTransactions / totalVisits * 100;
-        reportOptions.averageTime = totalDuration / totalVisits / 60;
+        priorReportOptions.sessions = totalSessions;
+        priorReportOptions.sessionsChg = (currentReportOptions.sessions-totalSessions)/totalSessions * 100;
+        priorReportOptions.transactions = totalTransactions;
+        priorReportOptions.transactionsChg = (currentReportOptions.transactions-totalTransactions)/totalTransactions * 100;
+        priorReportOptions.bounceRate = totalBounces / totalVisits * 100;
+        priorReportOptions.bounceRateChg = (currentReportOptions.bounceRate-priorReportOptions.bounceRate)/priorReportOptions.bounceRate * 100;
+        priorReportOptions.conversionRate = totalTransactions / totalVisits * 100;
+        priorReportOptions.conversionRateChg = (currentReportOptions.conversionRate-priorReportOptions.conversionRate)/priorReportOptions.conversionRate * 100;
+        priorReportOptions.averageTime = totalDuration / totalVisits / 60;
+        priorReportOptions.averageTimeChg = (currentReportOptions.averageTime-priorReportOptions.averageTime)/priorReportOptions.averageTime * 100;
 
         //Get reports data for barchart
-        var percentageValuesTwo = this.getFilteredList(groupBy);
-
+        var percentageValuesTwo = this.getFilteredList(analytics, groupBy);
+        var rawDataValuesTwo = { ...this.state.rawDataValuesTwo };
+        debugger;
         let percentageReport = [];
         if (groupBy === 'total')
-            percentageReport.push(this.convertObjectToComma(reportOptions));
-        else
+            percentageReport.push(this.convertObjectToComma(priorReportOptions));
+        else {
+            for (let i = 0; i < percentageValuesTwo.length; i++) {
+                percentageValuesTwo[i].sessionsChg = (rawDataValuesTwo[i].sessions - percentageValuesTwo[i].sessions) / percentageValuesTwo[i].sessions * 100;
+                percentageValuesTwo[i].transactionsChg = (rawDataValuesTwo[i].transactions - percentageValuesTwo[i].transactions) / percentageValuesTwo[i].transactions * 100;
+                percentageValuesTwo[i].bounceRateChg = (rawDataValuesTwo[i].bounceRate - percentageValuesTwo[i].bounceRate) / percentageValuesTwo[i].bounceRate * 100;
+                percentageValuesTwo[i].conversionRateChg = (rawDataValuesTwo[i].conversionRate - percentageValuesTwo[i].conversionRate) / percentageValuesTwo[i].conversionRate * 100;
+                percentageValuesTwo[i].averageTimeChg = (rawDataValuesTwo[i].averageTime - percentageValuesTwo[i].averageTime) / percentageValuesTwo[i].averageTime * 100;
+            }
+            // percentageValuesTwo.forEach((element) => {
+            //     debugger;
+            //     element.sessionsChg = (currentReportOptions.sessions - element.sessions) / element.sessions * 100;
+            //     element.transactionsChg = (currentReportOptions.transactions - element.transactions) / element.transactions * 100;
+            //     element.bounceRateChg = (currentReportOptions.bounceRate - element.bounceRate) / element.bounceRate * 100;
+            //     element.conversionRateChg = (currentReportOptions.conversionRate - element.conversionRate) / element.conversionRate * 100;
+            //     element.averageTimeChg = (currentReportOptions.averageTime - element.averageTime) / element.averageTime * 100;
+            // });
             percentageReport = percentageValuesTwo;
+        }
 
-        this.initDataTable($(this.percentageTable), percentageReport);
+
+        this.initDataTableForPercentage($(this.percentageTable), percentageReport);
 
         this.setState({ percentageReport });
-        this.setState({ reportOptions });
         this.setState({ percentageValuesOne: percentageValuesOne });
         this.setState({ percentageValuesTwo: percentageValuesTwo });
     }
 
-    initDataTable(elm, analysisResult) {
+    initDataTableForRawData(elm, analysisResult) {
         elm.DataTable({
             destroy: true,
             data: analysisResult,
@@ -251,6 +270,86 @@ class Dashboard2 extends Component {
         });
     }
 
+    initDataTableForPercentage(elm, analysisResult) {
+        elm.DataTable({
+            destroy: true,
+            data: analysisResult,
+            columns: [
+                { "data": "rValue" },
+                {
+                    "data": "sessions",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',').display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "sessionsChg",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "transactions",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',').display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "transactionsChg",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "bounceRate",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "bounceRateChg",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "conversionRate",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "conversionRateChg",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+                {
+                    "data": "averageTime",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num;
+                    }
+                },
+                {
+                    "data": "averageTimeChg",
+                    render: function (data, type, row, meta) {
+                        var num = $.fn.dataTable.render.number(',', '.', 2).display(data);
+                        return num + ' ' + '%';
+                    }
+                },
+            ]
+        });
+    }
+
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -264,7 +363,9 @@ class Dashboard2 extends Component {
 
         let p1 = new Promise((resolve, reject) => {
             this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
-                this.setRawDataValues();
+                let { analytics } = this.props;
+                this.setState({ priorAnalytics: analytics });
+
                 resolve();
             }, err => {
                 reject(err);
@@ -273,7 +374,9 @@ class Dashboard2 extends Component {
 
         let p2 = new Promise((resolve, reject) => {
             this.props.fetchAnalytics(priorStartDate, priorEndDate).then(res => {
-                this.setPercentageValues();
+                let { analytics } = this.props;
+                this.setState({ currentAnalytics: analytics });
+
                 resolve();
             }, err => {
                 reject(err);
@@ -281,6 +384,8 @@ class Dashboard2 extends Component {
         })
 
         Promise.all([p1, p2]).then(() => {
+            this.setRawDataValues();
+            this.setPercentageValues();
             this.setState({ loading: false });
         }, err => {
 
@@ -298,12 +403,14 @@ class Dashboard2 extends Component {
     setGroup1Active(e) {
         this.setState({ group1Active: e.target.value }, () => {
             this.setRawDataValues();
+            this.setPercentageValues();
         });
     }
 
     setGroup2Active(e) {
         this.setState({ group2Active: e.target.value }, () => {
             this.setRawDataValues();
+            this.setPercentageValues();
         });
     }
 
