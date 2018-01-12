@@ -159,8 +159,6 @@ class Dashboard2 extends Component {
 
         let analytics = this.state.priorAnalytics;
 
-        debugger;
-
         var percentageValuesOne = this.getFilteredList(analytics, 'date');
 
         let currentReportOptions = { ...this.state.currentReportOptions };
@@ -194,26 +192,21 @@ class Dashboard2 extends Component {
         //Get reports data for barchart
         var percentageValuesTwo = this.getFilteredList(analytics, groupBy);
         var rawDataValuesTwo = { ...this.state.rawDataValuesTwo };
-        debugger;
+
         let percentageReport = [];
         if (groupBy === 'total')
             percentageReport.push(this.convertObjectToComma(priorReportOptions));
         else {
             for (let i = 0; i < percentageValuesTwo.length; i++) {
+                if (typeof rawDataValuesTwo[i] == "undefined") {
+                    continue;
+                }
                 percentageValuesTwo[i].sessionsChg = (rawDataValuesTwo[i].sessions - percentageValuesTwo[i].sessions) / percentageValuesTwo[i].sessions * 100;
                 percentageValuesTwo[i].transactionsChg = (rawDataValuesTwo[i].transactions - percentageValuesTwo[i].transactions) / percentageValuesTwo[i].transactions * 100;
                 percentageValuesTwo[i].bounceRateChg = (rawDataValuesTwo[i].bounceRate - percentageValuesTwo[i].bounceRate) / percentageValuesTwo[i].bounceRate * 100;
                 percentageValuesTwo[i].conversionRateChg = (rawDataValuesTwo[i].conversionRate - percentageValuesTwo[i].conversionRate) / percentageValuesTwo[i].conversionRate * 100;
                 percentageValuesTwo[i].averageTimeChg = (rawDataValuesTwo[i].averageTime - percentageValuesTwo[i].averageTime) / percentageValuesTwo[i].averageTime * 100;
             }
-            // percentageValuesTwo.forEach((element) => {
-            //     debugger;
-            //     element.sessionsChg = (currentReportOptions.sessions - element.sessions) / element.sessions * 100;
-            //     element.transactionsChg = (currentReportOptions.transactions - element.transactions) / element.transactions * 100;
-            //     element.bounceRateChg = (currentReportOptions.bounceRate - element.bounceRate) / element.bounceRate * 100;
-            //     element.conversionRateChg = (currentReportOptions.conversionRate - element.conversionRate) / element.conversionRate * 100;
-            //     element.averageTimeChg = (currentReportOptions.averageTime - element.averageTime) / element.averageTime * 100;
-            // });
             percentageReport = percentageValuesTwo;
         }
 
@@ -402,15 +395,30 @@ class Dashboard2 extends Component {
 
     setGroup1Active(e) {
         this.setState({ group1Active: e.target.value }, () => {
-            this.setRawDataValues();
-            this.setPercentageValues();
+            var promise = new Promise((resolve, reject) => {
+                this.setRawDataValues();
+                resolve();
+            });
+            promise.then(() => {
+                this.setPercentageValues();
+            }, err => {
+
+            });
+
         });
     }
 
     setGroup2Active(e) {
         this.setState({ group2Active: e.target.value }, () => {
-            this.setRawDataValues();
-            this.setPercentageValues();
+            var promise = new Promise((resolve, reject) => {
+                this.setRawDataValues();
+                resolve();
+            });
+            promise.then(() => {
+                this.setPercentageValues();
+            }, err => {
+
+            });
         });
     }
 
