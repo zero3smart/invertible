@@ -199,13 +199,18 @@ class Dashboard2 extends Component {
         else {
             for (let i = 0; i < percentageValuesTwo.length; i++) {
                 if (typeof rawDataValuesTwo[i] == "undefined") {
+                    percentageValuesTwo[i].sessionsChg = 0;
+                    percentageValuesTwo[i].transactionsChg = 0;
+                    percentageValuesTwo[i].bounceRateChg = 0;
+                    percentageValuesTwo[i].conversionRateChg = 0;
+                    percentageValuesTwo[i].averageTimeChg = 0;
                     continue;
                 }
-                percentageValuesTwo[i].sessionsChg = (rawDataValuesTwo[i].sessions - percentageValuesTwo[i].sessions) / percentageValuesTwo[i].sessions * 100;
-                percentageValuesTwo[i].transactionsChg = (rawDataValuesTwo[i].transactions - percentageValuesTwo[i].transactions) / percentageValuesTwo[i].transactions * 100;
-                percentageValuesTwo[i].bounceRateChg = (rawDataValuesTwo[i].bounceRate - percentageValuesTwo[i].bounceRate) / percentageValuesTwo[i].bounceRate * 100;
-                percentageValuesTwo[i].conversionRateChg = (rawDataValuesTwo[i].conversionRate - percentageValuesTwo[i].conversionRate) / percentageValuesTwo[i].conversionRate * 100;
-                percentageValuesTwo[i].averageTimeChg = (rawDataValuesTwo[i].averageTime - percentageValuesTwo[i].averageTime) / percentageValuesTwo[i].averageTime * 100;
+                percentageValuesTwo[i].sessionsChg = percentageValuesTwo[i].sessions != 0 ? (rawDataValuesTwo[i].sessions - percentageValuesTwo[i].sessions) / percentageValuesTwo[i].sessions * 100 : 0;
+                percentageValuesTwo[i].transactionsChg = percentageValuesTwo[i].transactions != 0 ? (rawDataValuesTwo[i].transactions - percentageValuesTwo[i].transactions) / percentageValuesTwo[i].transactions * 100 : 0;
+                percentageValuesTwo[i].bounceRateChg = percentageValuesTwo[i].bounceRate != 0 ? (rawDataValuesTwo[i].bounceRate - percentageValuesTwo[i].bounceRate) / percentageValuesTwo[i].bounceRate * 100 : 0;
+                percentageValuesTwo[i].conversionRateChg = percentageValuesTwo[i].conversionRate != 0 ? (rawDataValuesTwo[i].conversionRate - percentageValuesTwo[i].conversionRate) / percentageValuesTwo[i].conversionRate * 100 : 0;
+                percentageValuesTwo[i].averageTimeChg = percentageValuesTwo[i].averageTime != 0 ? (rawDataValuesTwo[i].averageTime - percentageValuesTwo[i].averageTime) / percentageValuesTwo[i].averageTime * 100 : 0;
             }
             percentageReport = percentageValuesTwo;
         }
@@ -267,6 +272,9 @@ class Dashboard2 extends Component {
         elm.DataTable({
             destroy: true,
             data: analysisResult,
+            "columnDefs": [
+                { "width": "50px", "targets": 0 }
+            ],
             columns: [
                 { "data": "rValue" },
                 {
