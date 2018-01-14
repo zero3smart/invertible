@@ -114,8 +114,6 @@ class Dashboard2 extends Component {
 
         let analytics = this.state.currentAnalytics;
 
-        debugger;
-
         var rawDataValuesOne = this.getFilteredList(analytics, 'date');
 
         let reportOptions = { ...this.state.currentReportOptions };
@@ -162,6 +160,23 @@ class Dashboard2 extends Component {
         let analytics = this.state.priorAnalytics;
 
         var percentageValuesOne = this.getFilteredList(analytics, 'date');
+        var rawDataValuesOne = { ...this.state.rawDataValuesOne };
+
+        for (let i = 0; i < percentageValuesOne.length; i++) {
+            if (typeof percentageValuesOne[i] == "undefined") {
+                percentageValuesOne[i].sessionsChg = 0;
+                percentageValuesOne[i].transactionsChg = 0;
+                percentageValuesOne[i].bounceRateChg = 0;
+                percentageValuesOne[i].conversionRateChg = 0;
+                percentageValuesOne[i].averageTimeChg = 0;
+                continue;
+            }
+            percentageValuesOne[i].sessionsChg = percentageValuesOne[i].sessions != 0 ? (rawDataValuesOne[i].sessions / percentageValuesOne[i].sessions - 1) * 100 : 0;
+            percentageValuesOne[i].transactionsChg = percentageValuesOne[i].transactions != 0 ? (rawDataValuesOne[i].transactions / percentageValuesOne[i].transactions - 1) * 100 : 0;
+            percentageValuesOne[i].bounceRateChg = percentageValuesOne[i].bounceRate != 0 ? (rawDataValuesOne[i].bounceRate / percentageValuesOne[i].bounceRate - 1) * 100 : 0;
+            percentageValuesOne[i].conversionRateChg = percentageValuesOne[i].conversionRate != 0 ? (rawDataValuesOne[i].conversionRate / percentageValuesOne[i].conversionRate - 1) * 100 : 0;
+            percentageValuesOne[i].averageTimeChg = percentageValuesOne[i].averageTime != 0 ? (rawDataValuesOne[i].averageTime / percentageValuesOne[i].averageTime - 1) * 100 : 0;
+        }
 
         let currentReportOptions = { ...this.state.currentReportOptions };
         let priorReportOptions = {};
@@ -208,11 +223,11 @@ class Dashboard2 extends Component {
                     percentageValuesTwo[i].averageTimeChg = 0;
                     continue;
                 }
-                percentageValuesTwo[i].sessionsChg = percentageValuesTwo[i].sessions != 0 ? (rawDataValuesTwo[i].sessions - percentageValuesTwo[i].sessions) / percentageValuesTwo[i].sessions * 100 : 0;
-                percentageValuesTwo[i].transactionsChg = percentageValuesTwo[i].transactions != 0 ? (rawDataValuesTwo[i].transactions - percentageValuesTwo[i].transactions) / percentageValuesTwo[i].transactions * 100 : 0;
-                percentageValuesTwo[i].bounceRateChg = percentageValuesTwo[i].bounceRate != 0 ? (rawDataValuesTwo[i].bounceRate - percentageValuesTwo[i].bounceRate) / percentageValuesTwo[i].bounceRate * 100 : 0;
-                percentageValuesTwo[i].conversionRateChg = percentageValuesTwo[i].conversionRate != 0 ? (rawDataValuesTwo[i].conversionRate - percentageValuesTwo[i].conversionRate) / percentageValuesTwo[i].conversionRate * 100 : 0;
-                percentageValuesTwo[i].averageTimeChg = percentageValuesTwo[i].averageTime != 0 ? (rawDataValuesTwo[i].averageTime - percentageValuesTwo[i].averageTime) / percentageValuesTwo[i].averageTime * 100 : 0;
+                percentageValuesTwo[i].sessionsChg = percentageValuesTwo[i].sessions != 0 ? (rawDataValuesTwo[i].sessions / percentageValuesTwo[i].sessions - 1) * 100 : 0;
+                percentageValuesTwo[i].transactionsChg = percentageValuesTwo[i].transactions != 0 ? (rawDataValuesTwo[i].transactions / percentageValuesTwo[i].transactions - 1) * 100 : 0;
+                percentageValuesTwo[i].bounceRateChg = percentageValuesTwo[i].bounceRate != 0 ? (rawDataValuesTwo[i].bounceRate / percentageValuesTwo[i].bounceRate - 1) * 100 : 0;
+                percentageValuesTwo[i].conversionRateChg = percentageValuesTwo[i].conversionRate != 0 ? (rawDataValuesTwo[i].conversionRate / percentageValuesTwo[i].conversionRate - 1) * 100 : 0;
+                percentageValuesTwo[i].averageTimeChg = percentageValuesTwo[i].averageTime != 0 ? (rawDataValuesTwo[i].averageTime / percentageValuesTwo[i].averageTime - 1) * 100 : 0;
             }
             percentageReport = percentageValuesTwo;
         }
@@ -598,14 +613,14 @@ class Dashboard2 extends Component {
                     "theme": "light",
                     "graphs": [{
                         "id": "g1",
-                        "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]</span></b>",
+                        "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]]%</span></b>",
                         "bullet": "round",
                         "bulletSize": 4,
                         "lineColor": "#3962B7",
                         "lineThickness": 2,
                         "negativeLineColor": "#637bb6",
                         "type": "smoothedLine",
-                        "valueField": this.state.reportMappings[this.state.group1Active]
+                        "valueField": this.state.reportMappings[this.state.group1Active] + 'Chg'
                     }],
                     "dataProvider": this.state.percentageValuesOne,
                     "titles": [{
@@ -627,6 +642,12 @@ class Dashboard2 extends Component {
                         "selectedGraphLineColor": "#888888",
                         "selectedGraphLineAlpha": 1
                     },
+                    "valueAxes": [{
+                        "gridColor": "#FFFFFF",
+                        "gridAlpha": 0.2,
+                        "dashLength": 0,
+                        "unit": "%",
+                    }],
                     "chartCursor": {
                         "categoryBalloonDateFormat": "MMM DD YYYY",
                         "cursorAlpha": 0,
@@ -673,16 +694,17 @@ class Dashboard2 extends Component {
                     "valueAxes": [{
                         "gridColor": "#FFFFFF",
                         "gridAlpha": 0.2,
-                        "dashLength": 0
+                        "dashLength": 0,
+                        "unit": "%",
                     }],
                     "gridAboveGraphs": true,
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "[[category]]: <b>[[value]]</b>",
+                        "balloonText": "[[category]]: <b>[[value]]%</b>",
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": this.state.reportMappings[this.state.group1Active],
+                        "valueField": this.state.reportMappings[this.state.group1Active] + 'Chg',
                         "lineColor": "#3962B7"
                     }],
                     "chartCursor": {
