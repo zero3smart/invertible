@@ -692,9 +692,8 @@ class Dashboard2 extends Component {
                         "text": this.state.group2Active
                     }],
                     "valueAxes": [{
-                        "gridColor": "#FFFFFF",
-                        "gridAlpha": 0.2,
-                        "dashLength": 0,
+                        "axisAlpha": 0,
+                        "position": "left",
                         "unit": "%",
                     }],
                     "gridAboveGraphs": true,
@@ -715,10 +714,7 @@ class Dashboard2 extends Component {
                     "categoryField": "xValue",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "gridAlpha": 0,
-                        "tickPosition": "start",
-                        "tickLength": 20,
-                        "labelRotation": 90,
+                        "labelRotation": 45,
                     },
                     "export": {
                         "enabled": true
