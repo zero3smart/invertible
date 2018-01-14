@@ -28,17 +28,17 @@ var data2 = [
     {
         "medium": "Desktop",
         "value": -25,
-        "color": "#FF6600"
+        "color": "#008000"
     },
     {
         "medium": "Mobile",
         "value": 14,
-        "color": "#FF9E01"
+        "color": "#FF0F00"
     },
     {
         "medium": "Tablet",
         "value": 139,
-        "color": "#FCD202"
+        "color": "#FF0F00"
     }
 ];
 
@@ -46,22 +46,22 @@ var data3 = [
     {
         "medium": "All Devices",
         "value": 46,
-        "color": "#2A0CD0"
+        "color": "#FF0F00"
     },
     {
         "medium": "Desktop",
         "value": 45,
-        "color": "#CD0D74"
+        "color": "#FF0F00"
     },
     {
         "medium": "Mobile",
         "value": 46,
-        "color": "#0D8ECF"
+        "color": "#FF0F00"
     },
     {
         "medium": "Tablet",
         "value": 55,
-        "color": "#FCD202"
+        "color": "#FF0F00"
     }
 ];
 
@@ -69,22 +69,22 @@ var data4 = [
     {
         "medium": "All Devices",
         "value": -10.4,
-        "color": "#2A0CD0"
+        "color": "#008000"
     },
     {
         "medium": "Desktop",
         "value": 9.6,
-        "color": "#CD0D74"
+        "color": "#FF0F00"
     },
     {
         "medium": "Mobile",
         "value": -15.8,
-        "color": "#0D8ECF"
+        "color": "#008000"
     },
     {
         "medium": "Tablet",
         "value": 1.8,
-        "color": "#FCD202"
+        "color": "#FF0F00"
     }
 ];
 
@@ -92,22 +92,22 @@ var data5 = [
     {
         "medium": "All Devices",
         "value": 37,
-        "color": "#2A0CD0"
+        "color": "#FF0F00"
     },
     {
         "medium": "Desktop",
         "value": 32,
-        "color": "#CD0D74"
+        "color": "#FF0F00"
     },
     {
         "medium": "Mobile",
         "value": 2,
-        "color": "#0D8ECF"
+        "color": "#FF0F00"
     },
     {
         "medium": "Tablet",
         "value": 3,
-        "color": "#FCD202"
+        "color": "#FF0F00"
     }
 ];
 
@@ -115,22 +115,22 @@ var data6 = [
     {
         "medium": "All Devices",
         "value": 270,
-        "color": "#2A0CD0"
+        "color": "#FF0F00"
     },
     {
         "medium": "Desktop",
         "value": 255,
-        "color": "#CD0D74"
+        "color": "#FF0F00"
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": "#0D8ECF"
+        "color": "#FF0F00"
     },
     {
         "medium": "Tablet",
         "value": 100,
-        "color": "#FCD202"
+        "color": "#FF0F00"
     }
 ];
 
@@ -138,17 +138,17 @@ var data7 = [
     {
         "medium": "All Devices",
         "value": 21895,
-        "color": "#2A0CD0"
+        "color": "#FCD202"
     },
     {
         "medium": "Desktop",
         "value": 16509,
-        "color": "#CD0D74"
+        "color": "#FCD202"
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": "#0D8ECF"
+        "color": "#FCD202"
     },
     {
         "medium": "Tablet",
@@ -161,22 +161,22 @@ var data8 = [
     {
         "medium": "All Devices",
         "value": 35,
-        "color": "#2A0CD0"
+        "color": "#FF0F00"
     },
     {
         "medium": "Desktop",
         "value": 22,
-        "color": "#CD0D74"
+        "color": "#FF0F00"
     },
     {
         "medium": "Mobile",
         "value": 38,
-        "color": "#0D8ECF"
+        "color": "#FF0F00"
     },
     {
         "medium": "Tablet",
         "value": 46,
-        "color": "#FCD202"
+        "color": "#FF0F00"
     }
 ];
 
