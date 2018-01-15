@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addFlashMessage } from '../actions/flashMessages';
 import Dashboard1 from './Dashboard1';
+import '../assets/stylesheets/components/Dashboard1.scss';
 
 class HomePage extends React.Component {
     render() {

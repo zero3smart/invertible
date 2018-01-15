@@ -3,6 +3,56 @@ import AmCharts from '@amcharts/amcharts3-react';
 import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import Color from 'color';
+
+
+var analytics = [
+    {
+        id: 1,
+        device: "Desktop",
+        mediaSpends: 4006,
+        cpa: 103,
+        visits: 2553,
+        bounceRate: 44,
+        newVisits: 63,
+        signUps: 20,
+        transaction: 39
+    },
+    {
+        id: 2,
+        device: "Mobile",
+        mediaSpends: 9057,
+        cpa: 193,
+        visits: 7103,
+        bounceRate: 45,
+        newVisits: 78,
+        signUps: 13,
+        transaction: 47
+    },
+    {
+        id: 3,
+        device: "Tablet",
+        mediaSpends: 197,
+        cpa: 197,
+        visits: 288,
+        bounceRate: 54,
+        newVisits: 80,
+        signUps: 0,
+        transaction: 1
+    },
+    {
+        id: 4,
+        device: "All Devices",
+        mediaSpends: 13261,
+        cpa: 152,
+        visits: 9944,
+        bounceRate: 45,
+        newVisits: 74,
+        signUps: 33,
+        transaction: 87
+    }
+];
 
 var data1 = [
     {
@@ -19,26 +69,34 @@ var data1 = [
     }
 ];
 
+function rgb2hex(rgb) {
+    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+    return (rgb && rgb.length === 4) ? "#" +
+        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+}
+
 var data2 = [
     {
         "medium": "All Devices",
         "value": 2,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(2 / 100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": -25,
-        "color": "#FF6600"
+        "color": rgb2hex(Color("#008000").alpha(25/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 14,
-        "color": "#FF9E01"
+        "color": rgb2hex(Color("#FF0F00").alpha(14/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 139,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FF0F00").alpha(139/100).rgb().string())
     }
 ];
 
@@ -46,22 +104,22 @@ var data3 = [
     {
         "medium": "All Devices",
         "value": 46,
-        "color": "#2A0CD0"
+        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 45,
-        "color": "#CD0D74"
+        "color": rgb2hex(Color("#FF0F00").alpha(45/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 46,
-        "color": "#0D8ECF"
+        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 55,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FF0F00").alpha(55/100).rgb().string())
     }
 ];
 
@@ -69,22 +127,22 @@ var data4 = [
     {
         "medium": "All Devices",
         "value": -10.4,
-        "color": "#2A0CD0"
+        "color": rgb2hex(Color("#008000").alpha(10.4/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 9.6,
-        "color": "#CD0D74"
+        "color": rgb2hex(Color("#FF0F00").alpha(9.6/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": -15.8,
-        "color": "#0D8ECF"
+        "color": rgb2hex(Color("#008000").alpha(15.8/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 1.8,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FF0F00").alpha(1.8/100).rgb().string())
     }
 ];
 
@@ -92,22 +150,22 @@ var data5 = [
     {
         "medium": "All Devices",
         "value": 37,
-        "color": "#2A0CD0"
+        "color": rgb2hex(Color("#FF0F00").alpha(37/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 32,
-        "color": "#CD0D74"
+        "color": rgb2hex(Color("#FF0F00").alpha(32/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 2,
-        "color": "#0D8ECF"
+        "color": rgb2hex(Color("#FF0F00").alpha(2/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 3,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FF0F00").alpha(3/100).rgb().string())
     }
 ];
 
@@ -115,22 +173,22 @@ var data6 = [
     {
         "medium": "All Devices",
         "value": 270,
-        "color": "#2A0CD0"
+        "color": rgb2hex(Color("#FF0F00").alpha(270/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 255,
-        "color": "#CD0D74"
+        "color": rgb2hex(Color("#FF0F00").alpha(255/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": "#0D8ECF"
+        "color": rgb2hex(Color("#FF0F00").alpha(100/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 100,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FF0F00").alpha(100/100).rgb().string())
     }
 ];
 
@@ -138,22 +196,22 @@ var data7 = [
     {
         "medium": "All Devices",
         "value": 21895,
-        "color": "#2A0CD0"
+        "color": rgb2hex(Color("#FCD202").alpha(21895/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 16509,
-        "color": "#CD0D74"
+        "color": rgb2hex(Color("#FCD202").alpha(16509/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": "#0D8ECF"
+        "color": rgb2hex(Color("#FCD202").alpha(100/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 741,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FCD202").alpha(741/100).rgb().string())
     }
 ];
 
@@ -161,26 +219,39 @@ var data8 = [
     {
         "medium": "All Devices",
         "value": 35,
-        "color": "#2A0CD0"
+        "color": rgb2hex(Color("#FF0F00").alpha(35/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 22,
-        "color": "#CD0D74"
+        "color": rgb2hex(Color("#FF0F00").alpha(22/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 38,
-        "color": "#0D8ECF"
+        "color": rgb2hex(Color("#FF0F00").alpha(38/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 46,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
     }
 ];
 
 class Dashboard1 extends Component {
+    constructor(props) {
+        super(props);
+        this.percentFormatter = this.percentFormatter.bind(this);
+    }
+
+    percentFormatter(cell, row) {
+        return this.numWithCommas(cell) + ' %';
+    }
+
+    numWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     render() {
         const mediaSpendsChart = (
             <AmCharts.React
@@ -545,6 +616,19 @@ class Dashboard1 extends Component {
 
         return (
             <div className="">
+                <div className="">
+                    <BootstrapTable data={analytics} striped={true} hover={true}>
+                        <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
+                        <TableHeaderColumn dataField="device" dataSort={true}>Device1</TableHeaderColumn>
+                        <TableHeaderColumn dataField="mediaSpends">Media Spends</TableHeaderColumn>
+                        <TableHeaderColumn dataField="cpa">CPA</TableHeaderColumn>
+                        <TableHeaderColumn dataField="visits">Visits</TableHeaderColumn>
+                        <TableHeaderColumn dataField="bounceRate" dataFormat={this.percentFormatter}>Bounce Rate</TableHeaderColumn>
+                        <TableHeaderColumn dataField="newVisits" dataFormat={this.percentFormatter}>New Visits</TableHeaderColumn>
+                        <TableHeaderColumn dataField="signUps">Sign Ups</TableHeaderColumn>
+                        <TableHeaderColumn dataField="transaction">Transaction</TableHeaderColumn>
+                    </BootstrapTable>
+                </div>
                 <div className="row">
                     <div className="col-md-8">
                         <div className="row">
