@@ -3,6 +3,54 @@ import AmCharts from '@amcharts/amcharts3-react';
 import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+
+var analytics = [
+    {
+        id: 1,
+        device: "Desktop",
+        mediaSpends: 4006,
+        cpa: 103,
+        visits: 2553,
+        bounceRate: 44,
+        newVisits: 63,
+        signUps: 20,
+        transaction: 39
+    },
+    {
+        id: 2,
+        device: "Mobile",
+        mediaSpends: 9057,
+        cpa: 193,
+        visits: 7103,
+        bounceRate: 45,
+        newVisits: 78,
+        signUps: 13,
+        transaction: 47
+    },
+    {
+        id: 3,
+        device: "Tablet",
+        mediaSpends: 197,
+        cpa: 197,
+        visits: 288,
+        bounceRate: 54,
+        newVisits: 80,
+        signUps: 0,
+        transaction: 1
+    },
+    {
+        id: 4,
+        device: "All Devices",
+        mediaSpends: 13261,
+        cpa: 152,
+        visits: 9944,
+        bounceRate: 45,
+        newVisits: 74,
+        signUps: 33,
+        transaction: 87
+    }
+];
 
 var data1 = [
     {
@@ -181,6 +229,19 @@ var data8 = [
 ];
 
 class Dashboard1 extends Component {
+    constructor(props) {
+        super(props);
+        this.percentFormatter = this.percentFormatter.bind(this);
+    }
+
+    percentFormatter(cell, row) {
+        return this.numWithCommas(cell) + ' %';
+    }
+
+    numWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     render() {
         const mediaSpendsChart = (
             <AmCharts.React
@@ -545,6 +606,19 @@ class Dashboard1 extends Component {
 
         return (
             <div className="">
+                <div className="">
+                    <BootstrapTable data={analytics} striped={true} hover={true}>
+                        <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
+                        <TableHeaderColumn dataField="device" dataSort={true}>Device1</TableHeaderColumn>
+                        <TableHeaderColumn dataField="mediaSpends">Media Spends</TableHeaderColumn>
+                        <TableHeaderColumn dataField="cpa">CPA</TableHeaderColumn>
+                        <TableHeaderColumn dataField="visits">Visits</TableHeaderColumn>
+                        <TableHeaderColumn dataField="bounceRate" dataFormat={this.percentFormatter}>Bounce Rate</TableHeaderColumn>
+                        <TableHeaderColumn dataField="newVisits" dataFormat={this.percentFormatter}>New Visits</TableHeaderColumn>
+                        <TableHeaderColumn dataField="signUps">Sign Ups</TableHeaderColumn>
+                        <TableHeaderColumn dataField="transaction">Transaction</TableHeaderColumn>
+                    </BootstrapTable>
+                </div>
                 <div className="row">
                     <div className="col-md-8">
                         <div className="row">
