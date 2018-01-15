@@ -4,7 +4,7 @@ import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Color = require('color');
+import Color from 'color';
 
 
 var analytics = [
