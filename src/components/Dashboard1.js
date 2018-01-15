@@ -4,6 +4,8 @@ import { IndexLink } from 'react-router';
 import CommentBox from './CommentBox';
 import Trending from './Trending';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+var Color = require('color');
+
 
 var analytics = [
     {
@@ -67,26 +69,34 @@ var data1 = [
     }
 ];
 
+function rgb2hex(rgb) {
+    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+    return (rgb && rgb.length === 4) ? "#" +
+        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
+}
+
 var data2 = [
     {
         "medium": "All Devices",
         "value": 2,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(2 / 100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": -25,
-        "color": "#008000"
+        "color": rgb2hex(Color("#008000").alpha(25/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 14,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(14/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 139,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(139/100).rgb().string())
     }
 ];
 
@@ -94,22 +104,22 @@ var data3 = [
     {
         "medium": "All Devices",
         "value": 46,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 45,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(45/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 46,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 55,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(55/100).rgb().string())
     }
 ];
 
@@ -117,22 +127,22 @@ var data4 = [
     {
         "medium": "All Devices",
         "value": -10.4,
-        "color": "#008000"
+        "color": rgb2hex(Color("#008000").alpha(10.4/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 9.6,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(9.6/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": -15.8,
-        "color": "#008000"
+        "color": rgb2hex(Color("#008000").alpha(15.8/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 1.8,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(1.8/100).rgb().string())
     }
 ];
 
@@ -140,22 +150,22 @@ var data5 = [
     {
         "medium": "All Devices",
         "value": 37,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(37/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 32,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(32/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 2,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(2/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 3,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(3/100).rgb().string())
     }
 ];
 
@@ -163,22 +173,22 @@ var data6 = [
     {
         "medium": "All Devices",
         "value": 270,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(270/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 255,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(255/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(100/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 100,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(100/100).rgb().string())
     }
 ];
 
@@ -186,22 +196,22 @@ var data7 = [
     {
         "medium": "All Devices",
         "value": 21895,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FCD202").alpha(21895/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 16509,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FCD202").alpha(16509/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FCD202").alpha(100/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 741,
-        "color": "#FCD202"
+        "color": rgb2hex(Color("#FCD202").alpha(741/100).rgb().string())
     }
 ];
 
@@ -209,22 +219,22 @@ var data8 = [
     {
         "medium": "All Devices",
         "value": 35,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(35/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 22,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(22/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 38,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(38/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 46,
-        "color": "#FF0F00"
+        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
     }
 ];
 
