@@ -875,18 +875,18 @@ class Explorer extends Component {
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
                             <div className="row">
+                                <h6>Prior Period</h6>
+                            </div>
+                            <div className="row">
                                 <div className="row">
-                                    <div className="col-md-3" style={{paddingTop: '6px'}}>
-                                        <span>Prior Period</span>
-                                    </div>
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <DatePicker
                                             selected={this.state.priorStartDate}
                                             onChange={this.handlePriorStartDateChange}
                                             className="form-control"
                                         />
                                     </div>
-                                    <div className="col-md-5">
+                                    <div className="col-md-6">
                                         <DatePicker
                                             selected={this.state.priorEndDate}
                                             onChange={this.handlePriorEndDateChange}
