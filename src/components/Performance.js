@@ -73,7 +73,7 @@ var mediaSpendsChgData = [
     {
         "medium": "All Devices",
         "value": 2,
-        "color": rgb2hex(Color("#FF0F00").alpha(2 / 100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(2/100).rgb().string())
     },
     {
         "medium": "Desktop",

@@ -591,10 +591,7 @@ class Explorer extends Component {
                     "categoryField": "xValue",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "gridAlpha": 0,
-                        "tickPosition": "start",
-                        "tickLength": 20,
-                        "labelRotation": 90,
+                        "labelRotation": 45,
                     },
                     "export": {
                         "enabled": true
