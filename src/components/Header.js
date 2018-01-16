@@ -51,17 +51,17 @@ class Header extends Component {
                 <Link to="/" activeClassName="active" onlyActiveOnIndex={true} className="navbar-brand"></Link>
                 <ul className="nav navbar-nav hidden-md-down">
                     <li className="nav-item px-1">
-                        <Link to="/dashboard1" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Dashboard1</Link>
+                        <Link to="/performance" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Performance</Link>
                     </li>
                     <li className="nav-item px-1">
-                        <Link to="/dashboard2" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Dashboard2</Link>
+                        <Link to="/explorer" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Explorer</Link>
                     </li>
                     <li className="nav-item px-1">
                         <Link to="/analysis" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Analysis</Link>
                     </li>
-                    <li className="nav-item px-1">
+                    {/* <li className="nav-item px-1">
                         <Link to="/credentials" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Credentials</Link>
-                    </li>
+                    </li> */}
                     <li className="nav-item px-1">
                         <Link to="/sql" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">SQL</Link>
                     </li>
