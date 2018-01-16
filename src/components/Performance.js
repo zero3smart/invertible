@@ -95,15 +95,23 @@ var mediaSpendsChgData = [
 var cpaData = [
     {
         "medium": "All Devices",
-        "value": 2212
+        "value": 26,
+        "color": rgb2hex(Color("#3962B7").alpha(26 / 100).rgb().string())
     },
     {
         "medium": "Desktop",
-        "value": 123
+        "value": 45,
+        "color": rgb2hex(Color("#3962B7").alpha(45 / 100).rgb().string())
     },
     {
         "medium": "Mobile",
-        "value": 1231
+        "value": 78,
+        "color": rgb2hex(Color("#3962B7").alpha(78 / 100).rgb().string())
+    },
+    {
+        "medium": "Tablet",
+        "value": 140,
+        "color": rgb2hex(Color("#3962B7").alpha(140 / 100).rgb().string())
     }
 ];
 
@@ -399,40 +407,36 @@ class Performance extends Component {
                     height: "300px"
                 }}
                 options={{
-                    "type": "pie",
-                    "startDuration": 0,
+                    "type": "serial",
                     "theme": "light",
-                    "addClassNames": true,
-                    "innerRadius": "30%",
-                    "defs": {
-                        "filter": [{
-                            "id": "shadow",
-                            "width": "200%",
-                            "height": "200%",
-                            "feOffset": {
-                                "result": "offOut",
-                                "in": "SourceAlpha",
-                                "dx": 0,
-                                "dy": 0
-                            },
-                            "feGaussianBlur": {
-                                "result": "blurOut",
-                                "in": "offOut",
-                                "stdDeviation": 5
-                            },
-                            "feBlend": {
-                                "in": "SourceGraphic",
-                                "in2": "blurOut",
-                                "mode": "normal"
-                            }
-                        }]
-                    },
+                    "marginRight": 70,
                     "dataProvider": cpaData,
                     "titles": [{
-                        "text": "CPA"
+                        "text": "Visits"
                     }],
-                    "valueField": "value",
-                    "titleField": "medium",
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "title": "Visits"
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start"
+                    },
                     "export": {
                         "enabled": true
                     }
