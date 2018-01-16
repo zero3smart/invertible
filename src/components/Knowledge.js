@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SearchResult from './SearchResult';
 import CommentBox from './CommentBox';
 
-class Analysis extends Component {
+class Knowledge extends Component {
     constructor(props) {
         super(props);
         this.onChange = this.onChange.bind(this);
@@ -32,7 +32,7 @@ class Analysis extends Component {
         }
 
         return (
-            <div className="analysis-container">
+            <div className="knowledge-container">
                 <div className="offset-md-8 col-md-4">
                     <form className="navbar-form" role="search">
                         <div className="input-group add-on">
@@ -63,4 +63,4 @@ class Analysis extends Component {
     }
 }
 
-export default Analysis;
+export default Knowledge;

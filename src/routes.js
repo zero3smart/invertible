@@ -4,7 +4,7 @@ import App from './components/App';
 import Performance from './components/Performance';
 import Explorer from './components/Explorer';
 import ChartDetail from './components/ChartDetail';
-import Analysis from './components/Analysis';
+import Knowledge from './components/Knowledge';
 import LoginPage from './components/login/LoginPage';
 import requireAuth from './utils/requireAuth';
 import HomePage from './components/HomePage';
@@ -16,6 +16,6 @@ export default (
         <Route path="/performance" component={Performance} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/chart-detail" component={ChartDetail} />
-        <Route path="/analysis" component={Analysis} />
+        <Route path="/knowledge" component={Knowledge} />
     </Route>
 )

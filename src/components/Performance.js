@@ -419,7 +419,7 @@ class Performance extends Component {
                     },
                     "dataProvider": cpaData,
                     "titles": [{
-                        "text": "Media Spends"
+                        "text": "CPA"
                     }],
                     "valueField": "value",
                     "titleField": "medium",
@@ -441,13 +441,13 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": cpaChgData,
                     "titles": [{
-                        "text": "Media Spends Change"
+                        "text": "CPA Change"
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
                         "unit": "%",
-                        "title": "Avg. Media Spends Chg"
+                        "title": "CPA Chg"
                     }],
                     "startDuration": 1,
                     "graphs": [{

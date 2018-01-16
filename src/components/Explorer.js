@@ -877,7 +877,7 @@ class Explorer extends Component {
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
-                            <div className="col-md-5 offset-md-4">
+                            <div className="col-md-5">
                                 <div className="row">
                                     <div className="col-md-3" style={{paddingTop: '6px'}}>
                                         <span>Prior Period</span>
