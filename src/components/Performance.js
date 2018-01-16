@@ -280,10 +280,20 @@ class Performance extends Component {
     constructor(props) {
         super(props);
         this.percentFormatter = this.percentFormatter.bind(this);
+        this.commaFormatter = this.commaFormatter.bind(this);
+        this.priceFormatter = this.priceFormatter.bind(this);
     }
 
     percentFormatter(cell, row) {
         return this.numWithCommas(cell) + ' %';
+    }
+
+    priceFormatter(cell, row) {
+        return '$' + this.numWithCommas(cell);
+    }
+
+    commaFormatter(cell, row) {
+        return this.numWithCommas(cell);
     }
 
     numWithCommas(x) {
@@ -737,13 +747,13 @@ class Performance extends Component {
                     <BootstrapTable data={analytics} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
                         <TableHeaderColumn dataField="device" dataSort={true}>Device1</TableHeaderColumn>
-                        <TableHeaderColumn dataField="mediaSpends">Media Spends</TableHeaderColumn>
-                        <TableHeaderColumn dataField="cpa">CPA</TableHeaderColumn>
-                        <TableHeaderColumn dataField="visits">Visits</TableHeaderColumn>
+                        <TableHeaderColumn dataField="mediaSpends" dataFormat={this.commaFormatter}>Media Spends</TableHeaderColumn>
+                        <TableHeaderColumn dataField="cpa" dataFormat={this.priceFormatter}>CPA</TableHeaderColumn>
+                        <TableHeaderColumn dataField="visits" dataFormat={this.commaFormatter}>Visits</TableHeaderColumn>
                         <TableHeaderColumn dataField="bounceRate" dataFormat={this.percentFormatter}>Bounce Rate</TableHeaderColumn>
                         <TableHeaderColumn dataField="newVisits" dataFormat={this.percentFormatter}>New Visits</TableHeaderColumn>
-                        <TableHeaderColumn dataField="signUps">Sign Ups</TableHeaderColumn>
-                        <TableHeaderColumn dataField="transaction">Transaction</TableHeaderColumn>
+                        <TableHeaderColumn dataField="signUps" dataFormat={this.commaFormatter}>Sign Ups</TableHeaderColumn>
+                        <TableHeaderColumn dataField="transaction" dataFormat={this.commaFormatter}>Transaction</TableHeaderColumn>
                     </BootstrapTable>
                 </div>
                 <div className="row">
