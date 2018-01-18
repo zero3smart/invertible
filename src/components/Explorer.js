@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import classnames from 'classnames';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../assets/stylesheets/components/Dashboard2.scss';
+import '../assets/stylesheets/components/Explorer.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 import { connect } from 'react-redux';
 import { fetchAnalytics } from '../actions/analyticsActions';
@@ -14,7 +14,7 @@ import _ from 'lodash';
 import '../assets/data-table/datatables';
 import { CSVLink } from 'react-csv';
 
-class Dashboard2 extends Component {
+class Explorer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -591,10 +591,7 @@ class Dashboard2 extends Component {
                     "categoryField": "xValue",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "gridAlpha": 0,
-                        "tickPosition": "start",
-                        "tickLength": 20,
-                        "labelRotation": 90,
+                        "labelRotation": 45,
                     },
                     "export": {
                         "enabled": true
@@ -723,7 +720,7 @@ class Dashboard2 extends Component {
         );
 
         return (
-            <div className="dashboard2-container">
+            <div className="explorer-container">
                 <h6>Current Period</h6>
                 <div className="row">
                     <div className="col-md-3">
@@ -877,19 +874,19 @@ class Dashboard2 extends Component {
                             </div>
                         </div>
                         <div role="tabpanel" className="tab-pane fade" id="percentage-changes">
-                            <div className="col-md-5 offset-md-4">
+                            <div className="row">
+                                <h6>Prior Period</h6>
+                            </div>
+                            <div className="row">
                                 <div className="row">
-                                    <div className="col-md-3" style={{paddingTop: '6px'}}>
-                                        <span>Prior Period</span>
-                                    </div>
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <DatePicker
                                             selected={this.state.priorStartDate}
                                             onChange={this.handlePriorStartDateChange}
                                             className="form-control"
                                         />
                                     </div>
-                                    <div className="col-md-5">
+                                    <div className="col-md-6">
                                         <DatePicker
                                             selected={this.state.priorEndDate}
                                             onChange={this.handlePriorEndDateChange}
@@ -947,7 +944,7 @@ class Dashboard2 extends Component {
     }
 }
 
-Dashboard2.propTypes = {
+Explorer.propTypes = {
     analytics: PropTypes.array.isRequired
 }
 
@@ -957,4 +954,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, { fetchAnalytics })(Dashboard2);
+export default connect(mapStateToProps, { fetchAnalytics })(Explorer);
