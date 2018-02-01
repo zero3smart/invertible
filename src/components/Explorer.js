@@ -460,7 +460,6 @@ class Explorer extends Component {
         this.setState({
             currentStartDate: date
         }, () => {
-            console.log(date.format('YYYYMMDD'));
             this.fetchAnalyticsData();
         });
     }

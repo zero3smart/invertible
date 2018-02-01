@@ -6,6 +6,9 @@ import Trending from './Trending';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Color from 'color';
 import '../assets/stylesheets/components/Performance.scss';
+import moment from 'moment';
+import classnames from 'classnames';
+import DatePicker from 'react-datepicker';
 
 var analytics = [
     {
@@ -287,9 +290,31 @@ function rgb2hex(rgb) {
 class Performance extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            currentStartDate: moment(new Date('2017-12-15T10:00:00')),
+            currentEndDate: moment()
+        }
         this.percentFormatter = this.percentFormatter.bind(this);
         this.commaFormatter = this.commaFormatter.bind(this);
         this.priceFormatter = this.priceFormatter.bind(this);
+        this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
+        this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+    }
+
+    handleCurrentStartDateChange(date) {
+        this.setState({
+            currentStartDate: date
+        }, () => {
+            // this.fetchAnalyticsData();
+        });
+    }
+
+    handleCurrentEndDateChange(date) {
+        this.setState({
+            currentEndDate: date
+        }, () => {
+            // this.fetchAnalyticsData();
+        });
     }
 
     percentFormatter(cell, row) {
@@ -748,6 +773,27 @@ class Performance extends Component {
         return (
             <div className="performance-container">
                 <div className="">
+                    <h6>Current Period</h6>
+                </div>
+                <div className="row">
+                    <div className="col-md-3 row">
+                        <div className="col-md-6">
+                            <DatePicker
+                                selected={this.state.currentStartDate}
+                                onChange={this.handleCurrentStartDateChange}
+                                className="form-control"
+                            />
+                        </div>
+                        <div className="col-md-6">
+                            <DatePicker
+                                selected={this.state.currentEndDate}
+                                onChange={this.handleCurrentEndDateChange}
+                                className="form-control"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="performance-table">
                     <BootstrapTable data={analytics} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
                         <TableHeaderColumn dataField="device" dataSort={true}>Device1</TableHeaderColumn>
