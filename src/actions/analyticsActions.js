@@ -10,7 +10,7 @@ export function setAnalytics(analytics) {
 
 export function fetchAnalytics(startDate, endDate) {
     return dispatch => {
-        return axios.get(process.env.API_URL + '/g_analytics/' + startDate + '/' + endDate).then(res => {
+        return axios.get(process.env.API_URL + '/g_analytics/explorer/' + startDate + '/' + endDate).then(res => {
             if (res.status !== 200) {
                 console.log(`There was a problem: ${res.status}`);
                 return;

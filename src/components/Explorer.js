@@ -410,6 +410,16 @@ class Explorer extends Component {
         });
     }
 
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.state.currentStartDate !== nextState.currentStartDate ||
+        this.state.currentEndDate !== nextState.currentEndDate ||
+        this.state.priorStartDate !== nextState.priorStartDate ||
+        this.state.priorEndDate !== nextState.priorEndDate) {
+            this.setState({loading: true});
+        }
+    }
+
     componentDidMount() {
         this.fetchAnalyticsData();
     }
@@ -853,7 +863,7 @@ class Explorer extends Component {
                                     &nbsp;Export Table
                                 </CSVLink>
                             </div>
-                            <div className="table-block">
+                            <div className={classnames('table-block', {'d-none' : this.state.loading})}>
                                 <div className="">
                                     <table className="ui celled table"
                                         cellSpacing="0"
@@ -912,7 +922,7 @@ class Explorer extends Component {
                                     &nbsp;Export Table
                                 </CSVLink>
                             </div>
-                            <div className="table-block">
+                            <div className={classnames('table-block', { 'd-none': this.state.loading })}>
                                 <div className="">
                                     <table className="ui celled table"
                                         cellSpacing="0"
