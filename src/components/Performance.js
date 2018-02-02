@@ -9,6 +9,9 @@ import '../assets/stylesheets/components/Performance.scss';
 import moment from 'moment';
 import classnames from 'classnames';
 import DatePicker from 'react-datepicker';
+import { fetchPerformance } from '../actions/analyticsActions';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 var analytics = [
     {
@@ -292,7 +295,9 @@ class Performance extends Component {
         super(props);
         this.state = {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
-            currentEndDate: moment()
+            currentEndDate: moment(),
+            performanceTableData: [],
+            loading: true
         }
         this.percentFormatter = this.percentFormatter.bind(this);
         this.commaFormatter = this.commaFormatter.bind(this);
@@ -305,7 +310,7 @@ class Performance extends Component {
         this.setState({
             currentStartDate: date
         }, () => {
-            // this.fetchAnalyticsData();
+            this.fetchPerformanceData();
         });
     }
 
@@ -313,12 +318,12 @@ class Performance extends Component {
         this.setState({
             currentEndDate: date
         }, () => {
-            // this.fetchAnalyticsData();
+            this.fetchPerformanceData();
         });
     }
 
     percentFormatter(cell, row) {
-        return this.numWithCommas(cell) + ' %';
+        return this.numWithCommas(cell.toFixed(2)) + ' %';
     }
 
     priceFormatter(cell, row) {
@@ -333,7 +338,96 @@ class Performance extends Component {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        if (this.state.currentStartDate !== nextState.currentStartDate ||
+            this.state.currentEndDate !== nextState.currentEndDate) {
+            this.setState({ loading: true });
+        }
+    }
+
+    componentDidMount() {
+        this.fetchPerformanceData();
+    }
+
+    getFilteredList(analytics, groupByAttr) {
+        let _filteredList = [];
+
+        _filteredList = _(analytics)
+            .groupBy(groupByAttr)
+            .map((objs, key) => {
+                if (groupByAttr === '')
+                    key = 'All Devices';
+
+                let newVisitsObj = _.filter(objs, (o) => {
+                    return o.usertype == 'New Visitor';
+                });
+
+                return {
+                    'rValue': key,
+                    'sessions': _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }),
+                    'transactions': _.sumBy(objs, (s) => {
+                        return parseInt(s.transactions, 10);
+                    }),
+                    'visits': _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }),
+                    'newVisits': _.sumBy(newVisitsObj, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }) / _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }) * 100,
+                    'bounceRate': _.sumBy(objs, (s) => {
+                        return parseInt(s.bounces, 10);
+                    }) / _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }) * 100,
+                    'signUps': 100,
+                    'mediaSpends': 100,
+                    'cpa': 100
+                };
+            })
+            .value();
+
+        return _filteredList;
+    }
+
+    setPerformanceValues() {
+        let { analytics } = this.props;
+        let per;
+        let p1 = new Promise((resolve, reject) => {
+            let per1 = this.getFilteredList(analytics, 'devicecategory');
+            resolve(per1);
+        });
+
+        p1.then((per1) => {
+            let per2 = this.getFilteredList(analytics, '');
+            per = per1.concat(per2);
+            this.setState({performanceTableData: per});
+        }, err => {
+
+        });
+    }
+
+    fetchPerformanceData() {
+        let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
+        let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
+
+        this.props.fetchPerformance(currentStartDate, currentEndDate).then(res => {
+            let { analytics } = this.props;
+            this.setPerformanceValues();
+            this.setState({ loading: false });
+        }, err => {
+
+        });
+    }
+
     render() {
+        const loading = (
+            <div className="ui active centered inline loader"></div>
+        );
+
         const mediaSpendsChart = (
             <AmCharts.React
                 style={{
@@ -793,20 +887,21 @@ class Performance extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="performance-table">
-                    <BootstrapTable data={analytics} striped={true} hover={true}>
+                {this.state.loading ? loading : <div>
+                <div className={classnames('performance-table', { 'd-none': this.state.loading })}>
+                    <BootstrapTable data={this.state.performanceTableData} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
-                        <TableHeaderColumn dataField="device" dataSort={true}>Device1</TableHeaderColumn>
+                        <TableHeaderColumn dataField="rValue" dataSort={true}>Device1</TableHeaderColumn>
                         <TableHeaderColumn dataField="mediaSpends" dataFormat={this.commaFormatter}>Media Spends</TableHeaderColumn>
                         <TableHeaderColumn dataField="cpa" dataFormat={this.priceFormatter}>CPA</TableHeaderColumn>
                         <TableHeaderColumn dataField="visits" dataFormat={this.commaFormatter}>Visits</TableHeaderColumn>
                         <TableHeaderColumn dataField="bounceRate" dataFormat={this.percentFormatter}>Bounce Rate</TableHeaderColumn>
                         <TableHeaderColumn dataField="newVisits" dataFormat={this.percentFormatter}>New Visits</TableHeaderColumn>
                         <TableHeaderColumn dataField="signUps" dataFormat={this.commaFormatter}>Sign Ups</TableHeaderColumn>
-                        <TableHeaderColumn dataField="transaction" dataFormat={this.commaFormatter}>Transaction</TableHeaderColumn>
+                        <TableHeaderColumn dataField="transactions" dataFormat={this.commaFormatter}>Transaction</TableHeaderColumn>
                     </BootstrapTable>
                 </div>
-                <div className="row">
+                <div className={classnames('row', { 'd-none': this.state.loading })}>
                     <div className="col-md-6">
                         {mediaSpendsChart}
                     </div>
@@ -814,7 +909,7 @@ class Performance extends Component {
                         {mediaSpendsChangeChart}
                     </div>
                 </div>
-                <div className="row">
+                <div className={classnames('row', { 'd-none': this.state.loading })}>
                     <div className="col-md-6">
                         {cpaChart}
                     </div>
@@ -822,7 +917,7 @@ class Performance extends Component {
                         {cpaChangeChart}
                     </div>
                 </div>
-                <div className="row">
+                <div className={classnames('row', { 'd-none': this.state.loading })}>
                     <div className="col-md-6">
                         {bounceRateChart}
                     </div>
@@ -830,7 +925,7 @@ class Performance extends Component {
                         {bounceRateChgChart}
                     </div>
                 </div>
-                <div className="row">
+                <div className={classnames('row', { 'd-none': this.state.loading })}>
                     <div className="col-md-6">
                         {transactionsChart}
                     </div>
@@ -838,7 +933,7 @@ class Performance extends Component {
                         {transactionsChgChart}
                     </div>
                 </div>
-                <div className="row">
+                <div className={classnames('row', { 'd-none': this.state.loading })}>
                     <div className="col-md-6">
                         {visitsChart}
                     </div>
@@ -846,9 +941,20 @@ class Performance extends Component {
                         {visitsChgChart}
                     </div>
                 </div>
+                </div> }
             </div>
         )
     }
 }
 
-export default Performance;
+Performance.propTypes = {
+    analytics: PropTypes.array.isRequired
+}
+
+function mapStateToProps(state) {
+    return {
+        analytics: state.performance
+    };
+}
+
+export default connect(mapStateToProps, { fetchPerformance })(Performance);
