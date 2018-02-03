@@ -1,8 +1,8 @@
-import { SET_ANALYTICS } from '../actions/types';
+import { SET_EXPLORER } from '../actions/types';
 
 export default (state = [], action = {}) => {
     switch (action.type) {
-        case SET_ANALYTICS:
+        case SET_EXPLORER:
             return action.analytics;
         default: return state;
     }

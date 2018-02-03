@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { IndexLink } from 'react-router';
 import DatePicker from 'react-datepicker';
@@ -8,13 +8,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../assets/stylesheets/components/Explorer.scss';
 import AmCharts from '@amcharts/amcharts3-react';
 import { connect } from 'react-redux';
-import { fetchAnalytics } from '../actions/analyticsActions';
+import { fetchExplorer } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import '../assets/data-table/datatables';
 import { CSVLink } from 'react-csv';
 
-class Explorer extends Component {
+class Explorer extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -80,7 +80,7 @@ class Explorer extends Component {
 
                 return {
                     'xValue': key.substring(0, 10),
-                    'rValue': key,
+                    'xValue': key,
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }),
@@ -163,7 +163,8 @@ class Explorer extends Component {
         var rawDataValuesOne = { ...this.state.rawDataValuesOne };
 
         for (let i = 0; i < percentageValuesOne.length; i++) {
-            if (typeof percentageValuesOne[i] == "undefined") {
+            if (typeof percentageValuesOne[i] == "undefined" ||
+                typeof rawDataValuesOne[i] == "undefined") {
                 percentageValuesOne[i].sessionsChg = 0;
                 percentageValuesOne[i].transactionsChg = 0;
                 percentageValuesOne[i].bounceRateChg = 0;
@@ -171,6 +172,7 @@ class Explorer extends Component {
                 percentageValuesOne[i].averageTimeChg = 0;
                 continue;
             }
+
             percentageValuesOne[i].sessionsChg = percentageValuesOne[i].sessions != 0 ? (rawDataValuesOne[i].sessions / percentageValuesOne[i].sessions - 1) * 100 : 0;
             percentageValuesOne[i].transactionsChg = percentageValuesOne[i].transactions != 0 ? (rawDataValuesOne[i].transactions / percentageValuesOne[i].transactions - 1) * 100 : 0;
             percentageValuesOne[i].bounceRateChg = percentageValuesOne[i].bounceRate != 0 ? (rawDataValuesOne[i].bounceRate / percentageValuesOne[i].bounceRate - 1) * 100 : 0;
@@ -245,7 +247,7 @@ class Explorer extends Component {
             destroy: true,
             data: analysisResult,
             columns: [
-                { "data": "rValue" },
+                { "data": "xValue" },
                 {
                     "data": "sessions",
                     render: function (data, type, row, meta) {
@@ -293,7 +295,7 @@ class Explorer extends Component {
                 { "width": "50px", "targets": 0 }
             ],
             columns: [
-                { "data": "rValue" },
+                { "data": "xValue" },
                 {
                     "data": "sessions",
                     render: function (data, type, row, meta) {
@@ -372,7 +374,7 @@ class Explorer extends Component {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    fetchAnalyticsData() {
+    fetchExplorerData() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
@@ -380,7 +382,7 @@ class Explorer extends Component {
         let priorEndDate = this.state.priorEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
         let p1 = new Promise((resolve, reject) => {
-            this.props.fetchAnalytics(currentStartDate, currentEndDate).then(res => {
+            this.props.fetchExplorer(currentStartDate, currentEndDate).then(res => {
                 let { analytics } = this.props;
                 this.setState({ currentAnalytics: analytics });
 
@@ -391,7 +393,7 @@ class Explorer extends Component {
         })
 
         let p2 = new Promise((resolve, reject) => {
-            this.props.fetchAnalytics(priorStartDate, priorEndDate).then(res => {
+            this.props.fetchExplorer(priorStartDate, priorEndDate).then(res => {
                 let { analytics } = this.props;
                 this.setState({ priorAnalytics: analytics });
 
@@ -421,7 +423,7 @@ class Explorer extends Component {
     }
 
     componentDidMount() {
-        this.fetchAnalyticsData();
+        this.fetchExplorerData();
     }
 
     rateFormatter(cell) {
@@ -460,8 +462,7 @@ class Explorer extends Component {
         this.setState({
             currentStartDate: date
         }, () => {
-            console.log(date.format('YYYYMMDD'));
-            this.fetchAnalyticsData();
+            this.fetchExplorerData();
         });
     }
 
@@ -469,7 +470,7 @@ class Explorer extends Component {
         this.setState({
             currentEndDate: date
         }, () => {
-            this.fetchAnalyticsData();
+            this.fetchExplorerData();
         });
     }
 
@@ -478,7 +479,7 @@ class Explorer extends Component {
             priorStartDate: date
         }, () => {
             console.log(date.format('YYYYMMDD'));
-            this.fetchAnalyticsData();
+            this.fetchExplorerData();
         });
     }
 
@@ -486,7 +487,7 @@ class Explorer extends Component {
         this.setState({
             priorEndDate: date
         }, () => {
-            this.fetchAnalyticsData();
+            this.fetchExplorerData();
         });
     }
 
@@ -960,8 +961,8 @@ Explorer.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        analytics: state.analytics
+        analytics: state.explorer
     };
 }
 
-export default connect(mapStateToProps, { fetchAnalytics })(Explorer);
+export default connect(mapStateToProps, { fetchExplorer })(Explorer);
