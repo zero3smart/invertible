@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { IndexLink } from 'react-router';
 import DatePicker from 'react-datepicker';
@@ -14,7 +14,7 @@ import _ from 'lodash';
 import '../assets/data-table/datatables';
 import { CSVLink } from 'react-csv';
 
-class Explorer extends Component {
+class Explorer extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
