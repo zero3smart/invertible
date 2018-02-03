@@ -80,7 +80,7 @@ class Explorer extends PureComponent {
 
                 return {
                     'xValue': key.substring(0, 10),
-                    'rValue': key,
+                    'xValue': key,
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }),
@@ -247,7 +247,7 @@ class Explorer extends PureComponent {
             destroy: true,
             data: analysisResult,
             columns: [
-                { "data": "rValue" },
+                { "data": "xValue" },
                 {
                     "data": "sessions",
                     render: function (data, type, row, meta) {
@@ -295,7 +295,7 @@ class Explorer extends PureComponent {
                 { "width": "50px", "targets": 0 }
             ],
             columns: [
-                { "data": "rValue" },
+                { "data": "xValue" },
                 {
                     "data": "sessions",
                     render: function (data, type, row, meta) {
