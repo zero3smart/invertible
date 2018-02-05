@@ -217,7 +217,8 @@ class Explorer extends PureComponent {
             percentageReport.push(this.convertObjectToComma(priorReportOptions));
         else {
             for (let i = 0; i < percentageValuesTwo.length; i++) {
-                if (typeof rawDataValuesTwo[i] == "undefined") {
+                if (typeof rawDataValuesTwo[i] == "undefined" ||
+                    typeof percentageValuesTwo[i] == "undefined") {
                     percentageValuesTwo[i].sessionsChg = 0;
                     percentageValuesTwo[i].transactionsChg = 0;
                     percentageValuesTwo[i].bounceRateChg = 0;
@@ -420,6 +421,10 @@ class Explorer extends PureComponent {
         this.state.priorEndDate !== nextState.priorEndDate) {
             this.setState({loading: true});
         }
+    }
+
+    componentDidCatch(error, info) {
+        logComponentStackToMyService(info.componentStack);
     }
 
     componentDidMount() {
