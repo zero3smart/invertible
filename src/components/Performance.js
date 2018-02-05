@@ -368,14 +368,14 @@ class Performance extends Component {
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "unit": "%",
+                        "unit": "$",
                         "title": "Avg. Media Spends Chg",
                         "titleFontSize": 22,
                         "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "labelText": "[[value]]",
+                        "labelText": "[[value]]$",
                         "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
