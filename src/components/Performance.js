@@ -13,65 +13,26 @@ import { fetchPerformance } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-var analytics = [
-    {
-        id: 1,
-        device: "Desktop",
-        mediaSpends: 16788,
-        cpa: 430,
-        visits: 8520,
-        bounceRate: 42.23,
-        newVisits: 83,
-        signUps: 21,
-        transaction: 169
-    },
-    {
-        id: 2,
-        device: "Mobile",
-        mediaSpends: 266,
-        cpa: 133,
-        visits: 25250,
-        bounceRate: 46.6,
-        newVisits: 82,
-        signUps: 5,
-        transaction: 0
-    },
-    {
-        id: 3,
-        device: "Tablet",
-        mediaSpends: 22433,
-        cpa: 274,
-        visits: 906,
-        bounceRate: 53.91,
-        newVisits: 78,
-        signUps: 46,
-        transaction: 0
-    },
-    {
-        id: 4,
-        device: "All Devices",
-        mediaSpends: 5379,
-        cpa: 131,
-        visits: 34676,
-        bounceRate: 47.58,
-        newVisits: 65,
-        signUps: 20,
-        transaction: 169
-    }
-];
-
 var mediaSpendsData = [
     {
         "medium": "All Devices",
-        "value": 11372
+        "value": 2,
+        "color": rgb2hex(Color("#3962B7").alpha(2 / 100).rgb().string())
     },
     {
         "medium": "Desktop",
-        "value": 1000
+        "value": 125,
+        "color": rgb2hex(Color("#3962B7").alpha(25 / 100).rgb().string())
     },
     {
         "medium": "Mobile",
-        "value": 8279
+        "value": 14,
+        "color": rgb2hex(Color("#3962B7").alpha(14 / 100).rgb().string())
+    },
+    {
+        "medium": "Tablet",
+        "value": 139,
+        "color": rgb2hex(Color("#3962B7").alpha(139 / 100).rgb().string())
     }
 ];
 
@@ -144,29 +105,6 @@ var cpaChgData = [
     }
 ];
 
-var bounceRateData = [
-    {
-        "medium": "All Devices",
-        "value": 46,
-        "color": rgb2hex(Color("#3962B7").alpha(46/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 45,
-        "color": rgb2hex(Color("#3962B7").alpha(45/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 46,
-        "color": rgb2hex(Color("#3962B7").alpha(46/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 55,
-        "color": rgb2hex(Color("#3962B7").alpha(55/100).rgb().string())
-    }
-];
-
 var bounceRateChgData = [
     {
         "medium": "All Devices",
@@ -187,29 +125,6 @@ var bounceRateChgData = [
         "medium": "Tablet",
         "value": 1.8,
         "color": rgb2hex(Color("#FF0F00").alpha(1.8/100).rgb().string())
-    }
-];
-
-var transactionData = [
-    {
-        "medium": "All Devices",
-        "value": 37,
-        "color": rgb2hex(Color("#3962B7").alpha(37/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 32,
-        "color": rgb2hex(Color("#3962B7").alpha(32/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 2,
-        "color": rgb2hex(Color("#3962B7").alpha(2/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 3,
-        "color": rgb2hex(Color("#3962B7").alpha(3/100).rgb().string())
     }
 ];
 
@@ -300,7 +215,7 @@ class Performance extends Component {
     }
 
     percentFormatter(cell, row) {
-        return this.numWithCommas(cell.toFixed(5)) + ' %';
+        return this.numWithCommas(parseFloat(cell).toFixed(3)) + ' %';
     }
 
     priceFormatter(cell, row) {
@@ -355,11 +270,11 @@ class Performance extends Component {
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }) * 100,
-                    'bounceRate': _.sumBy(objs, (s) => {
+                    'bounceRate': this.precise(_.sumBy(objs, (s) => {
                         return parseInt(s.bounces, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
-                    }) * 100,
+                    }) * 100),
                     'signUps': 100,
                     'mediaSpends': 100,
                     'cpa': 100
@@ -368,6 +283,10 @@ class Performance extends Component {
             .value();
 
         return this.addColorToAnalytics(_filteredList);
+    }
+
+    precise(x) {
+        return Number.parseFloat(x).toFixed(3);
     }
 
     addColorToAnalytics(analytics) {
@@ -438,41 +357,42 @@ class Performance extends Component {
                     height: "700px"
                 }}
                 options={{
-                    "type": "pie",
-                    "startDuration": 0,
+                    "type": "serial",
                     "theme": "light",
-                    "addClassNames": true,
-                    "innerRadius": "30%",
-                    "defs": {
-                        "filter": [{
-                            "id": "shadow",
-                            "width": "200%",
-                            "height": "200%",
-                            "feOffset": {
-                                "result": "offOut",
-                                "in": "SourceAlpha",
-                                "dx": 0,
-                                "dy": 0
-                            },
-                            "feGaussianBlur": {
-                                "result": "blurOut",
-                                "in": "offOut",
-                                "stdDeviation": 5
-                            },
-                            "feBlend": {
-                                "in": "SourceGraphic",
-                                "in2": "blurOut",
-                                "mode": "normal"
-                            }
-                        }]
-                    },
+                    "marginRight": 70,
                     "dataProvider": mediaSpendsData,
                     "titles": [{
-                        "text": "Media Spends",
-                        "size": 25
+                        "text": "Media Spends Change",
+                        "size": 22
                     }],
-                    "valueField": "value",
-                    "titleField": "medium",
+                    "valueAxes": [{
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "unit": "%",
+                        "title": "Avg. Media Spends Chg",
+                        "titleFontSize": 22,
+                        "fontSize": 18
+                    }],
+                    "startDuration": 1,
+                    "graphs": [{
+                        "labelText": "[[value]]",
+                        "fontSize": 18,
+                        "fillColorsField": "color",
+                        "fillAlphas": 0.9,
+                        "lineAlpha": 0.2,
+                        "type": "column",
+                        "valueField": "value"
+                    }],
+                    "chartCursor": {
+                        "categoryBalloonEnabled": false,
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "medium",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "fontSize": 18
+                    },
                     "export": {
                         "enabled": true
                     }
@@ -504,7 +424,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "labelText": "[[value]]%",
+                        "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -551,7 +472,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "labelText": "[[value]]",
+                        "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -599,7 +521,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "labelText": "[[value]]%",
+                        "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -646,7 +569,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "labelText": "[[value]]%",
+                        "fontSize": 18,
                         "fillColorsField": "bounceRateColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -693,7 +617,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "labelText": "[[value]]%",
+                        "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -740,7 +665,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "labelText": "[[value]]",
+                        "fontSize": 18,
                         "fillColorsField": "transactionsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -787,7 +713,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "labelText": "[[value]]%",
+                        "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -834,7 +761,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]</b>",
+                        "labelText": "[[value]]",
+                        "fontSize": 18,
                         "fillColorsField": "visitsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -881,7 +809,8 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "balloonText": "<b>[[category]]: [[value]]%</b>",
+                        "labelText": "[[value]]%",
+                        "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
@@ -937,7 +866,7 @@ class Performance extends Component {
                         <TableHeaderColumn dataField="visits" dataFormat={this.commaFormatter}>Visits</TableHeaderColumn>
                         <TableHeaderColumn dataField="bounceRate" dataFormat={this.percentFormatter}>Bounce Rate</TableHeaderColumn>
                         <TableHeaderColumn dataField="newVisits" dataFormat={this.percentFormatter}>New Visits</TableHeaderColumn>
-                        <TableHeaderColumn dataField="signUps" dataFormat={this.commaFormatter}>Sign Ups</TableHeaderColumn>
+                        {/* <TableHeaderColumn dataField="signUps" dataFormat={this.commaFormatter}>Sign Ups</TableHeaderColumn> */}
                         <TableHeaderColumn dataField="transactions" dataFormat={this.commaFormatter}>Transaction</TableHeaderColumn>
                     </BootstrapTable>
                 </div>
