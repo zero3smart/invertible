@@ -434,8 +434,8 @@ class Performance extends Component {
         const mediaSpendsChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "pie",
@@ -481,8 +481,8 @@ class Performance extends Component {
         const mediaSpendsChangeChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -525,8 +525,8 @@ class Performance extends Component {
         const cpaChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -568,8 +568,8 @@ class Performance extends Component {
         const cpaChangeChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -612,8 +612,8 @@ class Performance extends Component {
         const bounceRateChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -655,8 +655,8 @@ class Performance extends Component {
         const bounceRateChgChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -698,8 +698,8 @@ class Performance extends Component {
         const transactionsChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -741,8 +741,8 @@ class Performance extends Component {
         const transactionsChgChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -784,8 +784,8 @@ class Performance extends Component {
         const visitsChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
@@ -827,8 +827,8 @@ class Performance extends Component {
         const visitsChgChart = (
             <AmCharts.React
                 style={{
-                    width: "100%",
-                    height: "400px"
+                    width: "80%",
+                    height: "500px"
                 }}
                 options={{
                     "type": "serial",
