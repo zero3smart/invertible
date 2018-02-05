@@ -434,8 +434,8 @@ class Performance extends Component {
         const mediaSpendsChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "pie",
@@ -468,7 +468,8 @@ class Performance extends Component {
                     },
                     "dataProvider": mediaSpendsData,
                     "titles": [{
-                        "text": "Media Spends"
+                        "text": "Media Spends",
+                        "size": 25
                     }],
                     "valueField": "value",
                     "titleField": "medium",
@@ -481,8 +482,8 @@ class Performance extends Component {
         const mediaSpendsChangeChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -490,7 +491,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": mediaSpendsChgData,
                     "titles": [{
-                        "text": "Media Spends Change"
+                        "text": "Media Spends Change",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -514,7 +516,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -525,8 +528,8 @@ class Performance extends Component {
         const cpaChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -534,7 +537,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": cpaData,
                     "titles": [{
-                        "text": "CPA"
+                        "text": "CPA",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -557,7 +561,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -568,8 +573,8 @@ class Performance extends Component {
         const cpaChangeChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -577,7 +582,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": cpaChgData,
                     "titles": [{
-                        "text": "CPA Change"
+                        "text": "CPA Change",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -601,7 +607,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -612,8 +619,8 @@ class Performance extends Component {
         const bounceRateChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -621,7 +628,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": this.state.performanceTableData,
                     "titles": [{
-                        "text": "Bounce Rate"
+                        "text": "Bounce Rate",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -644,7 +652,8 @@ class Performance extends Component {
                     },
                     "categoryField": "rValue",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -655,8 +664,8 @@ class Performance extends Component {
         const bounceRateChgChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -664,7 +673,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": bounceRateChgData,
                     "titles": [{
-                        "text": "Bounce Rate Chg"
+                        "text": "Bounce Rate Chg",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -687,7 +697,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -698,8 +709,8 @@ class Performance extends Component {
         const transactionsChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -707,7 +718,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": this.state.performanceTableData,
                     "titles": [{
-                        "text": "Transactions"
+                        "text": "Transactions",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -730,7 +742,8 @@ class Performance extends Component {
                     },
                     "categoryField": "rValue",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -741,8 +754,8 @@ class Performance extends Component {
         const transactionsChgChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -750,7 +763,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": transactionChgData,
                     "titles": [{
-                        "text": "Transactions Chg"
+                        "text": "Transactions Chg",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -773,7 +787,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -784,8 +799,8 @@ class Performance extends Component {
         const visitsChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -793,7 +808,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": this.state.performanceTableData,
                     "titles": [{
-                        "text": "Visits"
+                        "text": "Visits",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -816,7 +832,8 @@ class Performance extends Component {
                     },
                     "categoryField": "rValue",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -827,8 +844,8 @@ class Performance extends Component {
         const visitsChgChart = (
             <AmCharts.React
                 style={{
-                    width: "80%",
-                    height: "500px"
+                    width: "100%",
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -836,7 +853,8 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": visitsChgData,
                     "titles": [{
-                        "text": "Visits Chg"
+                        "text": "Visits Chg",
+                        "size": 25
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
@@ -859,7 +877,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 15
                     },
                     "export": {
                         "enabled": true
@@ -905,42 +924,42 @@ class Performance extends Component {
                     </BootstrapTable>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {mediaSpendsChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {mediaSpendsChangeChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {cpaChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {cpaChangeChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {bounceRateChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {bounceRateChgChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {transactionsChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {transactionsChgChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {visitsChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {visitsChgChart}
                     </div>
                 </div>
