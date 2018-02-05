@@ -300,7 +300,7 @@ class Performance extends Component {
     }
 
     percentFormatter(cell, row) {
-        return this.numWithCommas(cell.toFixed(2)) + ' %';
+        return this.numWithCommas(cell.toFixed(5)) + ' %';
     }
 
     priceFormatter(cell, row) {
@@ -492,13 +492,14 @@ class Performance extends Component {
                     "dataProvider": mediaSpendsChgData,
                     "titles": [{
                         "text": "Media Spends Change",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
                         "unit": "%",
-                        "title": "Avg. Media Spends Chg"
+                        "title": "Avg. Media Spends Chg",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -538,12 +539,13 @@ class Performance extends Component {
                     "dataProvider": cpaData,
                     "titles": [{
                         "text": "CPA",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "CPA"
+                        "title": "CPA",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -583,13 +585,14 @@ class Performance extends Component {
                     "dataProvider": cpaChgData,
                     "titles": [{
                         "text": "CPA Change",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
                         "unit": "%",
-                        "title": "CPA Chg"
+                        "title": "CPA Chg",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -629,12 +632,13 @@ class Performance extends Component {
                     "dataProvider": this.state.performanceTableData,
                     "titles": [{
                         "text": "Bounce Rate",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Bounce Rate"
+                        "title": "Bounce Rate",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -674,12 +678,13 @@ class Performance extends Component {
                     "dataProvider": bounceRateChgData,
                     "titles": [{
                         "text": "Bounce Rate Chg",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Bounce Rate Chg"
+                        "title": "Bounce Rate Chg",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -719,12 +724,13 @@ class Performance extends Component {
                     "dataProvider": this.state.performanceTableData,
                     "titles": [{
                         "text": "Transactions",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Transactions"
+                        "title": "Transactions",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -764,12 +770,13 @@ class Performance extends Component {
                     "dataProvider": transactionChgData,
                     "titles": [{
                         "text": "Transactions Chg",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Transactions Chg"
+                        "title": "Transactions Chg",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -809,12 +816,13 @@ class Performance extends Component {
                     "dataProvider": this.state.performanceTableData,
                     "titles": [{
                         "text": "Visits",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Visits"
+                        "title": "Visits",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -854,12 +862,13 @@ class Performance extends Component {
                     "dataProvider": visitsChgData,
                     "titles": [{
                         "text": "Visits Chg",
-                        "size": 25
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Visits Chg"
+                        "title": "Visits Chg",
+                        "titleFontSize": 22
                     }],
                     "startDuration": 1,
                     "graphs": [{

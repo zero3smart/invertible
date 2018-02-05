@@ -53,28 +53,28 @@ class Header extends Component {
                     <li className="nav-item px-1">
                         <Link to="/performance" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Performance</Link>
                     </li>
-                    <li className="nav-item px-1">
+                    <li className="nav-item px-1 d-none">
                         <Link to="/attribution" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Attribution</Link>
                     </li>
                     <li className="nav-item px-1">
                         <Link to="/explorer" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Explorer</Link>
                     </li>
-                    <li className="nav-item px-1">
+                    <li className="nav-item px-1 d-none">
                         <Link to="/knowledge" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Knowledge</Link>
                     </li>
-                    <li className="nav-item px-1">
+                    <li className="nav-item px-1 d-none">
                         <Link to="/ltv" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">LTV</Link>
                     </li>
-                    <li className="nav-item px-1">
+                    <li className="nav-item px-1 d-none">
                         <Link to="/predictive-crm" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Predictive CRM</Link>
                     </li>
-                    <li className="nav-item px-1">
+                    <li className="nav-item px-1 d-none">
                         <Link to="/personalization" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Personalization</Link>
                     </li>
                     {/* <li className="nav-item px-1">
                         <Link to="/credentials" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Credentials</Link>
                     </li> */}
-                    <li className="nav-item px-1">
+                    <li className="nav-item px-1 d-none">
                         <Link to="/sql" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">SQL</Link>
                     </li>
                     <li className="nav-item px-1">
