@@ -423,6 +423,10 @@ class Explorer extends PureComponent {
         }
     }
 
+    componentDidCatch(error, info) {
+        logComponentStackToMyService(info.componentStack);
+    }
+
     componentDidMount() {
         this.fetchExplorerData();
     }
