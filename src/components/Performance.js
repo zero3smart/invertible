@@ -236,29 +236,6 @@ var transactionChgData = [
     }
 ];
 
-var visitsData = [
-    {
-        "medium": "All Devices",
-        "value": 21895,
-        "color": rgb2hex(Color("#3962B7").alpha(21895/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 16509,
-        "color": rgb2hex(Color("#3962B7").alpha(16509/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 100,
-        "color": rgb2hex(Color("#3962B7").alpha(100/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 741,
-        "color": rgb2hex(Color("#3962B7").alpha(741/100).rgb().string())
-    }
-];
-
 var visitsChgData = [
     {
         "medium": "All Devices",
@@ -363,7 +340,7 @@ class Performance extends Component {
                 });
 
                 return {
-                    'rValue': key,
+                    'rValue': this.jsUcfirst(key),
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }),
@@ -385,15 +362,33 @@ class Performance extends Component {
                     }) * 100,
                     'signUps': 100,
                     'mediaSpends': 100,
-                    'cpa': 100,
-                    'visitsColor': rgb2hex(Color("#3962B7").alpha(_.sumBy(objs, (s) => {
-                        return parseInt(s.sessions, 10);
-                    }) / 100).rgb().string())
+                    'cpa': 100
                 };
             })
             .value();
 
-        return _filteredList;
+        return this.addColorToAnalytics(_filteredList);
+    }
+
+    addColorToAnalytics(analytics) {
+        analytics.forEach((elm) => {
+            if (elm["visits"] >= 0)
+                elm["visitsColor"] = rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
+            else
+                elm["visitsColor"] = rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
+
+            if (elm["transactions"] >= 0)
+                elm["transactionsColor"] = rgb2hex(Color("#3962B7").alpha(elm["transactions"] / 100).rgb().string());
+            else
+                elm["transactionsColor"] = rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
+
+            if (elm["bounceRate"] >= 0)
+                elm["bounceRateColor"] = rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
+            else
+                elm["bounceRateColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
+        });
+
+        return analytics;
     }
 
     setPerformanceValues() {
@@ -426,6 +421,11 @@ class Performance extends Component {
         });
     }
 
+    jsUcfirst(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     render() {
         const loading = (
             <div className="ui active centered inline loader"></div>
@@ -435,7 +435,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "pie",
@@ -482,7 +482,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
@@ -526,7 +526,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
@@ -569,7 +569,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
@@ -613,13 +613,13 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": bounceRateData,
+                    "dataProvider": this.state.performanceTableData,
                     "titles": [{
                         "text": "Bounce Rate"
                     }],
@@ -631,18 +631,18 @@ class Performance extends Component {
                     "startDuration": 1,
                     "graphs": [{
                         "balloonText": "<b>[[category]]: [[value]]</b>",
-                        "fillColorsField": "color",
+                        "fillColorsField": "bounceRateColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "bounceRate"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start"
                     },
@@ -656,7 +656,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
@@ -699,13 +699,13 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": transactionData,
+                    "dataProvider": this.state.performanceTableData,
                     "titles": [{
                         "text": "Transactions"
                     }],
@@ -717,18 +717,18 @@ class Performance extends Component {
                     "startDuration": 1,
                     "graphs": [{
                         "balloonText": "<b>[[category]]: [[value]]</b>",
-                        "fillColorsField": "color",
+                        "fillColorsField": "transactionsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "transactions"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start"
                     },
@@ -742,7 +742,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
@@ -785,7 +785,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
@@ -828,7 +828,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "400px"
                 }}
                 options={{
                     "type": "serial",
