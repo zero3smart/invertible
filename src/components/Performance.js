@@ -517,7 +517,7 @@ class Performance extends Component {
                     "categoryField": "medium",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -562,7 +562,7 @@ class Performance extends Component {
                     "categoryField": "medium",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -608,7 +608,7 @@ class Performance extends Component {
                     "categoryField": "medium",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -653,7 +653,7 @@ class Performance extends Component {
                     "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -698,7 +698,7 @@ class Performance extends Component {
                     "categoryField": "medium",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -743,7 +743,7 @@ class Performance extends Component {
                     "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -788,7 +788,7 @@ class Performance extends Component {
                     "categoryField": "medium",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -833,7 +833,7 @@ class Performance extends Component {
                     "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -878,7 +878,7 @@ class Performance extends Component {
                     "categoryField": "medium",
                     "categoryAxis": {
                         "gridPosition": "start",
-                        "fontSize": 15
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
