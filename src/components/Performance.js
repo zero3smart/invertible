@@ -385,7 +385,10 @@ class Performance extends Component {
                     }) * 100,
                     'signUps': 100,
                     'mediaSpends': 100,
-                    'cpa': 100
+                    'cpa': 100,
+                    'visitsColor': rgb2hex(Color("#3962B7").alpha(_.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }) / 100).rgb().string())
                 };
             })
             .value();
@@ -531,12 +534,12 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": cpaData,
                     "titles": [{
-                        "text": "Visits"
+                        "text": "CPA"
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Visits"
+                        "title": "CPA"
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -788,7 +791,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": visitsData,
+                    "dataProvider": this.state.performanceTableData,
                     "titles": [{
                         "text": "Visits"
                     }],
@@ -800,18 +803,18 @@ class Performance extends Component {
                     "startDuration": 1,
                     "graphs": [{
                         "balloonText": "<b>[[category]]: [[value]]</b>",
-                        "fillColorsField": "color",
+                        "fillColorsField": "visitsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "visits"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start"
                     },
