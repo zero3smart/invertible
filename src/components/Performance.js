@@ -236,29 +236,6 @@ var transactionChgData = [
     }
 ];
 
-var visitsData = [
-    {
-        "medium": "All Devices",
-        "value": 21895,
-        "color": rgb2hex(Color("#3962B7").alpha(21895/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 16509,
-        "color": rgb2hex(Color("#3962B7").alpha(16509/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 100,
-        "color": rgb2hex(Color("#3962B7").alpha(100/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 741,
-        "color": rgb2hex(Color("#3962B7").alpha(741/100).rgb().string())
-    }
-];
-
 var visitsChgData = [
     {
         "medium": "All Devices",
@@ -323,7 +300,7 @@ class Performance extends Component {
     }
 
     percentFormatter(cell, row) {
-        return this.numWithCommas(cell.toFixed(2)) + ' %';
+        return this.numWithCommas(cell.toFixed(5)) + ' %';
     }
 
     priceFormatter(cell, row) {
@@ -363,7 +340,7 @@ class Performance extends Component {
                 });
 
                 return {
-                    'rValue': key,
+                    'rValue': this.jsUcfirst(key),
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }),
@@ -390,7 +367,28 @@ class Performance extends Component {
             })
             .value();
 
-        return _filteredList;
+        return this.addColorToAnalytics(_filteredList);
+    }
+
+    addColorToAnalytics(analytics) {
+        analytics.forEach((elm) => {
+            if (elm["visits"] >= 0)
+                elm["visitsColor"] = rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
+            else
+                elm["visitsColor"] = rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
+
+            if (elm["transactions"] >= 0)
+                elm["transactionsColor"] = rgb2hex(Color("#3962B7").alpha(elm["transactions"] / 100).rgb().string());
+            else
+                elm["transactionsColor"] = rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
+
+            if (elm["bounceRate"] >= 0)
+                elm["bounceRateColor"] = rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
+            else
+                elm["bounceRateColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
+        });
+
+        return analytics;
     }
 
     setPerformanceValues() {
@@ -423,6 +421,11 @@ class Performance extends Component {
         });
     }
 
+    jsUcfirst(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     render() {
         const loading = (
             <div className="ui active centered inline loader"></div>
@@ -432,7 +435,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "pie",
@@ -465,7 +468,8 @@ class Performance extends Component {
                     },
                     "dataProvider": mediaSpendsData,
                     "titles": [{
-                        "text": "Media Spends"
+                        "text": "Media Spends",
+                        "size": 25
                     }],
                     "valueField": "value",
                     "titleField": "medium",
@@ -479,7 +483,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -487,13 +491,16 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": mediaSpendsChgData,
                     "titles": [{
-                        "text": "Media Spends Change"
+                        "text": "Media Spends Change",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
                         "unit": "%",
-                        "title": "Avg. Media Spends Chg"
+                        "title": "Avg. Media Spends Chg",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -511,7 +518,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -523,7 +531,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -531,12 +539,15 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": cpaData,
                     "titles": [{
-                        "text": "Visits"
+                        "text": "CPA",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Visits"
+                        "title": "CPA",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -554,7 +565,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -566,7 +578,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -574,13 +586,16 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": cpaChgData,
                     "titles": [{
-                        "text": "CPA Change"
+                        "text": "CPA Change",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
                         "unit": "%",
-                        "title": "CPA Chg"
+                        "title": "CPA Chg",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -598,7 +613,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -610,38 +626,42 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": bounceRateData,
+                    "dataProvider": this.state.performanceTableData,
                     "titles": [{
-                        "text": "Bounce Rate"
+                        "text": "Bounce Rate",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Bounce Rate"
+                        "title": "Bounce Rate",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
                         "balloonText": "<b>[[category]]: [[value]]</b>",
-                        "fillColorsField": "color",
+                        "fillColorsField": "bounceRateColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "bounceRate"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -653,7 +673,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -661,12 +681,15 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": bounceRateChgData,
                     "titles": [{
-                        "text": "Bounce Rate Chg"
+                        "text": "Bounce Rate Chg",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Bounce Rate Chg"
+                        "title": "Bounce Rate Chg",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -684,7 +707,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -696,38 +720,42 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": transactionData,
+                    "dataProvider": this.state.performanceTableData,
                     "titles": [{
-                        "text": "Transactions"
+                        "text": "Transactions",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Transactions"
+                        "title": "Transactions",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
                         "balloonText": "<b>[[category]]: [[value]]</b>",
-                        "fillColorsField": "color",
+                        "fillColorsField": "transactionsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "transactions"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -739,7 +767,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -747,12 +775,15 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": transactionChgData,
                     "titles": [{
-                        "text": "Transactions Chg"
+                        "text": "Transactions Chg",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Transactions Chg"
+                        "title": "Transactions Chg",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -770,7 +801,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -782,38 +814,42 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": visitsData,
+                    "dataProvider": this.state.performanceTableData,
                     "titles": [{
-                        "text": "Visits"
+                        "text": "Visits",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Visits"
+                        "title": "Visits",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
                         "balloonText": "<b>[[category]]: [[value]]</b>",
-                        "fillColorsField": "color",
+                        "fillColorsField": "visitsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "visits"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -825,7 +861,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "300px"
+                    height: "700px"
                 }}
                 options={{
                     "type": "serial",
@@ -833,12 +869,15 @@ class Performance extends Component {
                     "marginRight": 70,
                     "dataProvider": visitsChgData,
                     "titles": [{
-                        "text": "Visits Chg"
+                        "text": "Visits Chg",
+                        "size": 22
                     }],
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
-                        "title": "Visits Chg"
+                        "title": "Visits Chg",
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -856,7 +895,8 @@ class Performance extends Component {
                     },
                     "categoryField": "medium",
                     "categoryAxis": {
-                        "gridPosition": "start"
+                        "gridPosition": "start",
+                        "fontSize": 18
                     },
                     "export": {
                         "enabled": true
@@ -902,42 +942,42 @@ class Performance extends Component {
                     </BootstrapTable>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {mediaSpendsChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {mediaSpendsChangeChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {cpaChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {cpaChangeChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {bounceRateChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {bounceRateChgChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {transactionsChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {transactionsChgChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {visitsChart}
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
                         {visitsChgChart}
                     </div>
                 </div>
