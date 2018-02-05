@@ -499,7 +499,8 @@ class Performance extends Component {
                         "position": "left",
                         "unit": "%",
                         "title": "Avg. Media Spends Chg",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -545,7 +546,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "CPA",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -592,7 +594,8 @@ class Performance extends Component {
                         "position": "left",
                         "unit": "%",
                         "title": "CPA Chg",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -638,7 +641,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "Bounce Rate",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -684,7 +688,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "Bounce Rate Chg",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -730,7 +735,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "Transactions",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -776,7 +782,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "Transactions Chg",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -822,7 +829,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "Visits",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -868,7 +876,8 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "title": "Visits Chg",
-                        "titleFontSize": 22
+                        "titleFontSize": 22,
+                        "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
