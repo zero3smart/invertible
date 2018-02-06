@@ -861,7 +861,7 @@ class Performance extends Component {
                 <div className={classnames('performance-table', { 'd-none': this.state.loading })}>
                     <BootstrapTable data={this.state.performanceTableData} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
-                        <TableHeaderColumn dataField="rValue" dataSort={true}>Device1</TableHeaderColumn>
+                        <TableHeaderColumn dataField="rValue" dataSort={true}>Device</TableHeaderColumn>
                         <TableHeaderColumn dataField="mediaSpends" dataFormat={this.commaFormatter}>Media Spends</TableHeaderColumn>
                         <TableHeaderColumn dataField="cpa" dataFormat={this.priceFormatter}>CPA</TableHeaderColumn>
                         <TableHeaderColumn dataField="visits" dataFormat={this.commaFormatter}>Visits</TableHeaderColumn>
