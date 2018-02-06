@@ -837,7 +837,7 @@ class Performance extends Component {
         return (
             <div className="performance-container">
                 <div className="">
-                    <h6>Current Period</h6>
+                    <h4>Current Period</h4>
                 </div>
                 <div className="row">
                     <div className="col-md-3 row">
@@ -845,14 +845,14 @@ class Performance extends Component {
                             <DatePicker
                                 selected={this.state.currentStartDate}
                                 onChange={this.handleCurrentStartDateChange}
-                                className="form-control"
+                                className="form-control date-box"
                             />
                         </div>
                         <div className="col-md-6">
                             <DatePicker
                                 selected={this.state.currentEndDate}
                                 onChange={this.handleCurrentEndDateChange}
-                                className="form-control"
+                                className="form-control date-box"
                             />
                         </div>
                     </div>
