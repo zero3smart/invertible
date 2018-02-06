@@ -40,22 +40,22 @@ var mediaSpendsChgData = [
     {
         "medium": "All Devices",
         "value": 2,
-        "color": rgb2hex(Color("#FF0F00").alpha(2/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(2/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": -25,
-        "color": rgb2hex(Color("#008000").alpha(25/100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(25/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 14,
-        "color": rgb2hex(Color("#FF0F00").alpha(14/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(14/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 139,
-        "color": rgb2hex(Color("#FF0F00").alpha(139/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(139/100).rgb().string())
     }
 ];
 
@@ -86,22 +86,22 @@ var cpaChgData = [
     {
         "medium": "All Devices",
         "value": 212,
-        "color": rgb2hex(Color("#FF0F00").alpha(2 / 100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(2 / 100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": -251,
-        "color": rgb2hex(Color("#008000").alpha(25 / 100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(25 / 100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 124,
-        "color": rgb2hex(Color("#FF0F00").alpha(14 / 100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(14 / 100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 239,
-        "color": rgb2hex(Color("#FF0F00").alpha(139 / 100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(139 / 100).rgb().string())
     }
 ];
 
@@ -109,22 +109,22 @@ var bounceRateChgData = [
     {
         "medium": "All Devices",
         "value": -10.4,
-        "color": rgb2hex(Color("#008000").alpha(10.4/100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(10.4/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 9.6,
-        "color": rgb2hex(Color("#FF0F00").alpha(9.6/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(9.6/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": -15.8,
-        "color": rgb2hex(Color("#008000").alpha(15.8/100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(15.8/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 1.8,
-        "color": rgb2hex(Color("#FF0F00").alpha(1.8/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(1.8/100).rgb().string())
     }
 ];
 
@@ -132,22 +132,22 @@ var transactionChgData = [
     {
         "medium": "All Devices",
         "value": 270,
-        "color": rgb2hex(Color("#FF0F00").alpha(270/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(270/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 255,
-        "color": rgb2hex(Color("#FF0F00").alpha(255/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(255/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 100,
-        "color": rgb2hex(Color("#FF0F00").alpha(100/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(100/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 100,
-        "color": rgb2hex(Color("#FF0F00").alpha(100/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(100/100).rgb().string())
     }
 ];
 
@@ -155,22 +155,22 @@ var visitsChgData = [
     {
         "medium": "All Devices",
         "value": 35,
-        "color": rgb2hex(Color("#FF0F00").alpha(35/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(35/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 22,
-        "color": rgb2hex(Color("#FF0F00").alpha(22/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(22/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 38,
-        "color": rgb2hex(Color("#FF0F00").alpha(38/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(38/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 46,
-        "color": rgb2hex(Color("#FF0F00").alpha(46/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(46/100).rgb().string())
     }
 ];
 
