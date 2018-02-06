@@ -47,7 +47,10 @@ class CommentForm extends Component {
                     placeholder="Say something..."
                     value={this.state.text}
                     onChange={this.onChange} />
-                <input type="submit" value="Post" />
+                {/* <input type="submit" value="Post" /> */}
+
+                <button className="btn btn-primary">Post</button>
+
             </form>
         );
     }
