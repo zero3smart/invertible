@@ -354,7 +354,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -403,7 +403,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -452,7 +452,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -500,7 +500,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -549,7 +549,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -597,7 +597,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -645,7 +645,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -693,7 +693,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -741,7 +741,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -789,7 +789,7 @@ class Performance extends Component {
             <AmCharts.React
                 style={{
                     width: "100%",
-                    height: "700px"
+                    height: "600px"
                 }}
                 options={{
                     "type": "serial",
@@ -871,42 +871,42 @@ class Performance extends Component {
                     </BootstrapTable>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {mediaSpendsChart}
                     </div>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {mediaSpendsChangeChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {cpaChart}
                     </div>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {cpaChangeChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {bounceRateChart}
                     </div>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {bounceRateChgChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {transactionsChart}
                     </div>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {transactionsChgChart}
                     </div>
                 </div>
                 <div className={classnames('row', { 'd-none': this.state.loading })}>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {visitsChart}
                     </div>
-                    <div className="col-md-5" style={{ margin: 0, padding: 0 }}>
+                    <div className="col-md-5 chart-item">
                         {visitsChgChart}
                     </div>
                 </div>
