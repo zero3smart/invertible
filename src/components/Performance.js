@@ -275,9 +275,9 @@ class Performance extends Component {
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }) * 100)),
-                    'signUps': 100,
-                    'mediaSpends': 100,
-                    'cpa': 100
+                    'signUps': 2187,
+                    'mediaSpends': 249,
+                    'cpa': 7853
                 };
             })
             .value();
