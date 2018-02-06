@@ -467,13 +467,15 @@ class Performance extends Component {
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
+                        "unit": "$",
+                        "unitPosition": "left",
                         "title": "CPA",
                         "titleFontSize": 22,
                         "fontSize": 18
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "labelText": "[[value]]",
+                        "labelText": "$[[value]]",
                         "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
@@ -564,6 +566,7 @@ class Performance extends Component {
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
+                        "unit": "%",
                         "title": "Bounce Rate",
                         "titleFontSize": 22,
                         "fontSize": 18
@@ -612,6 +615,7 @@ class Performance extends Component {
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
+                        "unit": "%",
                         "title": "Bounce Rate Chg",
                         "titleFontSize": 22,
                         "fontSize": 18
@@ -708,6 +712,7 @@ class Performance extends Component {
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
+                        "unit": "%",
                         "title": "Transactions Chg",
                         "titleFontSize": 22,
                         "fontSize": 18
@@ -804,6 +809,7 @@ class Performance extends Component {
                     "valueAxes": [{
                         "axisAlpha": 0,
                         "position": "left",
+                        "unit": "%",
                         "title": "Visits Chg",
                         "titleFontSize": 22,
                         "fontSize": 18
