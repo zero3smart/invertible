@@ -215,7 +215,7 @@ class Performance extends Component {
     }
 
     percentFormatter(cell, row) {
-        return this.numWithCommas(parseFloat(cell).toFixed(3)) + ' %';
+        return this.numWithCommas(cell) + ' %';
     }
 
     priceFormatter(cell, row) {
@@ -265,16 +265,16 @@ class Performance extends Component {
                     'visits': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }),
-                    'newVisits': _.sumBy(newVisitsObj, (s) => {
+                    'newVisits': Math.round(_.sumBy(newVisitsObj, (s) => {
                         return parseInt(s.sessions, 10);
-                    }) / _.sumBy(objs, (s) => {
-                        return parseInt(s.sessions, 10);
-                    }) * 100,
-                    'bounceRate': this.precise(_.sumBy(objs, (s) => {
-                        return parseInt(s.bounces, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
                     }) * 100),
+                    'bounceRate': Math.round(this.precise(_.sumBy(objs, (s) => {
+                        return parseInt(s.bounces, 10);
+                    }) / _.sumBy(objs, (s) => {
+                        return parseInt(s.sessions, 10);
+                    }) * 100)),
                     'signUps': 100,
                     'mediaSpends': 100,
                     'cpa': 100
@@ -369,6 +369,7 @@ class Performance extends Component {
                         "axisAlpha": 0,
                         "position": "left",
                         "unit": "$",
+                        "unitPosition": "left",
                         "title": "Avg. Media Spends Chg",
                         "titleFontSize": 22,
                         "fontSize": 18
