@@ -375,7 +375,7 @@ class Performance extends Component {
                     }],
                     "startDuration": 1,
                     "graphs": [{
-                        "labelText": "[[value]]$",
+                        "labelText": "$[[value]]",
                         "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
