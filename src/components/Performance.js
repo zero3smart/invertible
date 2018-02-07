@@ -9,7 +9,7 @@ import '../assets/stylesheets/components/Performance.scss';
 import moment from 'moment';
 import classnames from 'classnames';
 import DatePicker from 'react-datepicker';
-import { fetchPerformance } from '../actions/analyticsActions';
+import { fetchPerformance, fetchMediaspends } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -86,22 +86,22 @@ var cpaChgData = [
     {
         "medium": "All Devices",
         "value": 212,
-        "color": rgb2hex(Color("#008000").alpha(2 / 100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(2 / 100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": -251,
-        "color": rgb2hex(Color("#FF0F00").alpha(25 / 100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(25 / 100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": 124,
-        "color": rgb2hex(Color("#008000").alpha(14 / 100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(14 / 100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 239,
-        "color": rgb2hex(Color("#008000").alpha(139 / 100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(139 / 100).rgb().string())
     }
 ];
 
@@ -109,22 +109,22 @@ var bounceRateChgData = [
     {
         "medium": "All Devices",
         "value": -10.4,
-        "color": rgb2hex(Color("#FF0F00").alpha(10.4/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(10.4/100).rgb().string())
     },
     {
         "medium": "Desktop",
         "value": 9.6,
-        "color": rgb2hex(Color("#008000").alpha(9.6/100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(9.6/100).rgb().string())
     },
     {
         "medium": "Mobile",
         "value": -15.8,
-        "color": rgb2hex(Color("#FF0F00").alpha(15.8/100).rgb().string())
+        "color": rgb2hex(Color("#008000").alpha(15.8/100).rgb().string())
     },
     {
         "medium": "Tablet",
         "value": 1.8,
-        "color": rgb2hex(Color("#008000").alpha(1.8/100).rgb().string())
+        "color": rgb2hex(Color("#FF0F00").alpha(1.8/100).rgb().string())
     }
 ];
 
@@ -188,6 +188,8 @@ class Performance extends Component {
         this.state = {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
             currentEndDate: moment(),
+            priorStartDate: moment(new Date('2017-12-10T10:00:00')),
+            priorEndDate: moment().add(-10, 'days'),
             performanceTableData: [],
             loading: true
         }
@@ -196,6 +198,8 @@ class Performance extends Component {
         this.priceFormatter = this.priceFormatter.bind(this);
         this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+        this.handlePriorStartDateChange = this.handlePriorStartDateChange.bind(this);
+        this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
     }
 
     handleCurrentStartDateChange(date) {
@@ -297,7 +301,7 @@ class Performance extends Component {
                 elm["visitsColor"] = rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
 
             if (elm["transactions"] >= 0)
-                elm["transactionsColor"] = rgb2hex(Color("#3962B7").alpha(elm["transactions"] / 100).rgb().string());
+                elm["transactionsColor"] = rgb2hex(Color("#3962B7").alpha(0.2).rgb().string());
             else
                 elm["transactionsColor"] = rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
 
@@ -311,15 +315,15 @@ class Performance extends Component {
     }
 
     setPerformanceValues() {
-        let { analytics } = this.props;
+        let { analyticsOverview } = this.props;
         let per;
         let p1 = new Promise((resolve, reject) => {
-            let per1 = this.getFilteredList(analytics, 'devicecategory');
+            let per1 = this.getFilteredList(analyticsOverview, 'devicecategory');
             resolve(per1);
         });
 
         p1.then((per1) => {
-            let per2 = this.getFilteredList(analytics, '');
+            let per2 = this.getFilteredList(analyticsOverview, '');
             per = per1.concat(per2);
             this.setState({performanceTableData: per});
         }, err => {
@@ -332,7 +336,7 @@ class Performance extends Component {
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
         this.props.fetchPerformance(currentStartDate, currentEndDate).then(res => {
-            let { analytics } = this.props;
+            let { analyticsOverview } = this.props;
             this.setPerformanceValues();
             this.setState({ loading: false });
         }, err => {
@@ -626,6 +630,7 @@ class Performance extends Component {
                         "fontSize": 18,
                         "fillColorsField": "color",
                         "fillAlphas": 0.9,
+                        "step": 4,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "value"
@@ -842,24 +847,47 @@ class Performance extends Component {
 
         return (
             <div className="performance-container">
-                <div className="">
-                    <h4>Current Period</h4>
-                </div>
                 <div className="row">
-                    <div className="col-md-3 row">
-                        <div className="col-md-6">
-                            <DatePicker
-                                selected={this.state.currentStartDate}
-                                onChange={this.handleCurrentStartDateChange}
-                                className="form-control date-box"
-                            />
+                    <div className="col-md-4">
+                        <div className="">
+                            <h4>Current Period</h4>
                         </div>
-                        <div className="col-md-6">
-                            <DatePicker
-                                selected={this.state.currentEndDate}
-                                onChange={this.handleCurrentEndDateChange}
-                                className="form-control date-box"
-                            />
+                        <div className="row">
+                            <div className="col-md-6">
+                                <DatePicker
+                                    selected={this.state.currentStartDate}
+                                    onChange={this.handleCurrentStartDateChange}
+                                    className="form-control date-box"
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <DatePicker
+                                    selected={this.state.currentEndDate}
+                                    onChange={this.handleCurrentEndDateChange}
+                                    className="form-control date-box"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        <div className="">
+                            <h4>Prior Period</h4>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <DatePicker
+                                    selected={this.state.priorStartDate}
+                                    onChange={this.handlePriorStartDateChange}
+                                    className="form-control date-box"
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <DatePicker
+                                    selected={this.state.priorEndDate}
+                                    onChange={this.handlePriorEndDateChange}
+                                    className="form-control date-box"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -924,13 +952,15 @@ class Performance extends Component {
 }
 
 Performance.propTypes = {
-    analytics: PropTypes.array.isRequired
+    analyticsOverview: PropTypes.array.isRequired,
+    analyticsMediaspends: PropTypes.array.isRequired
 }
 
 function mapStateToProps(state) {
     return {
-        analytics: state.performance
+        analyticsOverview: state.performance,
+        analyticsMediaspends: state.mediaSpends
     };
 }
 
-export default connect(mapStateToProps, { fetchPerformance })(Performance);
+export default connect(mapStateToProps, { fetchPerformance, fetchMediaspends })(Performance);
