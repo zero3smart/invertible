@@ -190,7 +190,10 @@ class Performance extends Component {
             currentEndDate: moment(),
             priorStartDate: moment(new Date('2017-12-10T10:00:00')),
             priorEndDate: moment().add(-10, 'days'),
-            performanceTableData: [],
+            currentAnalyticsOverview: [],
+            priorAnalyticsOverview: [],
+            currentAnalyticsMediaspends: [],
+            priorAnalyticsMediaspends: [],
             loading: true
         }
         this.percentFormatter = this.percentFormatter.bind(this);
@@ -213,6 +216,22 @@ class Performance extends Component {
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
+        }, () => {
+            this.fetchPerformanceData();
+        });
+    }
+
+    handlePriorStartDateChange(date) {
+        this.setState({
+            priorStartDate: date
+        }, () => {
+            this.fetchPerformanceData();
+        });
+    }
+
+    handlePriorEndDateChange(date) {
+        this.setState({
+            priorEndDate: date
         }, () => {
             this.fetchPerformanceData();
         });
@@ -317,6 +336,7 @@ class Performance extends Component {
     setPerformanceValues() {
         let { analyticsOverview } = this.props;
         let per;
+
         let p1 = new Promise((resolve, reject) => {
             let per1 = this.getFilteredList(analyticsOverview, 'devicecategory');
             resolve(per1);
@@ -325,7 +345,7 @@ class Performance extends Component {
         p1.then((per1) => {
             let per2 = this.getFilteredList(analyticsOverview, '');
             per = per1.concat(per2);
-            this.setState({performanceTableData: per});
+            this.setState({currentAnalyticsOverview: per});
         }, err => {
 
         });
@@ -335,8 +355,54 @@ class Performance extends Component {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
-        this.props.fetchPerformance(currentStartDate, currentEndDate).then(res => {
-            let { analyticsOverview } = this.props;
+        let priorStartDate = this.state.priorStartDate.format('YYYYMMDD').replace(/-/gi, '');
+        let priorEndDate = this.state.priorEndDate.format('YYYYMMDD').replace(/-/gi, '');
+
+        let p1 = new Promise((resolve, reject) => {
+            this.props.fetchPerformance(currentStartDate, currentEndDate).then(res => {
+                let { analyticsOverview } = this.props;
+                this.setState({ currentAnalyticsOverview: analyticsOverview });
+
+                resolve();
+            }, err => {
+                reject(err);
+            });
+        });
+
+        let p2 = new Promise((resolve, reject) => {
+            this.props.fetchMediaspends(currentStartDate, currentEndDate).then(res => {
+                let { analyticsMediaspends } = this.props;
+                this.setState({ currentAnalyticsMediaspends: analyticsMediaspends });
+
+                resolve();
+            }, err => {
+                reject(err);
+            });
+        });
+
+        let p3 = new Promise((resolve, reject) => {
+            this.props.fetchPerformance(priorStartDate, priorEndDate).then(res => {
+                let { analyticsOverview } = this.props;
+                this.setState({ priorAnalyticsOverview: analyticsOverview });
+
+                resolve();
+            }, err => {
+                reject(err);
+            });
+        });
+
+        let p4 = new Promise((resolve, reject) => {
+            this.props.fetchMediaspends(priorStartDate, priorEndDate).then(res => {
+                let { analyticsMediaspends } = this.props;
+                this.setState({ priorAnalyticsMediaspends: analyticsMediaspends });
+
+                resolve();
+            }, err => {
+                reject(err);
+            });
+        });
+
+        Promise.all([p1, p2, p3, p4]).then(() => {
             this.setPerformanceValues();
             this.setState({ loading: false });
         }, err => {
@@ -562,7 +628,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": this.state.performanceTableData,
+                    "dataProvider": this.state.currentAnalyticsOverview,
                     "titles": [{
                         "text": "Bounce Rate",
                         "size": 22
@@ -661,7 +727,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": this.state.performanceTableData,
+                    "dataProvider": this.state.currentAnalyticsOverview,
                     "titles": [{
                         "text": "Transactions",
                         "size": 22
@@ -758,7 +824,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": this.state.performanceTableData,
+                    "dataProvider": this.state.currentAnalyticsOverview,
                     "titles": [{
                         "text": "Visits",
                         "size": 22
@@ -893,7 +959,7 @@ class Performance extends Component {
                 </div>
                 {this.state.loading ? loading : <div>
                 <div className={classnames('performance-table', { 'd-none': this.state.loading })}>
-                    <BootstrapTable data={this.state.performanceTableData} striped={true} hover={true}>
+                    <BootstrapTable data={this.state.currentAnalyticsOverview} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
                         <TableHeaderColumn dataField="rValue" dataSort={true}>Device</TableHeaderColumn>
                         <TableHeaderColumn dataField="mediaSpends" dataFormat={this.commaFormatter}>Media Spends</TableHeaderColumn>
