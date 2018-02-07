@@ -188,7 +188,7 @@ class Performance extends Component {
         this.state = {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
             currentEndDate: moment(),
-            priorStartDate: moment(new Date('2017-12-8T10:00:00')),
+            priorStartDate: moment(new Date('2017-12-08T10:00:00')),
             priorEndDate: moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
