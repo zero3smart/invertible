@@ -188,12 +188,20 @@ class Performance extends Component {
         this.state = {
             currentStartDate: moment(new Date('2017-12-15T10:00:00')),
             currentEndDate: moment(),
-            priorStartDate: moment(new Date('2017-12-10T10:00:00')),
-            priorEndDate: moment().add(-10, 'days'),
+            priorStartDate: moment(new Date('2017-12-8T10:00:00')),
+            priorEndDate: moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
             priorAnalyticsMediaspends: [],
+            currentReportTable: [],
+            priorReportTable: [],
+            mediaSpendsKeyMap: {
+                'Mobile': 'mobile',
+                'Desktop': 'desktop',
+                'Tablet': 'tablet',
+                'All Devices': 'total'
+            },
             loading: true
         }
         this.percentFormatter = this.percentFormatter.bind(this);
@@ -255,7 +263,9 @@ class Performance extends Component {
 
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
-            this.state.currentEndDate !== nextState.currentEndDate) {
+            this.state.currentEndDate !== nextState.currentEndDate ||
+            this.state.priorStartDate !== nextState.priorStartDate ||
+            this.state.priorEndDate !== nextState.priorEndDate) {
             this.setState({ loading: true });
         }
     }
@@ -264,7 +274,7 @@ class Performance extends Component {
         this.fetchPerformanceData();
     }
 
-    getFilteredList(analytics, groupByAttr) {
+    getFilteredListForOverview(analytics, groupByAttr) {
         let _filteredList = [];
 
         _filteredList = _(analytics)
@@ -308,6 +318,33 @@ class Performance extends Component {
         return this.addColorToAnalytics(_filteredList);
     }
 
+    getFilteredListForMediaspends(analytics, groupByAttr) {
+        let _filteredList = [];
+
+        _filteredList = _(analytics)
+            .groupBy(groupByAttr)
+            .map((objs, key) => {
+                return {
+                    'rValue': this.jsUcfirst(key),
+                    'desktop': _.sumBy(objs, (s) => {
+                        return parseInt(s.desktop, 10);
+                    }),
+                    'mobile': _.sumBy(objs, (s) => {
+                        return parseInt(s.mobile, 10);
+                    }),
+                    'tablet': _.sumBy(objs, (s) => {
+                        return parseInt(s.tablet, 10);
+                    }),
+                    'total': _.sumBy(objs, (s) => {
+                        return parseInt(s.total, 10);
+                    })
+                };
+            })
+            .value();
+
+        return _filteredList;
+    }
+
     precise(x) {
         return Number.parseFloat(x).toFixed(3);
     }
@@ -333,19 +370,39 @@ class Performance extends Component {
         return analytics;
     }
 
-    setPerformanceValues() {
-        let { analyticsOverview } = this.props;
+    setPerformanceValues(analyticsOverview, periodType) {
         let per;
 
         let p1 = new Promise((resolve, reject) => {
-            let per1 = this.getFilteredList(analyticsOverview, 'devicecategory');
+            let per1 = this.getFilteredListForOverview(analyticsOverview, 'devicecategory');
             resolve(per1);
         });
 
-        p1.then((per1) => {
-            let per2 = this.getFilteredList(analyticsOverview, '');
-            per = per1.concat(per2);
-            this.setState({currentAnalyticsOverview: per});
+        let p2 = new Promise((resolve, reject) => {
+            let per2 = this.getFilteredListForMediaspends(this.state.currentAnalyticsMediaspends, '');
+            resolve(per2);
+        });
+
+        let p3 = new Promise((resolve, reject) => {
+            let per3 = this.getFilteredListForOverview(analyticsOverview, '');
+            resolve(per3);
+        })
+
+        Promise.all([p1, p2, p3]).then((values) => {
+            debugger;
+            per = values[0].concat(values[2]);
+
+            let newPer = per.map((row) => {
+                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                return row;
+            });
+
+            debugger;
+
+            if (periodType == 'current')
+                this.setState({ currentReportTable: newPer });
+            else if (periodType == 'prior')
+                this.setState({ priorReportTable: newPer });
         }, err => {
 
         });
@@ -403,7 +460,8 @@ class Performance extends Component {
         });
 
         Promise.all([p1, p2, p3, p4]).then(() => {
-            this.setPerformanceValues();
+            this.setPerformanceValues(this.state.currentAnalyticsOverview, 'current');
+            this.setPerformanceValues(this.state.priorAnalyticsOverview, 'prior');
             this.setState({ loading: false });
         }, err => {
 
@@ -628,7 +686,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": this.state.currentAnalyticsOverview,
+                    "dataProvider": this.state.currentReportTable,
                     "titles": [{
                         "text": "Bounce Rate",
                         "size": 22
@@ -727,7 +785,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": this.state.currentAnalyticsOverview,
+                    "dataProvider": this.state.currentReportTable,
                     "titles": [{
                         "text": "Transactions",
                         "size": 22
@@ -824,7 +882,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": this.state.currentAnalyticsOverview,
+                    "dataProvider": this.state.currentReportTable,
                     "titles": [{
                         "text": "Visits",
                         "size": 22
@@ -959,7 +1017,7 @@ class Performance extends Component {
                 </div>
                 {this.state.loading ? loading : <div>
                 <div className={classnames('performance-table', { 'd-none': this.state.loading })}>
-                    <BootstrapTable data={this.state.currentAnalyticsOverview} striped={true} hover={true}>
+                    <BootstrapTable data={this.state.currentReportTable} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
                         <TableHeaderColumn dataField="rValue" dataSort={true}>Device</TableHeaderColumn>
                         <TableHeaderColumn dataField="mediaSpends" dataFormat={this.commaFormatter}>Media Spends</TableHeaderColumn>
