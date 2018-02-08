@@ -26,8 +26,8 @@ class Performance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentStartDate: moment(new Date('2017-12-15T10:00:00')),
-            currentEndDate: moment(),
+            currentStartDate: moment(new Date('2018-01-01T10:00:00')),
+            currentEndDate: moment(new Date('2018-01-02T10:00:00')),
             priorStartDate: moment(new Date('2017-12-08T10:00:00')),
             priorEndDate: moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
@@ -91,6 +91,9 @@ class Performance extends Component {
     }
 
     priceFormatter(cell, row) {
+        if (cell.toString() == 'Infinity') {
+            return '-';
+        }
         return '$' + this.numWithCommas(cell);
     }
 
@@ -131,13 +134,13 @@ class Performance extends Component {
                 return {
                     'rValue': this.jsUcfirst(key),
                     'sessions': _.sumBy(objs, (s) => {
-                        return parseInt(s.sessions, 10);
+                        return parseFloat(s.sessions, 10);
                     }),
                     'transactions': _.sumBy(objs, (s) => {
-                        return parseInt(s.transactions, 10);
+                        return parseFloat(s.transactions, 10);
                     }),
                     'visits': _.sumBy(objs, (s) => {
-                        return parseInt(s.sessions, 10);
+                        return parseFloat(s.sessions, 10);
                     }),
                     'newVisits': Math.round(_.sumBy(newVisitsObj, (s) => {
                         return parseInt(s.sessions, 10);
@@ -145,9 +148,9 @@ class Performance extends Component {
                         return parseInt(s.sessions, 10);
                     }) * 100),
                     'bounceRate': Math.round(this.precise(_.sumBy(objs, (s) => {
-                        return parseInt(s.bounces, 10);
+                        return parseFloat(s.bounces, 10);
                     }) / _.sumBy(objs, (s) => {
-                        return parseInt(s.sessions, 10);
+                        return parseFloat(s.sessions, 10);
                     }) * 100)),
                     'signUps': 2187,
                     'mediaSpends': 249,
@@ -167,18 +170,18 @@ class Performance extends Component {
             .map((objs, key) => {
                 return {
                     'rValue': this.jsUcfirst(key),
-                    'desktop': _.sumBy(objs, (s) => {
-                        return parseInt(s.desktop, 10);
-                    }),
-                    'mobile': _.sumBy(objs, (s) => {
-                        return parseInt(s.mobile, 10);
-                    }),
-                    'tablet': _.sumBy(objs, (s) => {
-                        return parseInt(s.tablet, 10);
-                    }),
-                    'total': _.sumBy(objs, (s) => {
-                        return parseInt(s.total, 10);
-                    })
+                    'desktop': this.precise(_.sumBy(objs, (s) => {
+                        return parseFloat(s.desktop, 10);
+                    })),
+                    'mobile': this.precise(_.sumBy(objs, (s) => {
+                        return parseFloat(s.mobile, 10);
+                    })),
+                    'tablet': this.precise(_.sumBy(objs, (s) => {
+                        return parseFloat(s.tablet, 10);
+                    })),
+                    'total': this.precise(_.sumBy(objs, (s) => {
+                        return parseFloat(s.total, 10);
+                    }))
                 };
             })
             .value();
@@ -292,11 +295,11 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Number.parseFloat((item.mediaSpends / priorReportTable[index].mediaSpends - 1).toFixed(3)),
-                cpaChg: Number.parseFloat((item.cpa / priorReportTable[index].cpa - 1).toFixed(3)),
-                visitsChg: Number.parseFloat((item.visits / priorReportTable[index].visits - 1).toFixed(3)),
-                transactionsChg: Number.parseFloat((item.transactions / priorReportTable[index].transactions - 1).toFixed(3)),
-                bounceRateChg: Number.parseFloat((item.bounceRate / priorReportTable[index].bounceRate - 1).toFixed(3))
+                mediaSpendsChg: Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)),
+                cpaChg: Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)),
+                visitsChg: Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)),
+                transactionsChg: Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)),
+                bounceRateChg: Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3))
             };
             chgReportTable.push(_obj);
         });
@@ -750,7 +753,7 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "transactionChgColor",
+                        "fillColorsField": "transactionsChgColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
