@@ -4,11 +4,13 @@ import flashMessages from './reducers/flashMessages';
 import auth from './reducers/auth';
 import explorer from './reducers/explorer';
 import performance from './reducers/performance';
+import mediaSpends from './reducers/mediaSpends';
 
 export default combineReducers({
     comment,
     flashMessages,
     auth,
     explorer,
-    performance
+    performance,
+    mediaSpends
 });

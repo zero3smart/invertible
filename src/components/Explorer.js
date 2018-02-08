@@ -483,7 +483,6 @@ class Explorer extends PureComponent {
         this.setState({
             priorStartDate: date
         }, () => {
-            console.log(date.format('YYYYMMDD'));
             this.fetchExplorerData();
         });
     }
