@@ -18,10 +18,10 @@ class Performance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentStartDate: moment(new Date('2018-01-01T10:00:00')),
-            currentEndDate: moment(new Date('2018-01-02T10:00:00')),
-            priorStartDate: moment(new Date('2017-12-08T10:00:00')),
-            priorEndDate: moment().add(-7, 'days'),
+            currentStartDate: moment(new Date('2018-01-04T10:00:00')),
+            currentEndDate: moment(new Date('2018-01-05T10:00:00')),
+            priorStartDate: moment(new Date('2018-01-01T10:00:00')),
+            priorEndDate: moment(new Date('2018-01-02T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
