@@ -249,7 +249,7 @@ class Performance extends Component {
         return analytics;
     }
 
-    setPerformanceValues(analyticsOverview, periodType) {
+    setPerformanceValuesForCurrent(analyticsOverview) {
         let per;
 
         let p1 = new Promise((resolve, reject) => {
@@ -267,7 +267,7 @@ class Performance extends Component {
             resolve(per3);
         })
 
-        Promise.all([p1, p2, p3]).then((values) => {
+        let p4 = Promise.all([p1, p2, p3]).then((values) => {
             per = values[0].concat(values[2]);
 
             let newPer = per.map((row) => {
@@ -276,14 +276,51 @@ class Performance extends Component {
                 return row;
             });
 
-            if (periodType == 'current') {
-                this.setState({ currentReportTable: newPer });
-            } else if (periodType == 'prior') {
-                this.setState({ priorReportTable: newPer });
-            }
-        }, err => {
+            this.setState({ currentReportTable: newPer });
 
+            return Promise.resolve(newPer);
+        }, err => {
+            return Promise.reject(err);
         });
+
+        return p4;
+    }
+
+    setPerformanceValuesForPrior(analyticsOverview) {
+        let per;
+
+        let p1 = new Promise((resolve, reject) => {
+            let per1 = this.getFilteredListForOverview(analyticsOverview, 'devicecategory');
+            resolve(per1);
+        });
+
+        let p2 = new Promise((resolve, reject) => {
+            let per2 = this.getFilteredListForMediaspends(this.state.priorAnalyticsMediaspends, '');
+            resolve(per2);
+        });
+
+        let p3 = new Promise((resolve, reject) => {
+            let per3 = this.getFilteredListForOverview(analyticsOverview, '');
+            resolve(per3);
+        })
+
+        let p4 = Promise.all([p1, p2, p3]).then((values) => {
+            per = values[0].concat(values[2]);
+
+            let newPer = per.map((row) => {
+                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
+                row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
+                return row;
+            });
+
+            this.setState({ priorReportTable: newPer });
+
+            return Promise.resolve(newPer);
+        }, err => {
+            return Promise.reject(err);
+        });
+
+        return p4;
     }
 
     changeCaculation() {
@@ -320,7 +357,7 @@ class Performance extends Component {
                 let { analyticsOverview } = this.props;
                 this.setState({ currentAnalyticsOverview: analyticsOverview });
 
-                resolve();
+                resolve(analyticsOverview);
             }, err => {
                 reject(err);
             });
@@ -331,7 +368,7 @@ class Performance extends Component {
                 let { analyticsMediaspends } = this.props;
                 this.setState({ currentAnalyticsMediaspends: analyticsMediaspends });
 
-                resolve();
+                resolve(analyticsMediaspends);
             }, err => {
                 reject(err);
             });
@@ -342,7 +379,7 @@ class Performance extends Component {
                 let { analyticsOverview } = this.props;
                 this.setState({ priorAnalyticsOverview: analyticsOverview });
 
-                resolve();
+                resolve(analyticsOverview);
             }, err => {
                 reject(err);
             });
@@ -353,18 +390,19 @@ class Performance extends Component {
                 let { analyticsMediaspends } = this.props;
                 this.setState({ priorAnalyticsMediaspends: analyticsMediaspends });
 
-                resolve();
+                resolve(analyticsMediaspends);
             }, err => {
                 reject(err);
             });
         });
 
-        Promise.all([p1, p2, p3, p4]).then(() => {
-            Promise.all([
-                this.setPerformanceValues(this.state.currentAnalyticsOverview, 'current'),
-                this.setPerformanceValues(this.state.priorAnalyticsOverview, 'prior')
-            ]).then(() => {
-                this.changeCaculation();
+        Promise.all([p1, p2, p3, p4]).then((values) => {
+            this.setPerformanceValuesForCurrent(values[0]).then((res) => {
+                return res;
+            }).then((res) => {
+                this.setPerformanceValuesForPrior(values[2]).then((res) => {
+                    this.changeCaculation();
+                });
             });
         }).then(() => {
             this.setState({ loading: false });
