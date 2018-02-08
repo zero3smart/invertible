@@ -14,14 +14,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import async from 'async';
 
-function rgb2hex(rgb) {
-    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-    return (rgb && rgb.length === 4) ? "#" +
-        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
-}
-
 class Performance extends Component {
     constructor(props) {
         super(props);
@@ -84,6 +76,14 @@ class Performance extends Component {
         }, () => {
             this.fetchPerformanceData();
         });
+    }
+
+    rgb2hex(rgb) {
+        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+        return (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
     }
 
     percentFormatter(cell, row) {
@@ -196,54 +196,54 @@ class Performance extends Component {
     addColorToAnalytics(analytics) {
         analytics.forEach((elm) => {
             if (elm["mediaSpends"] >= 0)
-                elm["mediaSpendsColor"] = rgb2hex(Color("#3962B7").alpha(elm["mediaSpends"] / 100).rgb().string());
+                elm["mediaSpendsColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["mediaSpends"] / 100).rgb().string());
             else
-                elm["mediaSpendsColor"] = rgb2hex(Color("#008000").alpha(elm["mediaSpends"] / 100).rgb().string());
+                elm["mediaSpendsColor"] = this.rgb2hex(Color("#008000").alpha(elm["mediaSpends"] / 100).rgb().string());
 
             if (elm["cpa"] >= 0)
-                elm["cpaColor"] = rgb2hex(Color("#3962B7").alpha(elm["cpa"] / 100).rgb().string());
+                elm["cpaColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["cpa"] / 100).rgb().string());
             else
-                elm["cpaColor"] = rgb2hex(Color("#008000").alpha(elm["cpa"] / 100).rgb().string());
+                elm["cpaColor"] = this.rgb2hex(Color("#008000").alpha(elm["cpa"] / 100).rgb().string());
 
             if (elm["visits"] >= 0)
-                elm["visitsColor"] = rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
+                elm["visitsColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
             else
-                elm["visitsColor"] = rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
+                elm["visitsColor"] = this.rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
 
             if (elm["transactions"] >= 0)
-                elm["transactionsColor"] = rgb2hex(Color("#3962B7").alpha(0.2).rgb().string());
+                elm["transactionsColor"] = this.rgb2hex(Color("#3962B7").alpha(0.2).rgb().string());
             else
-                elm["transactionsColor"] = rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
+                elm["transactionsColor"] = this.rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
 
             if (elm["bounceRate"] >= 0)
-                elm["bounceRateColor"] = rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
+                elm["bounceRateColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
             else
-                elm["bounceRateColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
+                elm["bounceRateColor"] = this.rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
 
             if (elm["mediaSpendsChg"] >= 0)
-                elm["mediaSpendsChgColor"] = rgb2hex(Color("#008000").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
+                elm["mediaSpendsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
             else
-                elm["mediaSpendsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
+                elm["mediaSpendsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
 
             if (elm["cpaChg"] >= 0)
-                elm["cpaChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["cpaChg"] / 100).rgb().string());
+                elm["cpaChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["cpaChg"] / 100).rgb().string());
             else
-                elm["cpaChgColor"] = rgb2hex(Color("#008000").alpha(elm["cpaChg"] / 100).rgb().string());
+                elm["cpaChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["cpaChg"] / 100).rgb().string());
 
             if (elm["visitsChg"] >= 0)
-                elm["visitsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
+                elm["visitsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
             else
-                elm["visitsChgColor"] = rgb2hex(Color("#008000").alpha(elm["visitsChg"] / 100).rgb().string());
+                elm["visitsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["visitsChg"] / 100).rgb().string());
 
             if (elm["transactionsChg"] >= 0)
-                elm["transactionsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
+                elm["transactionsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
             else
-                elm["transactionsChgColor"] = rgb2hex(Color("#008000").alpha(elm["transactionsChg"] / 100).rgb().string());
+                elm["transactionsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["transactionsChg"] / 100).rgb().string());
 
             if (elm["bounceRateChg"] >= 0)
-                elm["bounceRateChgColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
+                elm["bounceRateChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
             else
-                elm["bounceRateChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["bounceRateChg"] / 100).rgb().string());
+                elm["bounceRateChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["bounceRateChg"] / 100).rgb().string());
         });
 
         return analytics;
