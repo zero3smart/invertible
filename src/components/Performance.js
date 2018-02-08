@@ -231,19 +231,19 @@ class Performance extends Component {
                 elm["cpaChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["cpaChg"] / 100).rgb().string());
 
             if (elm["visitsChg"] >= 0)
-                elm["visitsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
-            else
                 elm["visitsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["visitsChg"] / 100).rgb().string());
+            else
+                elm["visitsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
 
             if (elm["transactionsChg"] >= 0)
-                elm["transactionsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
-            else
                 elm["transactionsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["transactionsChg"] / 100).rgb().string());
+            else
+                elm["transactionsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
 
             if (elm["bounceRateChg"] >= 0)
-                elm["bounceRateChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
-            else
                 elm["bounceRateChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["bounceRateChg"] / 100).rgb().string());
+            else
+                elm["bounceRateChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
         });
 
         return analytics;
@@ -332,11 +332,11 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)),
-                cpaChg: Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)),
-                visitsChg: Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)),
-                transactionsChg: Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)),
-                bounceRateChg: Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3))
+                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)) * 100),
+                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)) * 100),
+                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)) * 100),
+                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)) * 100),
+                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3)) * 100)
             };
             chgReportTable.push(_obj);
         });
