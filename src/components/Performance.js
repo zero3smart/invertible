@@ -271,7 +271,7 @@ class Performance extends Component {
             per = values[0].concat(values[2]);
 
             let newPer = per.map((row) => {
-                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
                 row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
                 return row;
             });
