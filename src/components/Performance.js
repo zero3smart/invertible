@@ -923,7 +923,7 @@ class Performance extends Component {
                     <BootstrapTable data={this.state.currentReportTable} striped={true} hover={true}>
                         <TableHeaderColumn dataField="id" isKey={true} hidden={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
                         <TableHeaderColumn dataField="rValue" dataSort={true}>Device</TableHeaderColumn>
-                        <TableHeaderColumn dataField="mediaSpends" dataFormat={this.commaFormatter}>Media Spends</TableHeaderColumn>
+                        <TableHeaderColumn dataField="mediaSpends" dataFormat={this.priceFormatter}>Media Spends</TableHeaderColumn>
                         <TableHeaderColumn dataField="cpa" dataFormat={this.priceFormatter}>CPA</TableHeaderColumn>
                         <TableHeaderColumn dataField="visits" dataFormat={this.commaFormatter}>Visits</TableHeaderColumn>
                         <TableHeaderColumn dataField="bounceRate" dataFormat={this.percentFormatter}>Bounce Rate</TableHeaderColumn>
