@@ -14,167 +14,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import async from 'async';
 
-var mediaSpendsData = [
-    {
-        "medium": "All Devices",
-        "value": 2,
-        "color": rgb2hex(Color("#3962B7").alpha(2 / 100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 125,
-        "color": rgb2hex(Color("#3962B7").alpha(25 / 100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 14,
-        "color": rgb2hex(Color("#3962B7").alpha(14 / 100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 139,
-        "color": rgb2hex(Color("#3962B7").alpha(139 / 100).rgb().string())
-    }
-];
-
-var mediaSpendsChgData = [
-    {
-        "medium": "All Devices",
-        "value": 2,
-        "color": rgb2hex(Color("#008000").alpha(2/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": -25,
-        "color": rgb2hex(Color("#FF0F00").alpha(25/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 14,
-        "color": rgb2hex(Color("#008000").alpha(14/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 139,
-        "color": rgb2hex(Color("#008000").alpha(139/100).rgb().string())
-    }
-];
-
-var cpaData = [
-    {
-        "medium": "All Devices",
-        "value": 26,
-        "color": rgb2hex(Color("#3962B7").alpha(26 / 100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 45,
-        "color": rgb2hex(Color("#3962B7").alpha(45 / 100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 78,
-        "color": rgb2hex(Color("#3962B7").alpha(78 / 100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 140,
-        "color": rgb2hex(Color("#3962B7").alpha(140 / 100).rgb().string())
-    }
-];
-
-var cpaChgData = [
-    {
-        "medium": "All Devices",
-        "value": 212,
-        "color": rgb2hex(Color("#FF0F00").alpha(2 / 100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": -251,
-        "color": rgb2hex(Color("#008000").alpha(25 / 100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 124,
-        "color": rgb2hex(Color("#FF0F00").alpha(14 / 100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 239,
-        "color": rgb2hex(Color("#FF0F00").alpha(139 / 100).rgb().string())
-    }
-];
-
-var bounceRateChgData = [
-    {
-        "medium": "All Devices",
-        "value": -10.4,
-        "color": rgb2hex(Color("#008000").alpha(10.4/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 9.6,
-        "color": rgb2hex(Color("#FF0F00").alpha(9.6/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": -15.8,
-        "color": rgb2hex(Color("#008000").alpha(15.8/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 1.8,
-        "color": rgb2hex(Color("#FF0F00").alpha(1.8/100).rgb().string())
-    }
-];
-
-var transactionChgData = [
-    {
-        "medium": "All Devices",
-        "value": 270,
-        "color": rgb2hex(Color("#008000").alpha(270/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 255,
-        "color": rgb2hex(Color("#008000").alpha(255/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 100,
-        "color": rgb2hex(Color("#008000").alpha(100/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 100,
-        "color": rgb2hex(Color("#008000").alpha(100/100).rgb().string())
-    }
-];
-
-var visitsChgData = [
-    {
-        "medium": "All Devices",
-        "value": 35,
-        "color": rgb2hex(Color("#008000").alpha(35/100).rgb().string())
-    },
-    {
-        "medium": "Desktop",
-        "value": 22,
-        "color": rgb2hex(Color("#008000").alpha(22/100).rgb().string())
-    },
-    {
-        "medium": "Mobile",
-        "value": 38,
-        "color": rgb2hex(Color("#008000").alpha(38/100).rgb().string())
-    },
-    {
-        "medium": "Tablet",
-        "value": 46,
-        "color": rgb2hex(Color("#008000").alpha(46/100).rgb().string())
-    }
-];
-
 function rgb2hex(rgb) {
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
     return (rgb && rgb.length === 4) ? "#" +
@@ -353,10 +192,15 @@ class Performance extends Component {
 
     addColorToAnalytics(analytics) {
         analytics.forEach((elm) => {
-            if (elm["cpg"] >= 0)
-                elm["cpgColor"] = rgb2hex(Color("#3962B7").alpha(elm["cpg"] / 100).rgb().string());
+            if (elm["mediaSpends"] >= 0)
+                elm["mediaSpendsColor"] = rgb2hex(Color("#3962B7").alpha(elm["mediaSpends"] / 100).rgb().string());
             else
-                elm["cpgColor"] = rgb2hex(Color("#008000").alpha(elm["cpg"] / 100).rgb().string());
+                elm["mediaSpendsColor"] = rgb2hex(Color("#008000").alpha(elm["mediaSpends"] / 100).rgb().string());
+
+            if (elm["cpa"] >= 0)
+                elm["cpaColor"] = rgb2hex(Color("#3962B7").alpha(elm["cpa"] / 100).rgb().string());
+            else
+                elm["cpaColor"] = rgb2hex(Color("#008000").alpha(elm["cpa"] / 100).rgb().string());
 
             if (elm["visits"] >= 0)
                 elm["visitsColor"] = rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
@@ -378,10 +222,10 @@ class Performance extends Component {
             else
                 elm["mediaSpendsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
 
-            if (elm["cpgChg"] >= 0)
-                elm["cpgChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["cpgChg"] / 100).rgb().string());
+            if (elm["cpaChg"] >= 0)
+                elm["cpaChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["cpaChg"] / 100).rgb().string());
             else
-                elm["cpgChgColor"] = rgb2hex(Color("#008000").alpha(elm["cpgChg"] / 100).rgb().string());
+                elm["cpaChgColor"] = rgb2hex(Color("#008000").alpha(elm["cpaChg"] / 100).rgb().string());
 
             if (elm["visitsChg"] >= 0)
                 elm["visitsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
@@ -429,10 +273,11 @@ class Performance extends Component {
                 return row;
             });
 
-            if (periodType == 'current')
+            if (periodType == 'current') {
                 this.setState({ currentReportTable: newPer });
-            else if (periodType == 'prior')
+            } else if (periodType == 'prior') {
                 this.setState({ priorReportTable: newPer });
+            }
         }, err => {
 
         });
@@ -447,18 +292,17 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: this.precise(item.mediaSpends / priorReportTable[index].mediaSpends - 1),
-                cpaChg: this.precise(item.cpa / priorReportTable[index].cpa - 1),
-                visitsChg: this.precise(item.visits / priorReportTable[index].visits - 1),
-                transactionsChg: this.precise(item.transactions / priorReportTable[index].transactions - 1),
-                bounceRateChg: this.precise(item.bounceRate / priorReportTable[index].bounceRate - 1)
+                mediaSpendsChg: Number.parseFloat((item.mediaSpends / priorReportTable[index].mediaSpends - 1).toFixed(3)),
+                cpaChg: Number.parseFloat((item.cpa / priorReportTable[index].cpa - 1).toFixed(3)),
+                visitsChg: Number.parseFloat((item.visits / priorReportTable[index].visits - 1).toFixed(3)),
+                transactionsChg: Number.parseFloat((item.transactions / priorReportTable[index].transactions - 1).toFixed(3)),
+                bounceRateChg: Number.parseFloat((item.bounceRate / priorReportTable[index].bounceRate - 1).toFixed(3))
             };
             chgReportTable.push(_obj);
         });
 
-        debugger;
-        this.setState({chgReportTable: this.addColorToAnalytics(chgReportTable)});
-        debugger;
+        let tmp = this.addColorToAnalytics(chgReportTable);
+        this.setState({chgReportTable: tmp});
     }
 
     fetchPerformanceData() {
@@ -512,28 +356,15 @@ class Performance extends Component {
             });
         });
 
-        let p5 = Promise.all([p1, p2, p3, p4]).then(() => {
-            this.setPerformanceValues(this.state.currentAnalyticsOverview, 'current');
-            this.setPerformanceValues(this.state.priorAnalyticsOverview, 'prior');
-
-            return Promise.resolve();
-
-        }, err => {
-            return Promise.reject();
-        });
-
-        let p6 = p5.then(() => {
-            this.changeCaculation();
-            return Promise.resolve();
-        }, err => {
-            return Promise.reject();
-        });
-
-        p6.then(() => {
-            console.log(this.state.chgReportTable);
+        Promise.all([p1, p2, p3, p4]).then(() => {
+            Promise.all([
+                this.setPerformanceValues(this.state.currentAnalyticsOverview, 'current'),
+                this.setPerformanceValues(this.state.priorAnalyticsOverview, 'prior')
+            ]).then(() => {
+                this.changeCaculation();
+            });
+        }).then(() => {
             this.setState({ loading: false });
-        }, err => {
-
         });
     }
 
@@ -557,9 +388,9 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": mediaSpendsData,
+                    "dataProvider": this.state.currentReportTable,
                     "titles": [{
-                        "text": "Media Spends Change",
+                        "text": "Media Spends",
                         "size": 22
                     }],
                     "valueAxes": [{
@@ -567,7 +398,7 @@ class Performance extends Component {
                         "position": "left",
                         "unit": "$",
                         "unitPosition": "left",
-                        "title": "Avg. Media Spends Chg",
+                        "title": "Media Spends",
                         "titleFontSize": 22,
                         "fontSize": 18
                     }],
@@ -575,18 +406,18 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "$[[value]]",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "mediaSpendsColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "mediaSpends"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
@@ -656,7 +487,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": cpaData,
+                    "dataProvider": this.state.currentReportTable,
                     "titles": [{
                         "text": "CPA",
                         "size": 22
@@ -674,18 +505,18 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "$[[value]]",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "cpaColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "cpa"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
@@ -723,7 +554,7 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "cpgChgColor",
+                        "fillColorsField": "cpaChgColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
