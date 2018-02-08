@@ -12,6 +12,7 @@ import DatePicker from 'react-datepicker';
 import { fetchPerformance, fetchMediaspends } from '../actions/analyticsActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import async from 'async';
 
 var mediaSpendsData = [
     {
@@ -196,6 +197,7 @@ class Performance extends Component {
             priorAnalyticsMediaspends: [],
             currentReportTable: [],
             priorReportTable: [],
+            chgReportTable: [],
             mediaSpendsKeyMap: {
                 'Mobile': 'mobile',
                 'Desktop': 'desktop',
@@ -351,6 +353,11 @@ class Performance extends Component {
 
     addColorToAnalytics(analytics) {
         analytics.forEach((elm) => {
+            if (elm["cpg"] >= 0)
+                elm["cpgColor"] = rgb2hex(Color("#3962B7").alpha(elm["cpg"] / 100).rgb().string());
+            else
+                elm["cpgColor"] = rgb2hex(Color("#008000").alpha(elm["cpg"] / 100).rgb().string());
+
             if (elm["visits"] >= 0)
                 elm["visitsColor"] = rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
             else
@@ -365,6 +372,31 @@ class Performance extends Component {
                 elm["bounceRateColor"] = rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
             else
                 elm["bounceRateColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
+
+            if (elm["mediaSpendsChg"] >= 0)
+                elm["mediaSpendsChgColor"] = rgb2hex(Color("#008000").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
+            else
+                elm["mediaSpendsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
+
+            if (elm["cpgChg"] >= 0)
+                elm["cpgChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["cpgChg"] / 100).rgb().string());
+            else
+                elm["cpgChgColor"] = rgb2hex(Color("#008000").alpha(elm["cpgChg"] / 100).rgb().string());
+
+            if (elm["visitsChg"] >= 0)
+                elm["visitsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
+            else
+                elm["visitsChgColor"] = rgb2hex(Color("#008000").alpha(elm["visitsChg"] / 100).rgb().string());
+
+            if (elm["transactionsChg"] >= 0)
+                elm["transactionsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
+            else
+                elm["transactionsChgColor"] = rgb2hex(Color("#008000").alpha(elm["transactionsChg"] / 100).rgb().string());
+
+            if (elm["bounceRateChg"] >= 0)
+                elm["bounceRateChgColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
+            else
+                elm["bounceRateChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["bounceRateChg"] / 100).rgb().string());
         });
 
         return analytics;
@@ -389,15 +421,13 @@ class Performance extends Component {
         })
 
         Promise.all([p1, p2, p3]).then((values) => {
-            debugger;
             per = values[0].concat(values[2]);
 
             let newPer = per.map((row) => {
                 row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
                 return row;
             });
-
-            debugger;
 
             if (periodType == 'current')
                 this.setState({ currentReportTable: newPer });
@@ -406,6 +436,29 @@ class Performance extends Component {
         }, err => {
 
         });
+    }
+
+    changeCaculation() {
+        let currentReportTable = this.state.currentReportTable;
+        let priorReportTable = this.state.priorReportTable;
+
+        let chgReportTable = [];
+
+        currentReportTable.forEach((item, index) => {
+            let _obj = {
+                rValue: item.rValue,
+                mediaSpendsChg: this.precise(item.mediaSpends / priorReportTable[index].mediaSpends - 1),
+                cpaChg: this.precise(item.cpa / priorReportTable[index].cpa - 1),
+                visitsChg: this.precise(item.visits / priorReportTable[index].visits - 1),
+                transactionsChg: this.precise(item.transactions / priorReportTable[index].transactions - 1),
+                bounceRateChg: this.precise(item.bounceRate / priorReportTable[index].bounceRate - 1)
+            };
+            chgReportTable.push(_obj);
+        });
+
+        debugger;
+        this.setState({chgReportTable: this.addColorToAnalytics(chgReportTable)});
+        debugger;
     }
 
     fetchPerformanceData() {
@@ -459,9 +512,25 @@ class Performance extends Component {
             });
         });
 
-        Promise.all([p1, p2, p3, p4]).then(() => {
+        let p5 = Promise.all([p1, p2, p3, p4]).then(() => {
             this.setPerformanceValues(this.state.currentAnalyticsOverview, 'current');
             this.setPerformanceValues(this.state.priorAnalyticsOverview, 'prior');
+
+            return Promise.resolve();
+
+        }, err => {
+            return Promise.reject();
+        });
+
+        let p6 = p5.then(() => {
+            this.changeCaculation();
+            return Promise.resolve();
+        }, err => {
+            return Promise.reject();
+        });
+
+        p6.then(() => {
+            console.log(this.state.chgReportTable);
             this.setState({ loading: false });
         }, err => {
 
@@ -538,7 +607,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": mediaSpendsChgData,
+                    "dataProvider": this.state.chgReportTable,
                     "titles": [{
                         "text": "Media Spends Change",
                         "size": 22
@@ -555,18 +624,18 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "mediaSpendsChgColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "mediaSpendsChg"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
@@ -637,7 +706,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": cpaChgData,
+                    "dataProvider": this.state.chgReportTable,
                     "titles": [{
                         "text": "CPA Change",
                         "size": 22
@@ -654,18 +723,18 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "cpgChgColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "cpaChg"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
@@ -735,7 +804,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": bounceRateChgData,
+                    "dataProvider": this.state.chgReportTable,
                     "titles": [{
                         "text": "Bounce Rate Chg",
                         "size": 22
@@ -752,19 +821,19 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "bounceRateChgColor",
                         "fillAlphas": 0.9,
                         "step": 4,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "bounceRateChg"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
@@ -833,7 +902,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": transactionChgData,
+                    "dataProvider": this.state.chgReportTable,
                     "titles": [{
                         "text": "Transactions Chg",
                         "size": 22
@@ -850,18 +919,18 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "transactionChgColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "transactionsChg"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
@@ -930,7 +999,7 @@ class Performance extends Component {
                     "type": "serial",
                     "theme": "light",
                     "marginRight": 70,
-                    "dataProvider": visitsChgData,
+                    "dataProvider": this.state.chgReportTable,
                     "titles": [{
                         "text": "Visits Chg",
                         "size": 22
@@ -947,18 +1016,18 @@ class Performance extends Component {
                     "graphs": [{
                         "labelText": "[[value]]%",
                         "fontSize": 18,
-                        "fillColorsField": "color",
+                        "fillColorsField": "visitsChgColor",
                         "fillAlphas": 0.9,
                         "lineAlpha": 0.2,
                         "type": "column",
-                        "valueField": "value"
+                        "valueField": "visitsChg"
                     }],
                     "chartCursor": {
                         "categoryBalloonEnabled": false,
                         "cursorAlpha": 0,
                         "zoomable": false
                     },
-                    "categoryField": "medium",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "fontSize": 18
