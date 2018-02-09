@@ -18,10 +18,10 @@ class Performance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentStartDate: moment(new Date('2018-01-04T10:00:00')),
-            currentEndDate: moment(new Date('2018-01-05T10:00:00')),
+            currentStartDate: moment(new Date('2018-01-15T10:00:00')),
+            currentEndDate: moment(new Date('2018-01-28T10:00:00')),
             priorStartDate: moment(new Date('2018-01-01T10:00:00')),
-            priorEndDate: moment(new Date('2018-01-02T10:00:00')), //moment().add(-7, 'days'),
+            priorEndDate: moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -323,9 +323,14 @@ class Performance extends Component {
         return p4;
     }
 
-    changeCaculation() {
+    changeCalculation() {
         let currentReportTable = this.state.currentReportTable;
         let priorReportTable = this.state.priorReportTable;
+
+        debugger;
+
+        currentReportTable = _.orderBy(currentReportTable, ['rValue'], ['asc']);
+        priorReportTable = _.orderBy(priorReportTable, ['rValue'], ['asc']);
 
         let chgReportTable = [];
 
@@ -401,7 +406,7 @@ class Performance extends Component {
                 return res;
             }).then((res) => {
                 this.setPerformanceValuesForPrior(values[2]).then((res) => {
-                    this.changeCaculation();
+                    this.changeCalculation();
                 });
             });
         }).then(() => {
