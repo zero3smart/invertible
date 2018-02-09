@@ -327,8 +327,6 @@ class Performance extends Component {
         let currentReportTable = this.state.currentReportTable;
         let priorReportTable = this.state.priorReportTable;
 
-        debugger;
-
         currentReportTable = _.orderBy(currentReportTable, ['rValue'], ['asc']);
         priorReportTable = _.orderBy(priorReportTable, ['rValue'], ['asc']);
 
