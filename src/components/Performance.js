@@ -14,22 +14,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import async from 'async';
 
-function rgb2hex(rgb) {
-    rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-    return (rgb && rgb.length === 4) ? "#" +
-        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
-}
-
 class Performance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentStartDate: moment(new Date('2018-01-01T10:00:00')),
-            currentEndDate: moment(new Date('2018-01-02T10:00:00')),
-            priorStartDate: moment(new Date('2017-12-08T10:00:00')),
-            priorEndDate: moment().add(-7, 'days'),
+            currentStartDate: moment(new Date('2018-01-15T10:00:00')),
+            currentEndDate: moment(new Date('2018-01-28T10:00:00')),
+            priorStartDate: moment(new Date('2018-01-01T10:00:00')),
+            priorEndDate: moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -84,6 +76,14 @@ class Performance extends Component {
         }, () => {
             this.fetchPerformanceData();
         });
+    }
+
+    rgb2hex(rgb) {
+        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+        return (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
     }
 
     percentFormatter(cell, row) {
@@ -196,60 +196,60 @@ class Performance extends Component {
     addColorToAnalytics(analytics) {
         analytics.forEach((elm) => {
             if (elm["mediaSpends"] >= 0)
-                elm["mediaSpendsColor"] = rgb2hex(Color("#3962B7").alpha(elm["mediaSpends"] / 100).rgb().string());
+                elm["mediaSpendsColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["mediaSpends"] / 100).rgb().string());
             else
-                elm["mediaSpendsColor"] = rgb2hex(Color("#008000").alpha(elm["mediaSpends"] / 100).rgb().string());
+                elm["mediaSpendsColor"] = this.rgb2hex(Color("#008000").alpha(elm["mediaSpends"] / 100).rgb().string());
 
             if (elm["cpa"] >= 0)
-                elm["cpaColor"] = rgb2hex(Color("#3962B7").alpha(elm["cpa"] / 100).rgb().string());
+                elm["cpaColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["cpa"] / 100).rgb().string());
             else
-                elm["cpaColor"] = rgb2hex(Color("#008000").alpha(elm["cpa"] / 100).rgb().string());
+                elm["cpaColor"] = this.rgb2hex(Color("#008000").alpha(elm["cpa"] / 100).rgb().string());
 
             if (elm["visits"] >= 0)
-                elm["visitsColor"] = rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
+                elm["visitsColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["visits"] / 100).rgb().string());
             else
-                elm["visitsColor"] = rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
+                elm["visitsColor"] = this.rgb2hex(Color("#008000").alpha(elm["visits"] / 100).rgb().string());
 
             if (elm["transactions"] >= 0)
-                elm["transactionsColor"] = rgb2hex(Color("#3962B7").alpha(0.2).rgb().string());
+                elm["transactionsColor"] = this.rgb2hex(Color("#3962B7").alpha(0.2).rgb().string());
             else
-                elm["transactionsColor"] = rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
+                elm["transactionsColor"] = this.rgb2hex(Color("#008000").alpha(elm["transactions"] / 100).rgb().string());
 
             if (elm["bounceRate"] >= 0)
-                elm["bounceRateColor"] = rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
+                elm["bounceRateColor"] = this.rgb2hex(Color("#3962B7").alpha(elm["bounceRate"] / 100).rgb().string());
             else
-                elm["bounceRateColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
+                elm["bounceRateColor"] = this.rgb2hex(Color("#008000").alpha(elm["bounceRate"] / 100).rgb().string());
 
             if (elm["mediaSpendsChg"] >= 0)
-                elm["mediaSpendsChgColor"] = rgb2hex(Color("#008000").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
+                elm["mediaSpendsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
             else
-                elm["mediaSpendsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
+                elm["mediaSpendsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["mediaSpendsChg"] / 100).rgb().string());
 
             if (elm["cpaChg"] >= 0)
-                elm["cpaChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["cpaChg"] / 100).rgb().string());
+                elm["cpaChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["cpaChg"] / 100).rgb().string());
             else
-                elm["cpaChgColor"] = rgb2hex(Color("#008000").alpha(elm["cpaChg"] / 100).rgb().string());
+                elm["cpaChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["cpaChg"] / 100).rgb().string());
 
             if (elm["visitsChg"] >= 0)
-                elm["visitsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
+                elm["visitsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["visitsChg"] / 100).rgb().string());
             else
-                elm["visitsChgColor"] = rgb2hex(Color("#008000").alpha(elm["visitsChg"] / 100).rgb().string());
+                elm["visitsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["visitsChg"] / 100).rgb().string());
 
             if (elm["transactionsChg"] >= 0)
-                elm["transactionsChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
+                elm["transactionsChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["transactionsChg"] / 100).rgb().string());
             else
-                elm["transactionsChgColor"] = rgb2hex(Color("#008000").alpha(elm["transactionsChg"] / 100).rgb().string());
+                elm["transactionsChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["transactionsChg"] / 100).rgb().string());
 
             if (elm["bounceRateChg"] >= 0)
-                elm["bounceRateChgColor"] = rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
+                elm["bounceRateChgColor"] = this.rgb2hex(Color("#FF0F00").alpha(elm["bounceRateChg"] / 100).rgb().string());
             else
-                elm["bounceRateChgColor"] = rgb2hex(Color("#FF0F00").alpha(elm["bounceRateChg"] / 100).rgb().string());
+                elm["bounceRateChgColor"] = this.rgb2hex(Color("#008000").alpha(elm["bounceRateChg"] / 100).rgb().string());
         });
 
         return analytics;
     }
 
-    setPerformanceValues(analyticsOverview, periodType) {
+    setPerformanceValuesForCurrent(analyticsOverview) {
         let per;
 
         let p1 = new Promise((resolve, reject) => {
@@ -267,39 +267,79 @@ class Performance extends Component {
             resolve(per3);
         })
 
-        Promise.all([p1, p2, p3]).then((values) => {
+        let p4 = Promise.all([p1, p2, p3]).then((values) => {
             per = values[0].concat(values[2]);
 
             let newPer = per.map((row) => {
-                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
+                row["cpa"] = row["transactions"] !== 0 ? Math.round(this.precise(row["mediaSpends"] / row["transactions"])) : 0;
+                return row;
+            });
+
+            this.setState({ currentReportTable: newPer });
+
+            return Promise.resolve(newPer);
+        }, err => {
+            return Promise.reject(err);
+        });
+
+        return p4;
+    }
+
+    setPerformanceValuesForPrior(analyticsOverview) {
+        let per;
+
+        let p1 = new Promise((resolve, reject) => {
+            let per1 = this.getFilteredListForOverview(analyticsOverview, 'devicecategory');
+            resolve(per1);
+        });
+
+        let p2 = new Promise((resolve, reject) => {
+            let per2 = this.getFilteredListForMediaspends(this.state.priorAnalyticsMediaspends, '');
+            resolve(per2);
+        });
+
+        let p3 = new Promise((resolve, reject) => {
+            let per3 = this.getFilteredListForOverview(analyticsOverview, '');
+            resolve(per3);
+        })
+
+        let p4 = Promise.all([p1, p2, p3]).then((values) => {
+            per = values[0].concat(values[2]);
+
+            let newPer = per.map((row) => {
+                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
                 row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
                 return row;
             });
 
-            if (periodType == 'current') {
-                this.setState({ currentReportTable: newPer });
-            } else if (periodType == 'prior') {
-                this.setState({ priorReportTable: newPer });
-            }
-        }, err => {
+            this.setState({ priorReportTable: newPer });
 
+            return Promise.resolve(newPer);
+        }, err => {
+            return Promise.reject(err);
         });
+
+        return p4;
     }
 
-    changeCaculation() {
+    changeCalculation() {
         let currentReportTable = this.state.currentReportTable;
         let priorReportTable = this.state.priorReportTable;
+
+        currentReportTable = _.orderBy(currentReportTable, ['rValue'], ['asc']);
+        priorReportTable = _.orderBy(priorReportTable, ['rValue'], ['asc']);
 
         let chgReportTable = [];
 
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)),
-                cpaChg: Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)),
-                visitsChg: Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)),
-                transactionsChg: Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)),
-                bounceRateChg: Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3))
+                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)) * 100),
+                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)) * 100),
+                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)) * 100),
+                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)) * 100),
+                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3)) * 100)
             };
             chgReportTable.push(_obj);
         });
@@ -320,7 +360,7 @@ class Performance extends Component {
                 let { analyticsOverview } = this.props;
                 this.setState({ currentAnalyticsOverview: analyticsOverview });
 
-                resolve();
+                resolve(analyticsOverview);
             }, err => {
                 reject(err);
             });
@@ -331,7 +371,7 @@ class Performance extends Component {
                 let { analyticsMediaspends } = this.props;
                 this.setState({ currentAnalyticsMediaspends: analyticsMediaspends });
 
-                resolve();
+                resolve(analyticsMediaspends);
             }, err => {
                 reject(err);
             });
@@ -342,7 +382,7 @@ class Performance extends Component {
                 let { analyticsOverview } = this.props;
                 this.setState({ priorAnalyticsOverview: analyticsOverview });
 
-                resolve();
+                resolve(analyticsOverview);
             }, err => {
                 reject(err);
             });
@@ -353,18 +393,19 @@ class Performance extends Component {
                 let { analyticsMediaspends } = this.props;
                 this.setState({ priorAnalyticsMediaspends: analyticsMediaspends });
 
-                resolve();
+                resolve(analyticsMediaspends);
             }, err => {
                 reject(err);
             });
         });
 
-        Promise.all([p1, p2, p3, p4]).then(() => {
-            Promise.all([
-                this.setPerformanceValues(this.state.currentAnalyticsOverview, 'current'),
-                this.setPerformanceValues(this.state.priorAnalyticsOverview, 'prior')
-            ]).then(() => {
-                this.changeCaculation();
+        Promise.all([p1, p2, p3, p4]).then((values) => {
+            this.setPerformanceValuesForCurrent(values[0]).then((res) => {
+                return res;
+            }).then((res) => {
+                this.setPerformanceValuesForPrior(values[2]).then((res) => {
+                    this.changeCalculation();
+                });
             });
         }).then(() => {
             this.setState({ loading: false });
