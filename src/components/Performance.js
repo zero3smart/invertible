@@ -272,7 +272,7 @@ class Performance extends Component {
 
             let newPer = per.map((row) => {
                 row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
-                row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
+                row["cpa"] = row["transactions"] !== 0 ? Math.round(this.precise(row["mediaSpends"] / row["transactions"])) : 0;
                 return row;
             });
 
