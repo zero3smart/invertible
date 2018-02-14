@@ -327,8 +327,11 @@ class Performance extends Component {
         let currentReportTable = this.state.currentReportTable;
         let priorReportTable = this.state.priorReportTable;
 
-        currentReportTable = _.orderBy(currentReportTable, ['rValue'], ['asc']);
-        priorReportTable = _.orderBy(priorReportTable, ['rValue'], ['asc']);
+        currentReportTable = _.orderBy(currentReportTable, ['rValue'], ['dsc']);
+        priorReportTable = _.orderBy(priorReportTable, ['rValue'], ['dsc']);
+
+        this.setState({ currentReportTable });
+        this.setState({ priorReportTable });
 
         let chgReportTable = [];
 
