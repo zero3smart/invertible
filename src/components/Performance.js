@@ -159,10 +159,7 @@ class Performance extends Component {
                         return parseFloat(s.bounces, 10);
                     }) / _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions, 10);
-                    }) * 100)),
-                    'signUps': 2187,
-                    'mediaSpends': 249,
-                    'cpa': 7853
+                    }) * 100))
                 };
             })
             .value();
@@ -279,8 +276,8 @@ class Performance extends Component {
             per = values[0].concat(values[2]);
 
             let newPer = per.map((row) => {
-                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
-                row["cpa"] = row["transactions"] !== 0 ? Math.round(this.precise(row["mediaSpends"] / row["transactions"])) : 0;
+                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
                 return row;
             });
 
