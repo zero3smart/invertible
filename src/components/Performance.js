@@ -17,11 +17,19 @@ import async from 'async';
 class Performance extends Component {
     constructor(props) {
         super(props);
+        let beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
+            , day = beforeOneWeek.getDay()
+            , diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1)
+            , lastMonday = new Date(beforeOneWeek.setDate(diffToMonday))
+            , lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
+        let beforeTwoWeeksMonday = new Date(lastMonday.getTime() - 60 * 60 * 24 * 7 * 1000)
+            , beforeTwoWeeksSunday = new Date(lastSunday.getTime() - 60 * 60 * 24 * 7 * 1000);
+
         this.state = {
-            currentStartDate: moment(new Date('2018-01-15T10:00:00')),
-            currentEndDate: moment(new Date('2018-01-28T10:00:00')),
-            priorStartDate: moment(new Date('2018-01-01T10:00:00')),
-            priorEndDate: moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
+            currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
+            priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
+            priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -454,7 +462,7 @@ class Performance extends Component {
                         "labelText": "$[[value]]",
                         "fontSize": 18,
                         "fillColorsField": "mediaSpendsColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "mediaSpends"
@@ -503,7 +511,7 @@ class Performance extends Component {
                         "labelText": "[[value]]%",
                         "fontSize": 18,
                         "fillColorsField": "mediaSpendsChgColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "mediaSpendsChg"
@@ -553,7 +561,7 @@ class Performance extends Component {
                         "labelText": "$[[value]]",
                         "fontSize": 18,
                         "fillColorsField": "cpaColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "cpa"
@@ -602,7 +610,7 @@ class Performance extends Component {
                         "labelText": "[[value]]%",
                         "fontSize": 18,
                         "fillColorsField": "cpaChgColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "cpaChg"
@@ -651,7 +659,7 @@ class Performance extends Component {
                         "labelText": "[[value]]%",
                         "fontSize": 18,
                         "fillColorsField": "bounceRateColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "bounceRate"
@@ -700,7 +708,7 @@ class Performance extends Component {
                         "labelText": "[[value]]%",
                         "fontSize": 18,
                         "fillColorsField": "bounceRateChgColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "step": 4,
                         "lineAlpha": 0.2,
                         "type": "column",
@@ -749,7 +757,7 @@ class Performance extends Component {
                         "labelText": "[[value]]",
                         "fontSize": 18,
                         "fillColorsField": "transactionsColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "transactions"
@@ -798,7 +806,7 @@ class Performance extends Component {
                         "labelText": "[[value]]%",
                         "fontSize": 18,
                         "fillColorsField": "transactionsChgColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "transactionsChg"
@@ -846,7 +854,7 @@ class Performance extends Component {
                         "labelText": "[[value]]",
                         "fontSize": 18,
                         "fillColorsField": "visitsColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "visits"
@@ -895,7 +903,7 @@ class Performance extends Component {
                         "labelText": "[[value]]%",
                         "fontSize": 18,
                         "fillColorsField": "visitsChgColor",
-                        "fillAlphas": 0.9,
+                        "fillAlphas": 0.7,
                         "lineAlpha": 0.2,
                         "type": "column",
                         "valueField": "visitsChg"
