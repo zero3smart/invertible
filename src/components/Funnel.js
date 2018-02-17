@@ -21,15 +21,30 @@ class Funnel extends Component {
         this.state = {
             currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            selectValue: '001',
-            searchable: true
+            landingPage: '001',
+            deviceCategory: '001',
+            channel: '001'
         }
-        this.updateValue = this.updateValue.bind(this);
+        this.updateLandingPage = this.updateLandingPage.bind(this);
+        this.updateDeviceCategory = this.updateDeviceCategory.bind(this);
+        this.updateChannel = this.updateChannel.bind(this);
     }
 
-    updateValue(newValue) {
+    updateLandingPage(newValue) {
         this.setState({
-            selectValue: newValue,
+            landingPage: newValue,
+        });
+    }
+
+    updateDeviceCategory(newValue) {
+        this.setState({
+            deviceCategory: newValue,
+        });
+    }
+
+    updateChannel(newValue) {
+        this.setState({
+            channel: newValue,
         });
     }
 
@@ -68,7 +83,7 @@ class Funnel extends Component {
                         <div className="">
                             <h6>Landing Page</h6>
                         </div>
-                        <div className="row landing-page-block">
+                        <div className="row">
                             <Select
                                 id="landing-page-select"
                                 ref={(ref) => { this.landingPageSelect = ref; }}
@@ -81,10 +96,60 @@ class Funnel extends Component {
                                 name="landing-page-select"
                                 disabled={false}
                                 className="landing-page-select"
-                                value={this.state.selectValue}
-                                onChange={this.updateValue}
+                                value={this.state.deviceCategory}
+                                onChange={this.updateDeviceCategory}
                                 rtl={false}
-                                searchable={this.state.searchable}
+                                searchable={true}
+                            />
+                        </div>
+                    </div>
+                    {/* Device Category */}
+                    <div className="col-md-3">
+                        <div className="">
+                            <h6>Device Category</h6>
+                        </div>
+                        <div className="row">
+                            <Select
+                                id="device-category-select"
+                                ref={(ref) => { this.deviceCategorySelect = ref; }}
+                                onBlurResetsInput={false}
+                                onSelectResetsInput={false}
+                                autoFocus
+                                options={options}
+                                simpleValue
+                                clearable={true}
+                                name="device-category-select"
+                                disabled={false}
+                                className="device-category-select"
+                                value={this.state.landingPage}
+                                onChange={this.updateLandingPage}
+                                rtl={false}
+                                searchable={true}
+                            />
+                        </div>
+                    </div>
+                    {/* Channel */}
+                    <div className="col-md-3">
+                        <div className="">
+                            <h6>Channel</h6>
+                        </div>
+                        <div className="row">
+                            <Select
+                                id="device-category-select"
+                                ref={(ref) => { this.channelSelect = ref; }}
+                                onBlurResetsInput={false}
+                                onSelectResetsInput={false}
+                                autoFocus
+                                options={options}
+                                simpleValue
+                                clearable={true}
+                                name="channel-select"
+                                disabled={false}
+                                className="channel-select"
+                                value={this.state.channel}
+                                onChange={this.updateChannel}
+                                rtl={false}
+                                searchable={true}
                             />
                         </div>
                     </div>
