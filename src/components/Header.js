@@ -59,6 +59,9 @@ class Header extends Component {
                     <li className="nav-item px-1">
                         <Link to="/explorer" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Explorer</Link>
                     </li>
+                    <li className="nav-item px-1">
+                        <Link to="/funnel" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Funnel</Link>
+                    </li>
                     <li className="nav-item px-1 d-none">
                         <Link to="/knowledge" activeClassName="active" onlyActiveOnIndex={true} className="nav-link">Knowledge</Link>
                     </li>
