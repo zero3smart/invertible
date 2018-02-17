@@ -164,7 +164,7 @@ class Performance extends Component {
             })
             .value();
 
-        return this.addColorToAnalytics(_filteredList);
+        return _filteredList;
     }
 
     getFilteredListForMediaspends(analytics, groupByAttr) {
@@ -281,9 +281,11 @@ class Performance extends Component {
                 return row;
             });
 
-            this.setState({ currentReportTable: newPer });
+            let tmp = this.addColorToAnalytics(newPer);
 
-            return Promise.resolve(newPer);
+            this.setState({ currentReportTable: tmp });
+
+            return Promise.resolve(tmp);
         }, err => {
             return Promise.reject(err);
         });
