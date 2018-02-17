@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import '../assets/stylesheets/components/Funnel.scss';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import { fetchFunnel } from '../actions/analyticsActions';
+import { bindActionCreators } from 'redux';
 
 class Funnel extends Component {
     constructor(props) {
@@ -179,4 +181,21 @@ class Funnel extends Component {
     }
 }
 
-export default Funnel;
+Funnel.PropTypes = {
+    analytics: PropTypes.array.isRequired,
+    actions: PropTypes.array.isRequired
+}
+
+function mapStateToProps(state) {
+    return {
+        analytics: state.funnel
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators({ fetchFunnel }, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Funnel);
