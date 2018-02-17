@@ -1,4 +1,7 @@
-import { SET_EXPLORER, SET_PERFORMANCE, SET_MEDIASPENDS } from './types';
+import { SET_EXPLORER,
+        SET_PERFORMANCE,
+        SET_MEDIASPENDS,
+        SET_FUNNEL } from './types';
 import axios from 'axios';
 
 export function setExplorer(analytics) {
@@ -18,6 +21,13 @@ export function setPerformance(analytics) {
 export function setMediaspends(analytics) {
     return {
         type: SET_MEDIASPENDS,
+        analytics
+    };
+}
+
+export function setFunnel(analytics) {
+    return {
+        type: SET_FUNNEL,
         analytics
     };
 }
@@ -58,6 +68,20 @@ export function fetchMediaspends(startDate, endDate) {
                 return;
             }
             dispatch(setMediaspends(res.data));
+        }, err => {
+
+        });
+    }
+}
+
+export function fetchFunnel(startDate, endDate) {
+    return dispatch => {
+        return axios.get(process.env.API_URL + '/g_analytics/funnel/' + startDate + '/' + endDate).then(res => {
+            if (res.status !== 200) {
+                console.log(`There was a problem: ${res.status}`);
+                return;
+            }
+            dispatch(setFunnel(res.data));
         }, err => {
 
         });

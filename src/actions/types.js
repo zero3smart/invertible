@@ -6,3 +6,4 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const SET_EXPLORER = 'SET_EXPLORER';
 export const SET_PERFORMANCE = 'SET_PERFORMANCE';
 export const SET_MEDIASPENDS = 'SET_MEDIASPENDS';
+export const SET_FUNNEL = 'SET_FUNNEL';

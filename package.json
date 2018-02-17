@@ -64,8 +64,6 @@
     "shortid": "2.2.8",
     "validator": "8.0.0",
     "webpack-hot-middleware": "^2.21.0",
-    "zingchart": "^2.1.2",
-    "zingchart-react": "^1.0.6"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
