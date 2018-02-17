@@ -21,9 +21,9 @@ class Funnel extends Component {
         this.state = {
             currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            landingPage: '001',
-            deviceCategory: '001',
-            channel: '001'
+            landingPage: 'add_to_bag_visits',
+            deviceCategory: 'mobile',
+            channel: 'direct'
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
         this.updateDeviceCategory = this.updateDeviceCategory.bind(this);
@@ -49,9 +49,29 @@ class Funnel extends Component {
     }
 
     render() {
-        let options = [
-            { value: '01', label: '001' },
-            { value: '02', label: '002' },
+        let optionsLandingPage = [
+            { value: 'add_to_bag_visits', label: 'Add to Bag Visits' },
+            { value: 'checkout_billing', label: 'Checkout Billing' },
+            { value: 'checkout_shipping', label: 'Checkout Shipping' },
+            { value: 'homepage_visits', label: 'Homepage Visits' },
+            { value: 'product_customization', label: 'Product Customization' },
+            { value: 'shop_pages', label: 'Shop Pages' }
+        ];
+
+        let optionsChannel = [
+            { value: 'direct', label: 'Direct' },
+            { value: 'display', label: 'Display' },
+            { value: 'email', label: 'Email' },
+            { value: 'organic_search', label: 'Organic Search' },
+            { value: 'paid_search', label: 'Paid Search' },
+            { value: 'referral', label: 'Referral' },
+            { value: 'social', label: 'Social' }
+        ];
+
+        let optionsDeviceCategory = [
+            { value: 'desktop', label: 'Desktop' },
+            { value: 'tablet', label: 'Tablet' },
+            { value: 'mobile', label: 'Mobile' }
         ];
 
         return (
@@ -90,14 +110,14 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={options}
+                                options={optionsLandingPage}
                                 simpleValue
                                 clearable={true}
                                 name="landing-page-select"
                                 disabled={false}
                                 className="landing-page-select"
-                                value={this.state.deviceCategory}
-                                onChange={this.updateDeviceCategory}
+                                value={this.state.landingPage}
+                                onChange={this.updateLandingPage}
                                 rtl={false}
                                 searchable={true}
                             />
@@ -115,14 +135,14 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={options}
+                                options={optionsDeviceCategory}
                                 simpleValue
                                 clearable={true}
                                 name="device-category-select"
                                 disabled={false}
                                 className="device-category-select"
-                                value={this.state.landingPage}
-                                onChange={this.updateLandingPage}
+                                value={this.state.deviceCategory}
+                                onChange={this.updateDeviceCategory}
                                 rtl={false}
                                 searchable={true}
                             />
@@ -140,7 +160,7 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={options}
+                                options={optionsChannel}
                                 simpleValue
                                 clearable={true}
                                 name="channel-select"
