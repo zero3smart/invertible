@@ -21,15 +21,37 @@ class Funnel extends Component {
             , lastMonday = new Date(beforeOneWeek.setDate(diffToMonday))
             , lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
         this.state = {
-            currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
-            currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            landingPage: 'add_to_bag_visits',
+            currentStartDate: moment(new Date('2018-01-01T10:00:00')), //moment(lastMonday),
+            currentEndDate: moment(new Date('2018-01-02T10:00:00')), //moment(lastSunday),
+            landingPage: 'Add to Bag',
             deviceCategory: 'mobile',
-            channel: 'direct'
+            channel: 'direct',
+            currentAnalytics: [],
+            optionsLandingPage: [],
+            optionsDeviceCategory: [],
+            optionsChannel: []
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
         this.updateDeviceCategory = this.updateDeviceCategory.bind(this);
         this.updateChannel = this.updateChannel.bind(this);
+        this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
+        this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+    }
+
+    handleCurrentStartDateChange(date) {
+        this.setState({
+            currentStartDate: date
+        }, () => {
+            this.fetchFunnel();
+        });
+    }
+
+    handleCurrentEndDateChange(date) {
+        this.setState({
+            currentEndDate: date
+        }, () => {
+            this.fetchFunnel();
+        });
     }
 
     updateLandingPage(newValue) {
@@ -50,35 +72,83 @@ class Funnel extends Component {
         });
     }
 
+    getSelectBoxValues(analytics, groupBy) {
+        analytics = this.getFilteredList(analytics, groupBy);
+
+        let optionsChannel = analytics.map((elm) => {
+            return {
+                value: elm.rValue,
+                label: this.jsUcfirst(elm.rValue)
+            };
+        });
+
+        return optionsChannel;
+    }
+
+    fetchFunnel() {
+        let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
+        let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
+
+        this.props.fetchFunnel(currentStartDate, currentEndDate).then(() => {
+            let { analytics } = this.props;
+
+            this.setState({ optionsChannel: this.getSelectBoxValues(analytics, 'channel') });
+            this.setState({ optionsDeviceCategory: this.getSelectBoxValues(analytics, 'device') });
+            this.setState({ optionsLandingPage: this.getSelectBoxValues(analytics, 'funnel_step_name') });
+
+            this.setState({ currentAnalytics: analytics });
+        }, err => {
+            reject(err);
+        });
+    }
+
+    getFilteredList(analytics, groupByAttr) {
+        let _filteredList = [];
+
+        _filteredList = _(analytics)
+            .groupBy(groupByAttr)
+            .map((objs, key) => {
+                if (groupByAttr === '')
+                    key = 'All Devices';
+
+                let newVisitsObj = _.filter(objs, (o) => {
+                    return o.usertype == 'New Visitor';
+                });
+
+                return {
+                    'rValue': key,
+                    'sessions_total': _.sumBy(objs, (s) => {
+                        return parseFloat(s.sessions_total, 10);
+                    }),
+                    'sessions_purchase': _.sumBy(objs, (s) => {
+                        return parseFloat(s.sessions_purchase, 10);
+                    }),
+                    'users_total': _.sumBy(objs, (s) => {
+                        return parseFloat(s.users_total, 10);
+                    }),
+                    'users_purchase': _.sumBy(objs, (s) => {
+                        return parseFloat(s.users_purchase, 10);
+                    }),
+                };
+            })
+            .value();
+
+        return _filteredList;
+    }
+
+    jsUcfirst(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    componentDidMount() {
+        this.fetchFunnel();
+    }
+
     render() {
-        let optionsLandingPage = [
-            { value: 'add_to_bag_visits', label: 'Add to Bag Visits' },
-            { value: 'checkout_billing', label: 'Checkout Billing' },
-            { value: 'checkout_shipping', label: 'Checkout Shipping' },
-            { value: 'homepage_visits', label: 'Homepage Visits' },
-            { value: 'product_customization', label: 'Product Customization' },
-            { value: 'shop_pages', label: 'Shop Pages' }
-        ];
-
-        let optionsChannel = [
-            { value: 'direct', label: 'Direct' },
-            { value: 'display', label: 'Display' },
-            { value: 'email', label: 'Email' },
-            { value: 'organic_search', label: 'Organic Search' },
-            { value: 'paid_search', label: 'Paid Search' },
-            { value: 'referral', label: 'Referral' },
-            { value: 'social', label: 'Social' }
-        ];
-
-        let optionsDeviceCategory = [
-            { value: 'desktop', label: 'Desktop' },
-            { value: 'tablet', label: 'Tablet' },
-            { value: 'mobile', label: 'Mobile' }
-        ];
-
         return (
             <div className="funnel-container">
                 <div className="row">
+                    {/* Date Range */}
                     <div className="col-md-3">
                         <div className="">
                             <h6>Date Range</h6>
@@ -112,7 +182,7 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={optionsLandingPage}
+                                options={this.state.optionsLandingPage}
                                 simpleValue
                                 clearable={true}
                                 name="landing-page-select"
@@ -137,7 +207,7 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={optionsDeviceCategory}
+                                options={this.state.optionsDeviceCategory}
                                 simpleValue
                                 clearable={true}
                                 name="device-category-select"
@@ -162,7 +232,7 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={optionsChannel}
+                                options={this.state.optionsChannel}
                                 simpleValue
                                 clearable={true}
                                 name="channel-select"
@@ -183,7 +253,7 @@ class Funnel extends Component {
 
 Funnel.PropTypes = {
     analytics: PropTypes.array.isRequired,
-    actions: PropTypes.array.isRequired
+    fetchFunnel: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
@@ -193,9 +263,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators({ fetchFunnel }, dispatch)
-    }
+    return bindActionCreators({ fetchFunnel: fetchFunnel }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Funnel);
