@@ -96,9 +96,10 @@ class Funnel extends Component {
             this.setState({ optionsDeviceCategory: this.getSelectBoxValues(analytics, 'device') });
             this.setState({ optionsLandingPage: this.getSelectBoxValues(analytics, 'funnel_step_name') });
 
-            this.setState({ currentAnalytics: analytics });
+            let tmp = _.orderBy(this.getFilteredList(analytics, 'date'), ['rValue'], ['asc']);
+            this.setState({ currentAnalytics: tmp });
         }, err => {
-            reject(err);
+
         });
     }
 
@@ -145,6 +146,74 @@ class Funnel extends Component {
     }
 
     render() {
+        const funnelLineChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "400px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "legend": {
+                        "useGraphSettings": true
+                    },
+                    "titles": [{
+                        "text": "Total Sessions and Users"
+                    }],
+                    "dataProvider": this.state.currentAnalytics,
+                    "valueAxes": [{
+                        "position": "left",
+                        "axisAlpha": 0,
+                        "dashLength": 5,
+                        "title": "Total Sessions and Users"
+                    }],
+                    "startDuration": 0.5,
+                    "graphs": [{
+                        "balloonText": "place taken by Sessions in [[category]]: [[value]]",
+                        "bullet": "round",
+                        "title": "Sessions Total",
+                        "valueField": "sessions_total",
+                        "fillAlphas": 0
+                    }, {
+                        "balloonText": "place taken by Users in [[category]]: [[value]]",
+                        "bullet": "round",
+                        "title": "Users Total",
+                        "valueField": "users_total",
+                        "fillAlphas": 0
+                    }],
+                    "chartCursor": {
+                        "cursorAlpha": 0,
+                        "zoomable": false
+                    },
+                    "categoryField": "rValue",
+                    "dataDateFormat": "YYYY-MM-DD",
+                    "categoryAxis": {
+                        "parseDates": true,
+                        "minPeriod": "DD",
+                        "dashLength": 5,
+                        "minorGridEnabled": true,
+                        "gridPosition": "start",
+                        "axisAlpha": 0,
+                        "fillAlpha": 0.05,
+                        "fillColor": "#000000",
+                        "gridAlpha": 0,
+                        "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
+                        { "period": "ss", "format": "JJ:NN:SS" },
+                        { "period": "mm", "format": "JJ:NN" },
+                        { "period": "hh", "format": "JJ:NN" },
+                        { "period": "DD", "format": "MMM DD" },
+                        { "period": "WW", "format": "MMM DD" },
+                        { "period": "MM", "format": "MMM YYYY" },
+                        { "period": "YYYY", "format": "YYYY" }]
+                    },
+                    "export": {
+                        "enabled": true,
+                        "position": "bottom-right"
+                    }
+                }} />
+        );
+
         return (
             <div className="funnel-container">
                 <div className="row">
@@ -245,6 +314,9 @@ class Funnel extends Component {
                             />
                         </div>
                     </div>
+                </div>
+                <div className="row">
+                    { funnelLineChart }
                 </div>
             </div>
         );
