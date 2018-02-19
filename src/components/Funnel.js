@@ -199,13 +199,13 @@ class Funnel extends Component {
                         "fillColor": "#000000",
                         "gridAlpha": 0,
                         "dateFormats": [{ "period": "fff", "format": "JJ:NN:SS" },
-                        { "period": "ss", "format": "JJ:NN:SS" },
-                        { "period": "mm", "format": "JJ:NN" },
-                        { "period": "hh", "format": "JJ:NN" },
-                        { "period": "DD", "format": "MMM DD" },
-                        { "period": "WW", "format": "MMM DD" },
-                        { "period": "MM", "format": "MMM YYYY" },
-                        { "period": "YYYY", "format": "YYYY" }]
+                            { "period": "ss", "format": "JJ:NN:SS" },
+                            { "period": "mm", "format": "JJ:NN" },
+                            { "period": "hh", "format": "JJ:NN" },
+                            { "period": "DD", "format": "MMM DD" },
+                            { "period": "WW", "format": "MMM DD" },
+                            { "period": "MM", "format": "MMM YYYY" },
+                            { "period": "YYYY", "format": "YYYY" }]
                     },
                     "export": {
                         "enabled": true,
