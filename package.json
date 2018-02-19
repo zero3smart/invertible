@@ -40,6 +40,7 @@
     "react": "15.6.1",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-transition-group": "^15.6.2",
+    "react-bootstrap-select": "^0.14.0",
     "react-bootstrap-table": "^4.2.0",
     "react-breadcrumbs": "^1.5.2",
     "react-chartjs-2": "2.0.5",
@@ -53,7 +54,7 @@
     "react-responsive-carousel": "^3.1.28",
     "react-router": "2.8.1",
     "react-router-dom": "^4.2.2",
-    "react-select": "^1.0.0-rc.10",
+    "react-select": "^1.2.1",
     "react-smart-data-table": "^0.5.1",
     "react-text-mask": "^5.0.2",
     "reactstrap": "^4.8.0",
@@ -62,9 +63,7 @@
     "remarkable": "^1.7.1",
     "shortid": "2.2.8",
     "validator": "8.0.0",
-    "webpack-hot-middleware": "^2.21.0",
-    "zingchart": "^2.1.2",
-    "zingchart-react": "^1.0.6"
+    "webpack-hot-middleware": "^2.21.0"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",

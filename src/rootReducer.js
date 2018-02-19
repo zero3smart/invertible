@@ -5,6 +5,7 @@ import auth from './reducers/auth';
 import explorer from './reducers/explorer';
 import performance from './reducers/performance';
 import mediaSpends from './reducers/mediaSpends';
+import funnel from './reducers/funnel';
 
 export default combineReducers({
     comment,
@@ -12,5 +13,6 @@ export default combineReducers({
     auth,
     explorer,
     performance,
-    mediaSpends
+    mediaSpends,
+    funnel
 });

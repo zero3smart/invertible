@@ -8,6 +8,7 @@ import Knowledge from './components/Knowledge';
 import LoginPage from './components/login/LoginPage';
 import requireAuth from './utils/requireAuth';
 import HomePage from './components/HomePage';
+import Funnel from './components/Funnel';
 
 export default (
     <Route path="/" component={App}>
@@ -17,5 +18,6 @@ export default (
         <Route path="/explorer" component={Explorer} />
         <Route path="/chart-detail" component={ChartDetail} />
         <Route path="/knowledge" component={Knowledge} />
+        <Route path="/funnel" component={Funnel} />
     </Route>
 )

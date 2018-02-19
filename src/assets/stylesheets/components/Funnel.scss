@@ -1,0 +1,16 @@
+.funnel-container {
+    background: #fff;
+    padding: 6px;
+
+    .nomargin {
+        margin: 0;
+    }
+
+    .landing-page-select,
+    .device-category-select,
+    .channel-select {
+        background-color: #fff;
+        height: 36px;
+        width: 80%;
+    }
+}
