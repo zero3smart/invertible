@@ -99,7 +99,7 @@ class Funnel extends Component {
             let tmp = _.orderBy(this.getFilteredList(analytics, 'date'), ['rValue'], ['asc']);
             this.setState({ currentAnalytics: tmp });
         }, err => {
-
+            console.log(err);
         });
     }
 
