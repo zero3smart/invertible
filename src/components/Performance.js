@@ -196,7 +196,7 @@ class Performance extends Component {
     }
 
     precise(x) {
-        return Number.parseFloat(x).toFixed(3);
+        return Number.parseFloat(x).toFixed(2);
     }
 
     addColorToAnalytics(analytics) {
@@ -346,11 +346,11 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)) * 100),
-                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)) * 100),
-                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)) * 100),
-                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)) * 100),
-                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3)) * 100)
+                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(2)) * 100),
+                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(2)) * 100),
+                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(2)) * 100),
+                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(2)) * 100),
+                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(2)) * 100)
             };
             chgReportTable.push(_obj);
         });
