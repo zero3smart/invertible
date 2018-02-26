@@ -29,13 +29,21 @@ class Funnel extends Component {
             currentAnalytics: [],
             optionsLandingPage: [],
             optionsDeviceCategory: [],
-            optionsChannel: []
+            optionsChannel: [],
+            loading: true
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
         this.updateDeviceCategory = this.updateDeviceCategory.bind(this);
         this.updateChannel = this.updateChannel.bind(this);
         this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.state.currentStartDate !== nextState.currentStartDate ||
+            this.state.currentEndDate !== nextState.currentEndDate) {
+            this.setState({ loading: true });
+        }
     }
 
     handleCurrentStartDateChange(date) {
@@ -98,6 +106,7 @@ class Funnel extends Component {
 
             let tmp = _.orderBy(this.getFilteredList(analytics, 'date'), ['rValue'], ['asc']);
             this.setState({ currentAnalytics: tmp });
+            this.setState({ loading: false });
         }, err => {
             console.log(err);
         });
@@ -146,6 +155,10 @@ class Funnel extends Component {
     }
 
     render() {
+        const loading = (
+            <div className="ui active centered inline loader"></div>
+        );
+
         const funnelLineChart = (
             <AmCharts.React
                 style={{
@@ -316,7 +329,7 @@ class Funnel extends Component {
                     </div>
                 </div>
                 <div className="row">
-                    { funnelLineChart }
+                    { this.state.loading ? loading : funnelLineChart }
                 </div>
             </div>
         );
