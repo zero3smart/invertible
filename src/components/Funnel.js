@@ -239,25 +239,26 @@ class Funnel extends Component {
                     "rotate": true,
                     "marginBottom": 50,
                     "dataProvider": [{
-                        "age": "85+",
-                        "male": -0.1,
-                        "female": 0.3
+                        "funnel_step_name": "Add to Bag Visits",
+                        "users": -0.1,
+                        "sessions": 0.3
                     }, {
-                        "age": "80-54",
-                        "male": -0.2,
-                        "female": 0.3
+                        "funnel_step_name": "Checkout Shipping",
+                        "users": -0.2,
+                        "sessions": 0.3
                     }, {
-                        "age": "75-79",
-                        "male": -0.3,
-                        "female": 0.6
+                        "funnel_step_name": "Checkout Billing",
+                        "users": -0.3,
+                        "sessions": 0.6
                     }],
                     "startDuration": 1,
                     "graphs": [{
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
+                        "lineColor": "#008000",
                         "type": "column",
-                        "valueField": "male",
-                        "title": "Male",
+                        "valueField": "users",
+                        "title": "Users",
                         "labelText": "[[value]]",
                         "clustered": false,
                         "labelFunction": function (item) {
@@ -269,9 +270,10 @@ class Funnel extends Component {
                     }, {
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
+                        "lineColor": "#3962B7",
                         "type": "column",
-                        "valueField": "female",
-                        "title": "Female",
+                        "valueField": "sessions",
+                        "title": "Sessions",
                         "labelText": "[[value]]",
                         "clustered": false,
                         "labelFunction": function (item) {
@@ -281,7 +283,7 @@ class Funnel extends Component {
                             return item.category + ": " + Math.abs(item.values.value) + "%";
                         }
                     }],
-                    "categoryField": "age",
+                    "categoryField": "funnel_step_name",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "gridAlpha": 0.2,
@@ -307,13 +309,13 @@ class Funnel extends Component {
                         "fullWidth": true
                     },
                     "allLabels": [{
-                        "text": "Male",
+                        "text": "Users",
                         "x": "28%",
                         "y": "97%",
                         "bold": true,
                         "align": "middle"
                     }, {
-                        "text": "Female",
+                        "text": "Sessions",
                         "x": "75%",
                         "y": "97%",
                         "bold": true,
@@ -426,12 +428,18 @@ class Funnel extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row">
-                    { this.state.loading ? loading : funnelLineChart }
-                </div>
-                <div className="row">
-                    { this.state.loading ? loading : funnelStackBarChart }
-                </div>
+                {
+                    this.state.loading ? loading :
+                    <div>
+                        <div className="row">
+                            {funnelLineChart}
+                        </div>
+                        <div className="row">
+                            {funnelStackBarChart}
+                        </div>
+                    </div>
+                }
+
             </div>
         );
     }
