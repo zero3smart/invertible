@@ -44,6 +44,10 @@ class Performance extends Component {
                 'Tablet': 'tablet',
                 'All Devices': 'total'
             },
+            maxValues: {
+                mediaSpends: -1,
+                cpa: -1,
+            },
             loading: true
         }
         this.percentFormatter = this.percentFormatter.bind(this);
@@ -284,6 +288,11 @@ class Performance extends Component {
 
             let tmp = this.addColorToAnalytics(newPer);
 
+            this.setState({ maxValues: {
+                mediaSpends: this.getMax(tmp, 'mediaSpends'),
+                cpa: this.getMax(tmp, 'cpa')
+            }});
+
             this.setState({ currentReportTable: tmp });
 
             return Promise.resolve(tmp);
@@ -428,6 +437,14 @@ class Performance extends Component {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    getMax(data, attribute) {
+        let maxVal = _.maxBy(data, (o) => {
+            return parseInt(o[attribute], 10);
+        });
+
+        return maxVal[attribute];
+    }
+
     render() {
         const loading = (
             <div className="ui active centered inline loader"></div>
@@ -455,7 +472,8 @@ class Performance extends Component {
                         "unitPosition": "left",
                         "title": "Media Spends",
                         "titleFontSize": 22,
-                        "fontSize": 18
+                        "fontSize": 18,
+                        "maximum": this.state.maxValues.mediaSpends === -1 ? undefined : parseFloat(this.state.maxValues.mediaSpends) + 5,
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -554,7 +572,8 @@ class Performance extends Component {
                         "unitPosition": "left",
                         "title": "CPA",
                         "titleFontSize": 22,
-                        "fontSize": 18
+                        "fontSize": 18,
+                        "maximum": this.state.maxValues.cpa === -1 ? undefined : parseFloat(this.state.maxValues.cpa) + 5,
                     }],
                     "startDuration": 1,
                     "graphs": [{
