@@ -80,21 +80,6 @@ class Funnel extends Component {
         });
     }
 
-    getSelectBoxValues(analytics, groupBy) {
-        analytics = this.getFilteredList(analytics, groupBy);
-
-        // let optionsChannel = analytics.map((elm) => {
-        //     return {
-        //         value: elm.rValue,
-        //         label: this.jsUcfirst(elm.rValue),
-        //         sessions_total: elm.sessions_total,
-        //         users_total: elm.users_total
-        //     };
-        // });
-
-        return analytics;
-    }
-
     fetchFunnel() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -102,11 +87,16 @@ class Funnel extends Component {
         this.props.fetchFunnel(currentStartDate, currentEndDate).then(() => {
             let { analytics } = this.props;
 
-            this.setState({ optionsChannel: this.getSelectBoxValues(analytics, 'channel') });
-            this.setState({ optionsDeviceCategory: this.getSelectBoxValues(analytics, 'device') });
-            this.setState({ optionsLandingPage: this.getSelectBoxValues(analytics, 'funnel_step_name') });
+            let channelAnalytics = this.getFilteredList(analytics, 'channel');
+            let deviceAnalytics = this.getFilteredList(analytics, 'device');
+            let landingAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
 
-            let tmp = _.orderBy(this.getFilteredList(analytics, 'date'), ['rValue'], ['asc']);
+            this.setState({ optionsChannel: channelAnalytics });
+            this.setState({ optionsDeviceCategory: deviceAnalytics });
+            this.setState({ optionsLandingPage: landingAnalytics });
+
+            let entireAnalytics = this.getFilteredList(analytics, 'date');
+            let tmp = _.orderBy(entireAnalytics, ['rValue'], ['asc']);
             this.setState({ currentAnalytics: tmp });
             this.setState({ loading: false });
         }, err => {
