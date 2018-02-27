@@ -83,14 +83,16 @@ class Funnel extends Component {
     getSelectBoxValues(analytics, groupBy) {
         analytics = this.getFilteredList(analytics, groupBy);
 
-        let optionsChannel = analytics.map((elm) => {
-            return {
-                value: elm.rValue,
-                label: this.jsUcfirst(elm.rValue)
-            };
-        });
+        // let optionsChannel = analytics.map((elm) => {
+        //     return {
+        //         value: elm.rValue,
+        //         label: this.jsUcfirst(elm.rValue),
+        //         sessions_total: elm.sessions_total,
+        //         users_total: elm.users_total
+        //     };
+        // });
 
-        return optionsChannel;
+        return analytics;
     }
 
     fetchFunnel() {
@@ -114,6 +116,10 @@ class Funnel extends Component {
 
     getFilteredList(analytics, groupByAttr) {
         let _filteredList = [];
+        let minus = 1;
+
+        if (groupByAttr == 'funnel_step_name')
+            minus = -1;
 
         _filteredList = _(analytics)
             .groupBy(groupByAttr)
@@ -127,9 +133,10 @@ class Funnel extends Component {
 
                 return {
                     'rValue': key,
+                    'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions_total, 10);
-                    }),
+                    }) * minus,
                     'sessions_purchase': _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions_purchase, 10);
                     }),
@@ -238,26 +245,14 @@ class Funnel extends Component {
                     "theme": "light",
                     "rotate": true,
                     "marginBottom": 50,
-                    "dataProvider": [{
-                        "funnel_step_name": "Add to Bag Visits",
-                        "users": -0.1,
-                        "sessions": 0.3
-                    }, {
-                        "funnel_step_name": "Checkout Shipping",
-                        "users": -0.2,
-                        "sessions": 0.3
-                    }, {
-                        "funnel_step_name": "Checkout Billing",
-                        "users": -0.3,
-                        "sessions": 0.6
-                    }],
+                    "dataProvider": this.state.optionsLandingPage,
                     "startDuration": 1,
                     "graphs": [{
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
                         "lineColor": "#008000",
                         "type": "column",
-                        "valueField": "users",
+                        "valueField": "users_total",
                         "title": "Users",
                         "labelText": "[[value]]",
                         "clustered": false,
@@ -272,7 +267,7 @@ class Funnel extends Component {
                         "lineAlpha": 0.2,
                         "lineColor": "#3962B7",
                         "type": "column",
-                        "valueField": "sessions",
+                        "valueField": "sessions_total",
                         "title": "Sessions",
                         "labelText": "[[value]]",
                         "clustered": false,
@@ -283,7 +278,7 @@ class Funnel extends Component {
                             return item.category + ": " + Math.abs(item.values.value) + "%";
                         }
                     }],
-                    "categoryField": "funnel_step_name",
+                    "categoryField": "rValue",
                     "categoryAxis": {
                         "gridPosition": "start",
                         "gridAlpha": 0.2,
