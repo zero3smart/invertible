@@ -120,8 +120,6 @@ class Funnel extends Component {
             this.setState({ optionsDeviceCategory: deviceAnalytics });
             this.setState({ optionsLandingPage: landingAnalytics });
 
-            debugger;
-
             this.setState({
                 maxValues: {
                     u_s: this.getMax(landingAnalytics)
@@ -272,7 +270,7 @@ class Funnel extends Component {
                     "graphs": [{
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
-                        "lineColor": "#008000",
+                        "lineColor": "#3962B7",
                         "type": "column",
                         "valueField": "users_total",
                         "title": "Users",
@@ -287,7 +285,7 @@ class Funnel extends Component {
                     }, {
                         "fillAlphas": 0.8,
                         "lineAlpha": 0.2,
-                        "lineColor": "#3962B7",
+                        "lineColor": "#008000",
                         "type": "column",
                         "valueField": "sessions_total",
                         "title": "Sessions",
