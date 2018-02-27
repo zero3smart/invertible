@@ -53,6 +53,7 @@ export function fetchPerformance(startDate, endDate) {
                 console.log(`There was a problem: ${res.status}`);
                 return;
             }
+
             dispatch(setPerformance(res.data));
         }, err => {
 

@@ -44,6 +44,10 @@ class Performance extends Component {
                 'Tablet': 'tablet',
                 'All Devices': 'total'
             },
+            maxValues: {
+                mediaSpends: -1,
+                cpa: -1,
+            },
             loading: true
         }
         this.percentFormatter = this.percentFormatter.bind(this);
@@ -196,7 +200,7 @@ class Performance extends Component {
     }
 
     precise(x) {
-        return Number.parseFloat(x).toFixed(3);
+        return Number.parseFloat(x).toFixed(2);
     }
 
     addColorToAnalytics(analytics) {
@@ -284,6 +288,11 @@ class Performance extends Component {
 
             let tmp = this.addColorToAnalytics(newPer);
 
+            this.setState({ maxValues: {
+                mediaSpends: this.getMax(tmp, 'mediaSpends'),
+                cpa: this.getMax(tmp, 'cpa')
+            }});
+
             this.setState({ currentReportTable: tmp });
 
             return Promise.resolve(tmp);
@@ -346,11 +355,11 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(3)) * 100),
-                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(3)) * 100),
-                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(3)) * 100),
-                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(3)) * 100),
-                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(3)) * 100)
+                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(2)) * 100),
+                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(2)) * 100),
+                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(2)) * 100),
+                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(2)) * 100),
+                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(2)) * 100)
             };
             chgReportTable.push(_obj);
         });
@@ -428,6 +437,14 @@ class Performance extends Component {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    getMax(data, attribute) {
+        let maxVal = _.maxBy(data, (o) => {
+            return parseInt(o[attribute], 10);
+        });
+
+        return maxVal[attribute];
+    }
+
     render() {
         const loading = (
             <div className="ui active centered inline loader"></div>
@@ -455,7 +472,8 @@ class Performance extends Component {
                         "unitPosition": "left",
                         "title": "Media Spends",
                         "titleFontSize": 22,
-                        "fontSize": 18
+                        "fontSize": 18,
+                        "maximum": this.state.maxValues.mediaSpends === -1 ? undefined : parseFloat(this.state.maxValues.mediaSpends) + 5,
                     }],
                     "startDuration": 1,
                     "graphs": [{
@@ -554,7 +572,8 @@ class Performance extends Component {
                         "unitPosition": "left",
                         "title": "CPA",
                         "titleFontSize": 22,
-                        "fontSize": 18
+                        "fontSize": 18,
+                        "maximum": this.state.maxValues.cpa === -1 ? undefined : parseFloat(this.state.maxValues.cpa) + 5,
                     }],
                     "startDuration": 1,
                     "graphs": [{

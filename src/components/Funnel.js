@@ -29,13 +29,24 @@ class Funnel extends Component {
             currentAnalytics: [],
             optionsLandingPage: [],
             optionsDeviceCategory: [],
-            optionsChannel: []
+            optionsChannel: [],
+            loading: true,
+            maxValues: {
+                u_s: -1,
+            }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
         this.updateDeviceCategory = this.updateDeviceCategory.bind(this);
         this.updateChannel = this.updateChannel.bind(this);
         this.handleCurrentStartDateChange = this.handleCurrentStartDateChange.bind(this);
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.state.currentStartDate !== nextState.currentStartDate ||
+            this.state.currentEndDate !== nextState.currentEndDate) {
+            this.setState({ loading: true });
+        }
     }
 
     handleCurrentStartDateChange(date) {
@@ -72,17 +83,16 @@ class Funnel extends Component {
         });
     }
 
-    getSelectBoxValues(analytics, groupBy) {
-        analytics = this.getFilteredList(analytics, groupBy);
-
-        let optionsChannel = analytics.map((elm) => {
-            return {
-                value: elm.rValue,
-                label: this.jsUcfirst(elm.rValue)
-            };
+    getMax(data) {
+        let maxValUsersTotal = _.maxBy(data, (o) => {
+            return Math.abs(parseInt(o['users_total'], 10))
         });
 
-        return optionsChannel;
+        let maxValSessionsTotal = _.maxBy(data, (o) => {
+            return Math.abs(parseInt(o['sessions_total'], 10))
+        });
+
+        return Math.max(Math.abs(maxValUsersTotal.users_total), Math.abs(maxValSessionsTotal.sessions_total));
     }
 
     fetchFunnel() {
@@ -92,12 +102,33 @@ class Funnel extends Component {
         this.props.fetchFunnel(currentStartDate, currentEndDate).then(() => {
             let { analytics } = this.props;
 
-            this.setState({ optionsChannel: this.getSelectBoxValues(analytics, 'channel') });
-            this.setState({ optionsDeviceCategory: this.getSelectBoxValues(analytics, 'device') });
-            this.setState({ optionsLandingPage: this.getSelectBoxValues(analytics, 'funnel_step_name') });
+            let channelAnalytics = this.getFilteredList(analytics, 'channel');
+            let deviceAnalytics = this.getFilteredList(analytics, 'device');
+            let landingAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
+            let dateAnalytics = this.getFilteredList(analytics, 'date');
+            let entireAnalytics = this.getFilteredList(analytics, '');
 
-            let tmp = _.orderBy(this.getFilteredList(analytics, 'date'), ['rValue'], ['asc']);
+            landingAnalytics = landingAnalytics.map((elm) => {
+                let _obj = Object.assign({}, elm, {
+                    sessions_total_percentage: (elm.sessions_total / entireAnalytics[0].sessions_total * 100).toFixed(2),
+                    users_total_percentage: (elm.users_total / entireAnalytics[0].users_total * 100).toFixed(2)
+                });
+                return _obj;
+            });
+
+            this.setState({ optionsChannel: channelAnalytics });
+            this.setState({ optionsDeviceCategory: deviceAnalytics });
+            this.setState({ optionsLandingPage: landingAnalytics });
+
+            this.setState({
+                maxValues: {
+                    u_s: this.getMax(landingAnalytics)
+                }
+            });
+
+            let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
             this.setState({ currentAnalytics: tmp });
+            this.setState({ loading: false });
         }, err => {
             console.log(err);
         });
@@ -105,6 +136,10 @@ class Funnel extends Component {
 
     getFilteredList(analytics, groupByAttr) {
         let _filteredList = [];
+        let minus = 1;
+
+        if (groupByAttr == 'funnel_step_name')
+            minus = -1;
 
         _filteredList = _(analytics)
             .groupBy(groupByAttr)
@@ -118,9 +153,11 @@ class Funnel extends Component {
 
                 return {
                     'rValue': key,
+                    'value': key,
+                    'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions_total, 10);
-                    }),
+                    }) * minus,
                     'sessions_purchase': _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions_purchase, 10);
                     }),
@@ -146,6 +183,10 @@ class Funnel extends Component {
     }
 
     render() {
+        const loading = (
+            <div className="ui active centered inline loader"></div>
+        );
+
         const funnelLineChart = (
             <AmCharts.React
                 style={{
@@ -210,6 +251,95 @@ class Funnel extends Component {
                     "export": {
                         "enabled": true,
                         "position": "bottom-right"
+                    }
+                }} />
+        );
+
+        const funnelStackBarChart = (
+            <AmCharts.React
+                style={{
+                    width: "100%",
+                    height: "400px"
+                }}
+                options={{
+                    "type": "serial",
+                    "theme": "light",
+                    "rotate": true,
+                    "marginBottom": 50,
+                    "dataProvider": this.state.optionsLandingPage,
+                    "startDuration": 1,
+                    "graphs": [{
+                        "fillAlphas": 0.8,
+                        "lineAlpha": 0.2,
+                        "lineColor": "#3962B7",
+                        "type": "column",
+                        "valueField": "users_total",
+                        "title": "Users",
+                        "labelText": "[[value]]",
+                        "clustered": false,
+                        "labelFunction": function (item) {
+                            return Math.abs(item.values.value) + " (" + item.dataContext.sessions_total_percentage + "%)";
+                        },
+                        "balloonFunction": function (item) {
+                            return item.category + ": " + Math.abs(item.values.value);
+                        }
+                    }, {
+                        "fillAlphas": 0.8,
+                        "lineAlpha": 0.2,
+                        "lineColor": "#008000",
+                        "type": "column",
+                        "valueField": "sessions_total",
+                        "title": "Sessions",
+                        "labelText": "[[value]]",
+                        "clustered": false,
+                        "labelFunction": function (item) {
+                            return Math.abs(item.values.value) + " (" + item.dataContext.users_total_percentage + "%)";
+                        },
+                        "balloonFunction": function (item) {
+                            return item.category + ": " + Math.abs(item.values.value);
+                        }
+                    }],
+                    "categoryField": "rValue",
+                    "categoryAxis": {
+                        "gridPosition": "start",
+                        "gridAlpha": 0.2,
+                        "axisAlpha": 0
+                    },
+                    "valueAxes": [{
+                        "gridAlpha": 0,
+                        "ignoreAxisWidth": true,
+                        "labelFunction": function (value) {
+                            return Math.abs(value);
+                        },
+                        "guides": [{
+                            "value": 0,
+                            "lineAlpha": 0.2
+                        }],
+                        "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + 30,
+                    }],
+                    "balloon": {
+                        "fixedPosition": true
+                    },
+                    "chartCursor": {
+                        "valueBalloonsEnabled": false,
+                        "cursorAlpha": 0.05,
+                        "fullWidth": true
+                    },
+                    "allLabels": [{
+                        "text": "Users",
+                        "x": "28%",
+                        "y": "97%",
+                        "bold": true,
+                        "align": "middle"
+                    }, {
+                        "text": "Sessions",
+                        "x": "75%",
+                        "y": "97%",
+                        "bold": true,
+                        "align": "middle"
+                    }],
+                    "export": {
+                        "enabled": true
                     }
                 }} />
         );
@@ -315,9 +445,18 @@ class Funnel extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row">
-                    { funnelLineChart }
-                </div>
+                {
+                    this.state.loading ? loading :
+                    <div>
+                        <div className="row">
+                            {funnelLineChart}
+                        </div>
+                        <div className="row">
+                            {funnelStackBarChart}
+                        </div>
+                    </div>
+                }
+
             </div>
         );
     }
