@@ -153,6 +153,7 @@ class Funnel extends Component {
 
                 return {
                     'rValue': key,
+                    'value': key,
                     'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions_total, 10);
