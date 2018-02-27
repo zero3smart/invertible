@@ -30,7 +30,10 @@ class Funnel extends Component {
             optionsLandingPage: [],
             optionsDeviceCategory: [],
             optionsChannel: [],
-            loading: true
+            loading: true,
+            maxValues: {
+                u_s: -1,
+            }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
         this.updateDeviceCategory = this.updateDeviceCategory.bind(this);
@@ -80,6 +83,14 @@ class Funnel extends Component {
         });
     }
 
+    getMax(data, attribute) {
+        let maxVal = _.maxBy(data, (o) => {
+            return parseInt(o[attribute], 10);
+        });
+
+        return maxVal[attribute];
+    }
+
     fetchFunnel() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -90,13 +101,30 @@ class Funnel extends Component {
             let channelAnalytics = this.getFilteredList(analytics, 'channel');
             let deviceAnalytics = this.getFilteredList(analytics, 'device');
             let landingAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
+            let dateAnalytics = this.getFilteredList(analytics, 'date');
+            let entireAnalytics = this.getFilteredList(analytics, '');
+
+            landingAnalytics = landingAnalytics.map((elm) => {
+                let _obj = Object.assign({}, elm, {
+                    sessions_total_percentage: (elm.sessions_total / entireAnalytics[0].sessions_total * 100).toFixed(2),
+                    users_total_percentage: (elm.users_total / entireAnalytics[0].users_total * 100).toFixed(2)
+                });
+                return _obj;
+            });
 
             this.setState({ optionsChannel: channelAnalytics });
             this.setState({ optionsDeviceCategory: deviceAnalytics });
             this.setState({ optionsLandingPage: landingAnalytics });
 
-            let entireAnalytics = this.getFilteredList(analytics, 'date');
-            let tmp = _.orderBy(entireAnalytics, ['rValue'], ['asc']);
+            debugger;
+
+            this.setState({
+                maxValues: {
+                    u_s: _.max([landingAnalytics[0].sessions_total, landingAnalytics[0].users_total])
+                }
+            });
+
+            let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
             this.setState({ currentAnalytics: tmp });
             this.setState({ loading: false });
         }, err => {
@@ -247,10 +275,10 @@ class Funnel extends Component {
                         "labelText": "[[value]]",
                         "clustered": false,
                         "labelFunction": function (item) {
-                            return Math.abs(item.values.value);
+                            return Math.abs(item.values.value) + " (" + item.dataContext.sessions_total_percentage + "%)";
                         },
                         "balloonFunction": function (item) {
-                            return item.category + ": " + Math.abs(item.values.value) + "%";
+                            return item.category + ": " + Math.abs(item.values.value);
                         }
                     }, {
                         "fillAlphas": 0.8,
@@ -262,10 +290,10 @@ class Funnel extends Component {
                         "labelText": "[[value]]",
                         "clustered": false,
                         "labelFunction": function (item) {
-                            return Math.abs(item.values.value);
+                            return Math.abs(item.values.value) + " (" + item.dataContext.users_total_percentage + "%)";
                         },
                         "balloonFunction": function (item) {
-                            return item.category + ": " + Math.abs(item.values.value) + "%";
+                            return item.category + ": " + Math.abs(item.values.value);
                         }
                     }],
                     "categoryField": "rValue",
@@ -278,12 +306,13 @@ class Funnel extends Component {
                         "gridAlpha": 0,
                         "ignoreAxisWidth": true,
                         "labelFunction": function (value) {
-                            return Math.abs(value) + '%';
+                            return Math.abs(value);
                         },
                         "guides": [{
                             "value": 0,
                             "lineAlpha": 0.2
-                        }]
+                        }],
+                        "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + 30,
                     }],
                     "balloon": {
                         "fixedPosition": true
