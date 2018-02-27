@@ -83,12 +83,16 @@ class Funnel extends Component {
         });
     }
 
-    getMax(data, attribute) {
-        let maxVal = _.maxBy(data, (o) => {
-            return parseInt(o[attribute], 10);
+    getMax(data) {
+        let maxValUsersTotal = _.maxBy(data, (o) => {
+            return Math.abs(parseInt(o['users_total'], 10))
         });
 
-        return maxVal[attribute];
+        let maxValSessionsTotal = _.maxBy(data, (o) => {
+            return Math.abs(parseInt(o['sessions_total'], 10))
+        });
+
+        return Math.max(Math.abs(maxValUsersTotal.users_total), Math.abs(maxValSessionsTotal.sessions_total));
     }
 
     fetchFunnel() {
@@ -120,7 +124,7 @@ class Funnel extends Component {
 
             this.setState({
                 maxValues: {
-                    u_s: _.max([landingAnalytics[0].sessions_total, landingAnalytics[0].users_total])
+                    u_s: this.getMax(landingAnalytics)
                 }
             });
 
