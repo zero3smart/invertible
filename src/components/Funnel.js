@@ -33,6 +33,15 @@ class Funnel extends Component {
             loading: true,
             maxValues: {
                 u_s: -1,
+            },
+            // homepage> shop pages> product pages> shipping pages> billing pages> purchase
+            sortWeight: {
+                homepage: 1,
+                shop: 2,
+                product: 3,
+                shipping: 4,
+                billing: 5,
+                purchase: 6
             }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
@@ -118,7 +127,8 @@ class Funnel extends Component {
 
             this.setState({ optionsChannel: channelAnalytics });
             this.setState({ optionsDeviceCategory: deviceAnalytics });
-            this.setState({ optionsLandingPage: landingAnalytics });
+
+            this.setState({ optionsLandingPage: _.orderBy(landingAnalytics, ['weight'], ['asc']) });
 
             this.setState({
                 maxValues: {
@@ -151,9 +161,20 @@ class Funnel extends Component {
                     return o.usertype == 'New Visitor';
                 });
 
+                let weight = 0;
+                for (let k in this.state.sortWeight) {
+                    if (!this.state.sortWeight.hasOwnProperty(k)) continue;
+
+                    if (key.toLowerCase().includes(k)) {
+                        weight = this.state.sortWeight[k];
+                        break;
+                    }
+                }
+
                 return {
                     'rValue': key,
                     'value': key,
+                    'weight': weight,
                     'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
                         return parseFloat(s.sessions_total, 10);
