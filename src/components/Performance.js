@@ -29,6 +29,8 @@ class Performance extends Component {
         this.state = {
             currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
+            currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
+            currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
@@ -124,6 +126,19 @@ class Performance extends Component {
             this.state.priorStartDate !== nextState.priorStartDate ||
             this.state.priorEndDate !== nextState.priorEndDate) {
             this.setState({ loading: true });
+            this.setState({
+                currentAnalyticsOverview: [],
+                priorAnalyticsOverview: [],
+                currentAnalyticsMediaspends: [],
+                priorAnalyticsMediaspends: [],
+                currentReportTable: [],
+                priorReportTable: [],
+                chgReportTable: [],
+                maxValues: {
+                    mediaSpends: -1,
+                    cpa: -1,
+                }
+            });
         }
     }
 
