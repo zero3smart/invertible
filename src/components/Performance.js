@@ -27,10 +27,10 @@ class Performance extends Component {
             , beforeTwoWeeksSunday = new Date(lastSunday.getTime() - 60 * 60 * 24 * 7 * 1000);
 
         this.state = {
-            currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
-            currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
-            currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
+            // currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
+            // currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
+            currentStartDate: moment(new Date('2018-02-27T10:00:00')),
+            currentEndDate: moment(new Date('2018-02-27T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
@@ -295,11 +295,31 @@ class Performance extends Component {
         let p4 = Promise.all([p1, p2, p3]).then((values) => {
             per = values[0].concat(values[2]);
 
-            let newPer = per.map((row) => {
-                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
-                row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
-                return row;
-            });
+            let newPer = [];
+
+            if (typeof per !== 'undefined' && per.length > 0) {
+                newPer = per.map((row) => {
+                    row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                    row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
+                    return row;
+                });
+            } else {
+                for (let k in values[1][0]) {
+                    if (k === 'desktop' || k === 'mobile' || k === 'tablet' || k === 'total') {
+                        let _obj = {
+                            rValue: k === 'total' ? 'All Devices' : this.jsUcfirst(k),
+                            mediaSpends: values[1][0][k],
+                            cpa: 0,
+                            bounceRate: 0,
+                            newVisits: 0,
+                            sessions: 0,
+                            transactions: 0,
+                            visits: 0
+                        };
+                        newPer.push(_obj);
+                    }
+                }
+            }
 
             let tmp = this.addColorToAnalytics(newPer);
 
