@@ -28,6 +28,7 @@ class Funnel extends Component {
             channel: 'direct',
             currentAnalytics: [],
             optionsLandingPage: [],
+            optionsLandingPageAll: [],
             optionsDeviceCategory: [],
             optionsChannel: [],
             loading: true,
@@ -53,7 +54,8 @@ class Funnel extends Component {
 
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
-            this.state.currentEndDate !== nextState.currentEndDate) {
+            this.state.currentEndDate !== nextState.currentEndDate ||
+            this.state.landingPage !== nextState.landingPage) {
             this.setState({ loading: true });
         }
     }
@@ -77,6 +79,8 @@ class Funnel extends Component {
     updateLandingPage(newValue) {
         this.setState({
             landingPage: newValue,
+        }, () => {
+            this.fetchFunnel();
         });
     }
 
@@ -104,6 +108,18 @@ class Funnel extends Component {
         return Math.max(Math.abs(maxValUsersTotal.users_total), Math.abs(maxValSessionsTotal.sessions_total));
     }
 
+    componentWillReceiveProps(nextProps) {
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+
+    }
+
     fetchFunnel() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -128,11 +144,27 @@ class Funnel extends Component {
             this.setState({ optionsChannel: channelAnalytics });
             this.setState({ optionsDeviceCategory: deviceAnalytics });
 
-            this.setState({ optionsLandingPage: _.orderBy(landingAnalytics, ['weight'], ['asc']) });
+
+            let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
+            let findIdx, lp = this.state.landingPage;
+
+            for (let i = 0; i < sortedLA.length; i++) {
+                if (sortedLA[i].label == lp) {
+                    findIdx = i;
+                    break;
+                }
+            }
+
+            let newLA = sortedLA.slice(findIdx);
+
+            this.setState({ optionsLandingPage: newLA});
+            this.setState({ optionsLandingPageAll: landingAnalytics });
+
+            debugger;
 
             this.setState({
                 maxValues: {
-                    u_s: this.getMax(landingAnalytics)
+                    u_s: this.getMax(newLA)
                 }
             });
 
@@ -336,7 +368,8 @@ class Funnel extends Component {
                             "value": 0,
                             "lineAlpha": 0.2
                         }],
-                        "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + 30,
+                        "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + Math.pow(10, parseInt(this.state.maxValues.u_s).toString().length-1),
+                        "minimum": this.state.maxValues.u_s === -1 ? undefined : (parseFloat(this.state.maxValues.u_s) + Math.pow(10, parseInt(this.state.maxValues.u_s).toString().length-1)) * (-1)
                     }],
                     "balloon": {
                         "fixedPosition": true
@@ -402,7 +435,7 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={this.state.optionsLandingPage}
+                                options={this.state.optionsLandingPageAll}
                                 simpleValue
                                 clearable={true}
                                 name="landing-page-select"
