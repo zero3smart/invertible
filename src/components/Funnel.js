@@ -368,8 +368,8 @@ class Funnel extends Component {
                             "value": 0,
                             "lineAlpha": 0.2
                         }],
-                        "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + 30,
-                        "minimum": this.state.maxValues.u_s === -1 ? undefined : (parseFloat(this.state.maxValues.u_s) + 30) * (-1)
+                        "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + Math.pow(10, parseInt(this.state.maxValues.u_s).toString().length-1),
+                        "minimum": this.state.maxValues.u_s === -1 ? undefined : (parseFloat(this.state.maxValues.u_s) + Math.pow(10, parseInt(this.state.maxValues.u_s).toString().length-1)) * (-1)
                     }],
                     "balloon": {
                         "fixedPosition": true
