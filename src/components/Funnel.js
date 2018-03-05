@@ -53,7 +53,8 @@ class Funnel extends Component {
 
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
-            this.state.currentEndDate !== nextState.currentEndDate) {
+            this.state.currentEndDate !== nextState.currentEndDate ||
+            this.state.landingPage !== nextState.landingPage) {
             this.setState({ loading: true });
         }
     }
@@ -77,6 +78,8 @@ class Funnel extends Component {
     updateLandingPage(newValue) {
         this.setState({
             landingPage: newValue,
+        }, () => {
+            this.fetchFunnel();
         });
     }
 
@@ -104,6 +107,18 @@ class Funnel extends Component {
         return Math.max(Math.abs(maxValUsersTotal.users_total), Math.abs(maxValSessionsTotal.sessions_total));
     }
 
+    componentWillReceiveProps(nextProps) {
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+
+    }
+
     fetchFunnel() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -128,7 +143,18 @@ class Funnel extends Component {
             this.setState({ optionsChannel: channelAnalytics });
             this.setState({ optionsDeviceCategory: deviceAnalytics });
 
-            this.setState({ optionsLandingPage: _.orderBy(landingAnalytics, ['weight'], ['asc']) });
+
+            let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
+            let findIdx, lp = this.state.landingPage;
+
+            for (let i = 0; i < sortedLA.length; i++) {
+                if (sortedLA[i].label == lp) {
+                    findIdx = i;
+                    break;
+                }
+            }
+
+            this.setState({ optionsLandingPage: sortedLA.slice(findIdx)});
 
             this.setState({
                 maxValues: {
