@@ -28,6 +28,7 @@ class Funnel extends Component {
             channel: 'direct',
             currentAnalytics: [],
             optionsLandingPage: [],
+            optionsLandingPageAll: [],
             optionsDeviceCategory: [],
             optionsChannel: [],
             loading: true,
@@ -154,11 +155,16 @@ class Funnel extends Component {
                 }
             }
 
-            this.setState({ optionsLandingPage: sortedLA.slice(findIdx)});
+            let newLA = sortedLA.slice(findIdx);
+
+            this.setState({ optionsLandingPage: newLA});
+            this.setState({ optionsLandingPageAll: landingAnalytics });
+
+            debugger;
 
             this.setState({
                 maxValues: {
-                    u_s: this.getMax(landingAnalytics)
+                    u_s: this.getMax(newLA)
                 }
             });
 
@@ -363,6 +369,7 @@ class Funnel extends Component {
                             "lineAlpha": 0.2
                         }],
                         "maximum": this.state.maxValues.u_s === -1 ? undefined : parseFloat(this.state.maxValues.u_s) + 30,
+                        "minimum": this.state.maxValues.u_s === -1 ? undefined : (parseFloat(this.state.maxValues.u_s) + 30) * (-1)
                     }],
                     "balloon": {
                         "fixedPosition": true
@@ -428,7 +435,7 @@ class Funnel extends Component {
                                 onBlurResetsInput={false}
                                 onSelectResetsInput={false}
                                 autoFocus
-                                options={this.state.optionsLandingPage}
+                                options={this.state.optionsLandingPageAll}
                                 simpleValue
                                 clearable={true}
                                 name="landing-page-select"
