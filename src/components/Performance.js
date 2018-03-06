@@ -33,6 +33,8 @@ class Performance extends Component {
             currentEndDate: moment(new Date('2018-03-04T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            // priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
+            // priorEndDate: moment(new Date('2018-03-04T10:00:00')), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -359,9 +361,15 @@ class Performance extends Component {
         let p4 = Promise.all([p1, p2, p3]).then((values) => {
             per = values[0].concat(values[2]);
 
+            // let newPer = per.map((row) => {
+            //     row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
+            //     row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
+            //     return row;
+            // });
+
             let newPer = per.map((row) => {
-                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
-                row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
+                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
                 return row;
             });
 
