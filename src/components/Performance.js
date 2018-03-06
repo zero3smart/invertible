@@ -29,8 +29,8 @@ class Performance extends Component {
         this.state = {
             // currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             // currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            currentStartDate: moment(new Date('2018-02-27T10:00:00')),
-            currentEndDate: moment(new Date('2018-02-27T10:00:00')),
+            currentStartDate: moment(new Date('2018-02-26T10:00:00')),
+            currentEndDate: moment(new Date('2018-03-04T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
@@ -390,11 +390,11 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(2)) * 100),
-                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(2)) * 100),
-                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(2)) * 100),
-                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(2)) * 100),
-                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(2)) * 100)
+                mediaSpendsChg: priorReportTable[index].mediaSpends == 0 ? 0 : Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(2)) * 100),
+                cpaChg: priorReportTable[index].cpa == 0 ? 0 : Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(2)) * 100),
+                visitsChg: priorReportTable[index].visits == 0 ? 0 : Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(2)) * 100),
+                transactionsChg: priorReportTable[index].transactions == 0 ? 0 : Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(2)) * 100),
+                bounceRateChg: priorReportTable[index].bounceRate == 0 ? 0 : Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(2)) * 100)
             };
             chgReportTable.push(_obj);
         });
