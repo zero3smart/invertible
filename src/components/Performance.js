@@ -29,10 +29,12 @@ class Performance extends Component {
         this.state = {
             // currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             // currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            currentStartDate: moment(new Date('2018-02-27T10:00:00')),
-            currentEndDate: moment(new Date('2018-02-27T10:00:00')),
+            currentStartDate: moment(new Date('2018-02-26T10:00:00')),
+            currentEndDate: moment(new Date('2018-03-04T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            // priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
+            // priorEndDate: moment(new Date('2018-03-04T10:00:00')), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -61,6 +63,12 @@ class Performance extends Component {
         this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
     }
 
+    /**
+     * Event which listen to current start date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentStartDateChange(date) {
         this.setState({
             currentStartDate: date
@@ -69,6 +77,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Event which listen to current end date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
@@ -77,6 +91,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Event which listen to prior start date changes
+     * @param date
+     * @return
+     * etc
+     */
     handlePriorStartDateChange(date) {
         this.setState({
             priorStartDate: date
@@ -85,6 +105,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Event which listen to prior end date change
+     * @param date
+     * @return
+     * etc
+     */
     handlePriorEndDateChange(date) {
         this.setState({
             priorEndDate: date
@@ -93,6 +119,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Convert rgb to hex : rgb(x, x, x) = #xxxxxx
+     * @param rgb
+     * @return hexvalue
+     * etc
+     */
     rgb2hex(rgb) {
         rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
         return (rgb && rgb.length === 4) ? "#" +
@@ -101,10 +133,22 @@ class Performance extends Component {
             ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
     }
 
+    /**
+     * Cell formatter for React Bootstrap Table
+     * @param cell, row
+     * @return string which add % to end of the string
+     * etc
+     */
     percentFormatter(cell, row) {
         return this.numWithCommas(cell) + ' %';
     }
 
+    /**
+     * Cell formatter for React Bootstrap Table
+     * @param cell, row
+     * @return string which add $ to begining of the string
+     * etc
+     */
     priceFormatter(cell, row) {
         if (cell.toString() == 'Infinity') {
             return '-';
@@ -112,14 +156,32 @@ class Performance extends Component {
         return '$' + this.numWithCommas(cell);
     }
 
+    /**
+     * Cell formatter for React Bootstrap Table
+     * @param cell, row
+     * @return 100000 = 100,000
+     * etc
+     */
     commaFormatter(cell, row) {
         return this.numWithCommas(cell);
     }
 
+    /**
+     * ()
+     * @param x
+     * @return
+     * etc
+     */
     numWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps, nextState
+     * @return
+     * etc
+     */
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
             this.state.currentEndDate !== nextState.currentEndDate ||
@@ -359,9 +421,15 @@ class Performance extends Component {
         let p4 = Promise.all([p1, p2, p3]).then((values) => {
             per = values[0].concat(values[2]);
 
+            // let newPer = per.map((row) => {
+            //     row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
+            //     row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
+            //     return row;
+            // });
+
             let newPer = per.map((row) => {
-                row["mediaSpends"] = Math.round(values[1][0][this.state.mediaSpendsKeyMap[row.rValue]]);
-                row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
+                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
                 return row;
             });
 
@@ -390,11 +458,11 @@ class Performance extends Component {
         currentReportTable.forEach((item, index) => {
             let _obj = {
                 rValue: item.rValue,
-                mediaSpendsChg: Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(2)) * 100),
-                cpaChg: Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(2)) * 100),
-                visitsChg: Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(2)) * 100),
-                transactionsChg: Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(2)) * 100),
-                bounceRateChg: Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(2)) * 100)
+                mediaSpendsChg: priorReportTable[index].mediaSpends == 0 ? 0 : Math.round(Number.parseFloat(((item.mediaSpends - priorReportTable[index].mediaSpends) / priorReportTable[index].mediaSpends).toFixed(2)) * 100),
+                cpaChg: priorReportTable[index].cpa == 0 ? 0 : Math.round(Number.parseFloat(((item.cpa - priorReportTable[index].cpa) / priorReportTable[index].cpa).toFixed(2)) * 100),
+                visitsChg: priorReportTable[index].visits == 0 ? 0 : Math.round(Number.parseFloat(((item.visits - priorReportTable[index].visits) / priorReportTable[index].visits).toFixed(2)) * 100),
+                transactionsChg: priorReportTable[index].transactions == 0 ? 0 : Math.round(Number.parseFloat(((item.transactions - priorReportTable[index].transactions) / priorReportTable[index].transactions).toFixed(2)) * 100),
+                bounceRateChg: priorReportTable[index].bounceRate == 0 ? 0 : Math.round(Number.parseFloat(((item.bounceRate - priorReportTable[index].bounceRate) / priorReportTable[index].bounceRate).toFixed(2)) * 100)
             };
             chgReportTable.push(_obj);
         });
