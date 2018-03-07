@@ -119,6 +119,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Convert rgb to hex : rgb(x, x, x) = #xxxxxx
+     * @param rgb
+     * @return hexvalue
+     * etc
+     */
     rgb2hex(rgb) {
         rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
         return (rgb && rgb.length === 4) ? "#" +
@@ -127,10 +133,22 @@ class Performance extends Component {
             ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
     }
 
+    /**
+     * Cell formatter for React Bootstrap Table
+     * @param cell, row
+     * @return string which add % to end of the string
+     * etc
+     */
     percentFormatter(cell, row) {
         return this.numWithCommas(cell) + ' %';
     }
 
+    /**
+     * Cell formatter for React Bootstrap Table
+     * @param cell, row
+     * @return string which add $ to begining of the string
+     * etc
+     */
     priceFormatter(cell, row) {
         if (cell.toString() == 'Infinity') {
             return '-';
@@ -138,14 +156,32 @@ class Performance extends Component {
         return '$' + this.numWithCommas(cell);
     }
 
+    /**
+     * Cell formatter for React Bootstrap Table
+     * @param cell, row
+     * @return 100000 = 100,000
+     * etc
+     */
     commaFormatter(cell, row) {
         return this.numWithCommas(cell);
     }
 
+    /**
+     * ()
+     * @param x
+     * @return
+     * etc
+     */
     numWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps, nextState
+     * @return
+     * etc
+     */
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
             this.state.currentEndDate !== nextState.currentEndDate ||
