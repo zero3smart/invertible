@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addFlashMessage } from '../actions/flashMessages';
-import Dashboard1 from './Dashboard1';
+import Performance from './Performance';
+import '../assets/stylesheets/components/HomePage.scss';
 
 class HomePage extends React.Component {
     render() {
         return (
             <div className="home-container">
-                <Dashboard1 />
+                <Performance />
             </div>
         );
     }

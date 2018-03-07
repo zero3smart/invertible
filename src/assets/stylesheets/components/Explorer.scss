@@ -1,0 +1,41 @@
+.explorer-container {
+    background: #fff;
+    .nav-item {
+        .nav-link {
+            background: #fff;
+            &.active {
+                border-top: 2px solid #477fbe;
+            }
+        }
+    }
+    a {
+        margin: 0 auto;
+        background: #f4f4f4;
+        border-color: #adadad;
+        color: #2a2c36;
+    }
+    .table-block {
+        margin-top: 10px;
+    }
+}
+
+.btn-group1, .btn-group2 {
+    label {
+        background: #f4f4f4;
+        border-color: #adadad;
+        &.active {
+            background: #e5e5e5;
+        }
+        input[type="radio"] {
+            -webkit-appearance: none;
+        }
+    }
+}
+
+#percentage-changes {
+    span {
+        font-size: 1rem;
+        color: #2a2c36;
+        font-weight: 500;
+    }
+}
