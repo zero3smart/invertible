@@ -63,6 +63,12 @@ class Performance extends Component {
         this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
     }
 
+    /**
+     * Event which listen to current start date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentStartDateChange(date) {
         this.setState({
             currentStartDate: date
@@ -71,6 +77,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Event which listen to current end date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
@@ -79,6 +91,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Event which listen to prior start date changes
+     * @param date
+     * @return
+     * etc
+     */
     handlePriorStartDateChange(date) {
         this.setState({
             priorStartDate: date
@@ -87,6 +105,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Event which listen to prior end date change
+     * @param date
+     * @return
+     * etc
+     */
     handlePriorEndDateChange(date) {
         this.setState({
             priorEndDate: date
