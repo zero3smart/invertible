@@ -261,6 +261,12 @@ class Performance extends Component {
         return _filteredList;
     }
 
+    /**
+     * analytics(mediaSpends) is filtered by groupByAttr
+     * @param analytics, groupByAttr
+     * @return
+     * etc
+     */
     getFilteredListForMediaspends(analytics, groupByAttr) {
         let _filteredList = [];
 
@@ -288,6 +294,12 @@ class Performance extends Component {
         return _filteredList;
     }
 
+    /**
+     * Convert string to Float to 2 Precision
+     * @param x
+     * @return a string representing the Number object to 2 precision.
+     * etc
+     */
     precise(x) {
         return Number.parseFloat(x).toFixed(2);
     }
