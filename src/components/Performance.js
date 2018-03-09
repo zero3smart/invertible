@@ -204,10 +204,22 @@ class Performance extends Component {
         }
     }
 
+    /**
+     * component life cycle method
+     * @param
+     * @return
+     * etc
+     */
     componentDidMount() {
         this.fetchPerformanceData();
     }
 
+    /**
+     * analytics(table dashboard_overview) is filtered by groupByAttr
+     * @param analytics, groupByAttr
+     * @return
+     * etc
+     */
     getFilteredListForOverview(analytics, groupByAttr) {
         let _filteredList = [];
 
