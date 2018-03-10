@@ -29,12 +29,12 @@ class Performance extends Component {
         this.state = {
             // currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             // currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            currentStartDate: moment(new Date('2018-02-26T10:00:00')),
-            currentEndDate: moment(new Date('2018-03-04T10:00:00')),
-            priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
-            priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
-            // priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
-            // priorEndDate: moment(new Date('2018-03-04T10:00:00')), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            currentStartDate: moment(new Date('2018-03-01T10:00:00')),
+            currentEndDate: moment(new Date('2018-03-08T10:00:00')),
+            // priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
+            // priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
+            priorEndDate: moment(new Date('2018-03-04T10:00:00')), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -304,6 +304,12 @@ class Performance extends Component {
         return Number.parseFloat(x).toFixed(2);
     }
 
+    /**
+     * Calculate color values to analytics results for chart color
+     * @param analytics
+     * @return
+     * etc
+     */
     addColorToAnalytics(analytics) {
         analytics.forEach((elm) => {
             if (elm["mediaSpends"] >= 0)
@@ -385,7 +391,7 @@ class Performance extends Component {
 
             if (typeof per !== 'undefined' && per.length > 0) {
                 newPer = per.map((row) => {
-                    row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                    row["mediaSpends"] = typeof values[1] !== 'undefined' && values[1].length > 0 ? values[1][0][this.state.mediaSpendsKeyMap[row.rValue]] : 0;
                     row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
                     return row;
                 });
@@ -451,8 +457,10 @@ class Performance extends Component {
             //     return row;
             // });
 
+            debugger;
+
             let newPer = per.map((row) => {
-                row["mediaSpends"] = values[1][0][this.state.mediaSpendsKeyMap[row.rValue]];
+                row["mediaSpends"] = typeof values[1] !== 'undefined' && values[1].length > 0 ? values[1][0][this.state.mediaSpendsKeyMap[row.rValue]] : 0;
                 row["cpa"] = row["transactions"] !== 0 ? this.precise(row["mediaSpends"] / row["transactions"]) : 0;
                 return row;
             });
