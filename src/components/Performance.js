@@ -30,8 +30,6 @@ class Performance extends Component {
         this.state = {
             currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            // currentStartDate: moment(new Date('2018-03-01T10:00:00')),
-            // currentEndDate: moment(new Date('2018-03-08T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             // priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
@@ -62,6 +60,13 @@ class Performance extends Component {
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
         this.handlePriorStartDateChange = this.handlePriorStartDateChange.bind(this);
         this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
+    }
+
+    disablePrevDates(startDate) {
+        const startSeconds = Date.parse(startDate);
+        return (date) => {
+            return Date.parse(date) < startSeconds;
+        }
     }
 
     /**
@@ -1090,6 +1095,10 @@ class Performance extends Component {
                                     selected={this.state.currentStartDate}
                                     onChange={this.handleCurrentStartDateChange}
                                     className="form-control date-box"
+                                    // minDate={moment()}
+                                    // maxDate={moment().add(5, "months")}
+                                    maxDate={moment()}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                             <div className="col-md-6">
@@ -1097,6 +1106,8 @@ class Performance extends Component {
                                     selected={this.state.currentEndDate}
                                     onChange={this.handleCurrentEndDateChange}
                                     className="form-control date-box"
+                                    minDate={this.state.currentStartDate}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                         </div>
@@ -1111,6 +1122,8 @@ class Performance extends Component {
                                     selected={this.state.priorStartDate}
                                     onChange={this.handlePriorStartDateChange}
                                     className="form-control date-box"
+                                    maxDate={this.state.currentStartDate}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                             <div className="col-md-6">
@@ -1118,6 +1131,8 @@ class Performance extends Component {
                                     selected={this.state.priorEndDate}
                                     onChange={this.handlePriorEndDateChange}
                                     className="form-control date-box"
+                                    minDate={this.state.priorStartDate}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                         </div>
