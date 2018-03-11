@@ -20,21 +20,22 @@ class Performance extends Component {
 
         let beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
             , day = beforeOneWeek.getDay()
-            , diffToMonday = beforeOneWeek.getDate() - day + (day === 0 ? -6 : 1)
+            , diffToMonday = beforeOneWeek.getDate() - day
             , lastMonday = new Date(beforeOneWeek.setDate(diffToMonday))
             , lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
+
         let beforeTwoWeeksMonday = new Date(lastMonday.getTime() - 60 * 60 * 24 * 7 * 1000)
             , beforeTwoWeeksSunday = new Date(lastSunday.getTime() - 60 * 60 * 24 * 7 * 1000);
 
         this.state = {
-            // currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
-            // currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            currentStartDate: moment(new Date('2018-03-01T10:00:00')),
-            currentEndDate: moment(new Date('2018-03-08T10:00:00')),
-            // priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
-            // priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
-            priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
-            priorEndDate: moment(new Date('2018-03-04T10:00:00')), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
+            currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
+            // currentStartDate: moment(new Date('2018-03-01T10:00:00')),
+            // currentEndDate: moment(new Date('2018-03-08T10:00:00')),
+            priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
+            priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
+            // priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
+            // priorEndDate: moment(new Date('2018-03-04T10:00:00')), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             currentAnalyticsOverview: [],
             priorAnalyticsOverview: [],
             currentAnalyticsMediaspends: [],
@@ -456,8 +457,6 @@ class Performance extends Component {
             //     row["cpa"] = Math.round(this.precise(row["mediaSpends"] / row["transactions"]));
             //     return row;
             // });
-
-            debugger;
 
             let newPer = per.map((row) => {
                 row["mediaSpends"] = typeof values[1] !== 'undefined' && values[1].length > 0 ? values[1][0][this.state.mediaSpendsKeyMap[row.rValue]] : 0;
