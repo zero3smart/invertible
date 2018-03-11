@@ -1107,6 +1107,7 @@ class Performance extends Component {
                                     onChange={this.handleCurrentEndDateChange}
                                     className="form-control date-box"
                                     minDate={this.state.currentStartDate}
+                                    maxDate={moment()}
                                     showDisabledMonthNavigation
                                 />
                             </div>
@@ -1132,6 +1133,7 @@ class Performance extends Component {
                                     onChange={this.handlePriorEndDateChange}
                                     className="form-control date-box"
                                     minDate={this.state.priorStartDate}
+                                    maxDate={this.state.currentStartDate}
                                     showDisabledMonthNavigation
                                 />
                             </div>
