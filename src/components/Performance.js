@@ -372,6 +372,12 @@ class Performance extends Component {
         return analytics;
     }
 
+    /**
+     * Get fields from analytics array to the current date
+     * @param analyticsOverview
+     * @return return fields Array
+     * etc
+     */
     setPerformanceValuesForCurrent(analyticsOverview) {
         let per;
 
@@ -436,6 +442,12 @@ class Performance extends Component {
         return p4;
     }
 
+    /**
+     * Get fields from analytics array to the prior date
+     * @param analyticsOverview
+     * @return return fields Array
+     * etc
+     */
     setPerformanceValuesForPrior(analyticsOverview) {
         let per;
 
