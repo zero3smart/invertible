@@ -491,6 +491,12 @@ class Performance extends Component {
         return p4;
     }
 
+    /**
+     * Caculate chg value
+     * @param
+     * @return
+     * etc
+     */
     changeCalculation() {
         let currentReportTable = this.state.currentReportTable;
         let priorReportTable = this.state.priorReportTable;
@@ -519,6 +525,12 @@ class Performance extends Component {
         this.setState({chgReportTable: tmp});
     }
 
+    /**
+     * Get performance data range for current and prior date
+     * @param
+     * @return
+     * etc
+     */
     fetchPerformanceData() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -583,6 +595,12 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Convert first chracter of the string to capital
+     * @param string
+     * @return return converted string
+     * etc
+     */
     jsUcfirst(string)
     {
         return string.charAt(0).toUpperCase() + string.slice(1);
