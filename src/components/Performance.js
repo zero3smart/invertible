@@ -606,6 +606,12 @@ class Performance extends Component {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    /**
+     * Get Max Value of the fields in the array
+     * @param data, attribute
+     * @return return maximum value
+     * etc
+     */
     getMax(data, attribute) {
         let maxVal = _.maxBy(data, (o) => {
             return parseInt(o[attribute], 10);
