@@ -621,10 +621,12 @@ class Performance extends Component {
     }
 
     render() {
+        // spin element
         const loading = (
             <div className="ui active centered inline loader"></div>
         );
 
+        // chart for medis spends
         const mediaSpendsChart = (
             <AmCharts.React
                 style={{
@@ -676,6 +678,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for media spends change
         const mediaSpendsChangeChart = (
             <AmCharts.React
                 style={{
@@ -725,6 +728,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for cpa
         const cpaChart = (
             <AmCharts.React
                 style={{
@@ -776,6 +780,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for cpa change
         const cpaChangeChart = (
             <AmCharts.React
                 style={{
@@ -825,6 +830,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for bounce rate
         const bounceRateChart = (
             <AmCharts.React
                 style={{
@@ -874,6 +880,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for bounce rate chg
         const bounceRateChgChart = (
             <AmCharts.React
                 style={{
@@ -924,6 +931,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for transaction
         const transactionsChart = (
             <AmCharts.React
                 style={{
@@ -972,6 +980,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for transaction chg
         const transactionsChgChart = (
             <AmCharts.React
                 style={{
@@ -1021,6 +1030,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for visits
         const visitsChart = (
             <AmCharts.React
                 style={{
@@ -1069,6 +1079,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for visits change
         const visitsChgChart = (
             <AmCharts.React
                 style={{
