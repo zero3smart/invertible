@@ -52,6 +52,12 @@ class Funnel extends Component {
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps, nextState
+     * @return
+     * etc
+     */
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
             this.state.currentEndDate !== nextState.currentEndDate ||
@@ -60,6 +66,12 @@ class Funnel extends Component {
         }
     }
 
+    /**
+     * Event which listen to current start date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentStartDateChange(date) {
         this.setState({
             currentStartDate: date
@@ -68,6 +80,12 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * Event which listen to current end date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
@@ -76,6 +94,12 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * update the value of landing page drop down
+     * @param
+     * @return
+     * etc
+     */
     updateLandingPage(newValue) {
         this.setState({
             landingPage: newValue,
