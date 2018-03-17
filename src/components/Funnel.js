@@ -241,9 +241,9 @@ class Funnel extends Component {
     }
 
     /**
-     * fetch funnel data
-     * @param
-     * @return
+     * get filtered list by groupByAttr
+     * @param analytics, groupByAttr
+     * @return filtered list
      * etc
      */
     getFilteredList(analytics, groupByAttr) {
@@ -297,19 +297,33 @@ class Funnel extends Component {
         return _filteredList;
     }
 
+    /**
+     * return the string converted first character into capital
+     * @param string
+     * @return converted string
+     * etc
+     */
     jsUcfirst(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    /**
+     * component life cycle method
+     * @param prevProps, prevState
+     * @return
+     * etc
+     */
     componentDidMount() {
         this.fetchFunnel();
     }
 
     render() {
+        // loading element
         const loading = (
             <div className="ui active centered inline loader"></div>
         );
 
+        // line chart for funnel
         const funnelLineChart = (
             <AmCharts.React
                 style={{
@@ -378,6 +392,7 @@ class Funnel extends Component {
                 }} />
         );
 
+        // stackbar chart for funnel
         const funnelStackBarChart = (
             <AmCharts.React
                 style={{
