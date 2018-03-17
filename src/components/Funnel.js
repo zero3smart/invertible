@@ -595,7 +595,6 @@ class Funnel extends Component {
                         </div>
                     </div>
                 }
-
             </div>
         );
     }
