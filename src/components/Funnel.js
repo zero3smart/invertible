@@ -132,6 +132,12 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * get max value in users_total and sessions_total of the data array
+     * @param data
+     * @return maximum value
+     * etc
+     */
     getMax(data) {
         let maxValUsersTotal = _.maxBy(data, (o) => {
             return Math.abs(parseInt(o['users_total'], 10))
@@ -144,18 +150,42 @@ class Funnel extends Component {
         return Math.max(Math.abs(maxValUsersTotal.users_total), Math.abs(maxValSessionsTotal.sessions_total));
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps
+     * @return
+     * etc
+     */
     componentWillReceiveProps(nextProps) {
 
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps, nextState
+     * @return
+     * etc
+     */
     shouldComponentUpdate(nextProps, nextState) {
         return true;
     }
 
+    /**
+     * component life cycle method
+     * @param prevProps, prevState
+     * @return
+     * etc
+     */
     componentDidUpdate(prevProps, prevState) {
 
     }
 
+    /**
+     * fetch funnel data
+     * @param
+     * @return
+     * etc
+     */
     fetchFunnel() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -196,8 +226,6 @@ class Funnel extends Component {
             this.setState({ optionsLandingPage: newLA});
             this.setState({ optionsLandingPageAll: landingAnalytics });
 
-            debugger;
-
             this.setState({
                 maxValues: {
                     u_s: this.getMax(newLA)
@@ -212,6 +240,12 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * fetch funnel data
+     * @param
+     * @return
+     * etc
+     */
     getFilteredList(analytics, groupByAttr) {
         let _filteredList = [];
         let minus = 1;
