@@ -108,12 +108,24 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * update the value of device category drop down
+     * @param
+     * @return
+     * etc
+     */
     updateDeviceCategory(newValue) {
         this.setState({
             deviceCategory: newValue,
         });
     }
 
+    /**
+     * update the value of channel drop down
+     * @param
+     * @return
+     * etc
+     */
     updateChannel(newValue) {
         this.setState({
             channel: newValue,
