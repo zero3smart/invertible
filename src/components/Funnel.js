@@ -21,7 +21,7 @@ class Funnel extends Component {
             , lastMonday = new Date(beforeOneWeek.setDate(diffToMonday))
             , lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
         this.state = {
-            currentStartDate: moment(lastMonday),
+            currentStartDate: moment(new Date('2018-01-01T10:00:00')),//moment(lastMonday),
             currentEndDate: moment(), //moment(lastSunday),
             landingPage: 'Homepage Visits',
             deviceCategory: 'tablet',
@@ -204,6 +204,8 @@ class Funnel extends Component {
             let deviceAnalytics = this.getFilteredList(analytics, 'device');
             let landingAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
 
+            debugger;
+
             let dateAnalytics = this.getFilteredList(analytics, 'date');
             let entireAnalytics = this.getFilteredList(analytics, '');
 
@@ -259,7 +261,7 @@ class Funnel extends Component {
 
         if (groupByAttr == 'funnel_step_name') {
             minus = -1;
-            //analytics = analytics.filter(o => o.device == this.state.deviceCategory && o.channel == this.state.channel);
+            // analytics = analytics.filter(o => o.device == this.state.deviceCategory && o.channel == this.state.channel);
         }
 
         _filteredList = _(analytics)
