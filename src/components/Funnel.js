@@ -23,7 +23,7 @@ class Funnel extends Component {
         this.state = {
             currentStartDate: moment(new Date('2018-01-01T10:00:00')), //moment(lastMonday),
             currentEndDate: moment(new Date('2018-01-02T10:00:00')), //moment(lastSunday),
-            landingPage: 'Add to Bag',
+            landingPage: 'Homepage Visits',
             deviceCategory: 'mobile',
             channel: 'direct',
             currentAnalytics: [],
@@ -35,14 +35,15 @@ class Funnel extends Component {
             maxValues: {
                 u_s: -1,
             },
-            // homepage> shop pages> product pages> shipping pages> billing pages> purchase
+            // homepage> shop pages> product pages> add to bag> shipping pages> billing pages> purchase
             sortWeight: {
                 homepage: 1,
                 shop: 2,
                 product: 3,
-                shipping: 4,
-                billing: 5,
-                purchase: 6
+                add: 4,
+                shipping: 5,
+                billing: 6,
+                purchase: 7
             }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
@@ -61,7 +62,9 @@ class Funnel extends Component {
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
             this.state.currentEndDate !== nextState.currentEndDate ||
-            this.state.landingPage !== nextState.landingPage) {
+            this.state.landingPage !== nextState.landingPage ||
+            this.state.deviceCategory !== nextState.deviceCategory ||
+            this.state.channel !== nextState.channel) {
             this.setState({ loading: true });
         }
     }
@@ -117,6 +120,8 @@ class Funnel extends Component {
     updateDeviceCategory(newValue) {
         this.setState({
             deviceCategory: newValue,
+        }, () => {
+            this.fetchFunnel();
         });
     }
 
@@ -129,6 +134,8 @@ class Funnel extends Component {
     updateChannel(newValue) {
         this.setState({
             channel: newValue,
+        }, () => {
+            this.fetchFunnel();
         });
     }
 
@@ -210,6 +217,7 @@ class Funnel extends Component {
             this.setState({ optionsChannel: channelAnalytics });
             this.setState({ optionsDeviceCategory: deviceAnalytics });
 
+            debugger;
 
             let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
             let findIdx, lp = this.state.landingPage;
@@ -224,7 +232,7 @@ class Funnel extends Component {
             let newLA = sortedLA.slice(findIdx);
 
             this.setState({ optionsLandingPage: newLA});
-            this.setState({ optionsLandingPageAll: landingAnalytics });
+            this.setState({ optionsLandingPageAll: sortedLA });
 
             this.setState({
                 maxValues: {
@@ -279,16 +287,24 @@ class Funnel extends Component {
                     'weight': weight,
                     'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
-                        return parseFloat(s.sessions_total, 10);
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_total, 10);
+                        return 0;
                     }) * minus,
                     'sessions_purchase': _.sumBy(objs, (s) => {
-                        return parseFloat(s.sessions_purchase, 10);
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_purchase, 10);
+                        return 0;
                     }),
                     'users_total': _.sumBy(objs, (s) => {
-                        return parseFloat(s.users_total, 10);
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_total, 10);
+                        return 0;
                     }),
                     'users_purchase': _.sumBy(objs, (s) => {
-                        return parseFloat(s.users_purchase, 10);
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_purchase, 10);
+                        return 0;
                     }),
                 };
             })
@@ -600,7 +616,7 @@ class Funnel extends Component {
     }
 }
 
-Funnel.PropTypes = {
+Funnel.propTypes = {
     analytics: PropTypes.array.isRequired,
     fetchFunnel: PropTypes.func.isRequired
 }
