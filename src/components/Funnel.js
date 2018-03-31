@@ -39,11 +39,7 @@ class Funnel extends Component {
             sortWeight: {
                 homepage: 1,
                 shop: 2,
-                product: 3,
-                add: 4,
-                shipping: 5,
-                billing: 6,
-                purchase: 7
+                product: 3
             }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
@@ -202,7 +198,7 @@ class Funnel extends Component {
 
             let channelAnalytics = this.getFilteredList(analytics, 'channel');
             let deviceAnalytics = this.getFilteredList(analytics, 'device');
-            let landingAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
+            let landingAnalytics = this.getFilteredList(analytics, 'funnel_entry_page');
 
             debugger;
 
@@ -210,9 +206,24 @@ class Funnel extends Component {
             let entireAnalytics = this.getFilteredList(analytics, '');
 
             landingAnalytics = landingAnalytics.map((elm) => {
+                let users_value, sessions_value;
+
+                if (elm.label == 'Homepage Visits') {
+                    users_value = elm.users_homepage;
+                    sessions_value = elm.sessions_homepage;
+                } else if (elm.label == 'Shop Pages') {
+                    users_value = elm.users_shop;
+                    sessions_value = elm.sessions_shop;
+                } else if (elm.label == 'Product Pages') {
+                    users_value = elm.users_product;
+                    sessions_value = elm.sessions_product;
+                }
+
                 let _obj = Object.assign({}, elm, {
-                    sessions_total_percentage: (elm.sessions_total / entireAnalytics[0].sessions_total * 100).toFixed(2),
-                    users_total_percentage: (elm.users_total / entireAnalytics[0].users_total * 100).toFixed(2)
+                    users_value: users_value,
+                    sessions_value: sessions_value,
+                    sessions_total_percentage: (sessions_value / entireAnalytics[0].sessions_total * 100).toFixed(2),
+                    users_total_percentage: (users_value / entireAnalytics[0].users_total * 100).toFixed(2)
                 });
                 return _obj;
             });
@@ -259,7 +270,7 @@ class Funnel extends Component {
         let _filteredList = [];
         let minus = 1;
 
-        if (groupByAttr == 'funnel_step_name') {
+        if (groupByAttr == 'funnel_entry_page') {
             minus = -1;
             // analytics = analytics.filter(o => o.device == this.state.deviceCategory && o.channel == this.state.channel);
         }
@@ -293,22 +304,82 @@ class Funnel extends Component {
                         if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
                             return parseFloat(s.sessions_total, 10);
                         return 0;
-                    }) * minus,
+                    }),
                     'sessions_purchase': _.sumBy(objs, (s) => {
                         if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
                             return parseFloat(s.sessions_purchase, 10);
+                        return 0;
+                    }),
+                    'sessions_homepage': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_homepage, 10);
+                        return 0;
+                    }),
+                    'sessions_shop': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_shop, 10);
+                        return 0;
+                    }),
+                    'sessions_product': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_product, 10);
+                        return 0;
+                    }),
+                    'sessions_addtobag': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_addtobag, 10);
+                        return 0;
+                    }),
+                    'sessions_shipping': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_shipping, 10);
+                        return 0;
+                    }),
+                    'sessions_billing': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_billing, 10);
                         return 0;
                     }),
                     'users_total': _.sumBy(objs, (s) => {
                         if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
                             return parseFloat(s.users_total, 10);
                         return 0;
-                    }),
+                    }) * minus,
                     'users_purchase': _.sumBy(objs, (s) => {
                         if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
                             return parseFloat(s.users_purchase, 10);
                         return 0;
-                    }),
+                    }) * minus,
+                    'users_homepage': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_homepage, 10);
+                        return 0;
+                    }) * minus,
+                    'users_shop': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_shop, 10);
+                        return 0;
+                    }) * minus,
+                    'users_product': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_product, 10);
+                        return 0;
+                    }) * minus,
+                    'users_addtobag': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_addtobag, 10);
+                        return 0;
+                    }) * minus,
+                    'users_shipping': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_shipping, 10);
+                        return 0;
+                    }) * minus,
+                    'users_billing': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_billing, 10);
+                        return 0;
+                    }) * minus
                 };
             })
             .value();
@@ -430,7 +501,7 @@ class Funnel extends Component {
                         "lineAlpha": 0.2,
                         "lineColor": "#3962B7",
                         "type": "column",
-                        "valueField": "users_total",
+                        "valueField": "users_value",
                         "title": "Users",
                         "labelText": "[[value]]",
                         "clustered": false,
@@ -445,7 +516,7 @@ class Funnel extends Component {
                         "lineAlpha": 0.2,
                         "lineColor": "#008000",
                         "type": "column",
-                        "valueField": "sessions_total",
+                        "valueField": "sessions_value",
                         "title": "Sessions",
                         "labelText": "[[value]]",
                         "clustered": false,
