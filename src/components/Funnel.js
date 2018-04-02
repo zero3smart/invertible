@@ -103,7 +103,7 @@ class Funnel extends Component {
         this.setState({
             landingPage: newValue,
         }, () => {
-            this.fetchFunnel();
+            this.fetchFromStore();
         });
     }
 
@@ -117,7 +117,7 @@ class Funnel extends Component {
         this.setState({
             deviceCategory: newValue,
         }, () => {
-            this.fetchFunnel();
+            this.fetchFromStore();
         });
     }
 
@@ -131,7 +131,7 @@ class Funnel extends Component {
         this.setState({
             channel: newValue,
         }, () => {
-            this.fetchFunnel();
+            this.fetchFromStore();
         });
     }
 
@@ -183,6 +183,83 @@ class Funnel extends Component {
 
     }
 
+    fetchFromStore() {
+        let {
+            analytics
+        } = this.props;
+
+        let channelAnalytics = this.getFilteredList(analytics, 'channel');
+        let deviceAnalytics = this.getFilteredList(analytics, 'device');
+        let landingAnalytics = this.getFilteredList(analytics, 'funnel_entry_page');
+
+        let dateAnalytics = this.getFilteredList(analytics, 'date');
+        let entireAnalytics = this.getFilteredList(analytics, '');
+
+        landingAnalytics = landingAnalytics.map((elm) => {
+            let users_value, sessions_value;
+
+            if (elm.label == 'Homepage Visits') {
+                users_value = elm.users_homepage;
+                sessions_value = elm.sessions_homepage;
+            } else if (elm.label == 'Shop Pages') {
+                users_value = elm.users_shop;
+                sessions_value = elm.sessions_shop;
+            } else if (elm.label == 'Product Pages') {
+                users_value = elm.users_product;
+                sessions_value = elm.sessions_product;
+            }
+
+            let _obj = Object.assign({}, elm, {
+                users_value: users_value,
+                sessions_value: sessions_value,
+                sessions_total_percentage: (sessions_value / entireAnalytics[0].sessions_total * 100).toFixed(2),
+                users_total_percentage: (users_value / entireAnalytics[0].users_total * 100).toFixed(2)
+            });
+            return _obj;
+        });
+
+        this.setState({
+            optionsChannel: channelAnalytics
+        });
+        this.setState({
+            optionsDeviceCategory: deviceAnalytics
+        });
+
+        let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
+
+        let findIdx, lp = this.state.landingPage;
+
+        for (let i = 0; i < sortedLA.length; i++) {
+            if (sortedLA[i].label == lp) {
+                findIdx = i;
+                break;
+            }
+        }
+
+        let newLA = sortedLA.slice(findIdx);
+
+        this.setState({
+            optionsLandingPage: newLA
+        });
+        this.setState({
+            optionsLandingPageAll: sortedLA
+        });
+
+        this.setState({
+            maxValues: {
+                u_s: this.getMax(newLA)
+            }
+        });
+
+        let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
+        this.setState({
+            currentAnalytics: tmp
+        });
+        this.setState({
+            loading: false
+        });
+    }
+
     /**
      * fetch funnel data
      * @param
@@ -194,67 +271,7 @@ class Funnel extends Component {
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
         this.props.fetchFunnel(currentStartDate, currentEndDate).then(() => {
-            let { analytics } = this.props;
-
-            let channelAnalytics = this.getFilteredList(analytics, 'channel');
-            let deviceAnalytics = this.getFilteredList(analytics, 'device');
-            let landingAnalytics = this.getFilteredList(analytics, 'funnel_entry_page');
-
-            debugger;
-
-            let dateAnalytics = this.getFilteredList(analytics, 'date');
-            let entireAnalytics = this.getFilteredList(analytics, '');
-
-            landingAnalytics = landingAnalytics.map((elm) => {
-                let users_value, sessions_value;
-
-                if (elm.label == 'Homepage Visits') {
-                    users_value = elm.users_homepage;
-                    sessions_value = elm.sessions_homepage;
-                } else if (elm.label == 'Shop Pages') {
-                    users_value = elm.users_shop;
-                    sessions_value = elm.sessions_shop;
-                } else if (elm.label == 'Product Pages') {
-                    users_value = elm.users_product;
-                    sessions_value = elm.sessions_product;
-                }
-
-                let _obj = Object.assign({}, elm, {
-                    users_value: users_value,
-                    sessions_value: sessions_value,
-                    sessions_total_percentage: (sessions_value / entireAnalytics[0].sessions_total * 100).toFixed(2),
-                    users_total_percentage: (users_value / entireAnalytics[0].users_total * 100).toFixed(2)
-                });
-                return _obj;
-            });
-
-            this.setState({ optionsChannel: channelAnalytics });
-            this.setState({ optionsDeviceCategory: deviceAnalytics });
-
-            let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
-            let findIdx, lp = this.state.landingPage;
-
-            for (let i = 0; i < sortedLA.length; i++) {
-                if (sortedLA[i].label == lp) {
-                    findIdx = i;
-                    break;
-                }
-            }
-
-            let newLA = sortedLA.slice(findIdx);
-
-            this.setState({ optionsLandingPage: newLA});
-            this.setState({ optionsLandingPageAll: sortedLA });
-
-            this.setState({
-                maxValues: {
-                    u_s: this.getMax(newLA)
-                }
-            });
-
-            let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
-            this.setState({ currentAnalytics: tmp });
-            this.setState({ loading: false });
+            this.fetchFromStore();
         }, err => {
             console.log(err);
         });
