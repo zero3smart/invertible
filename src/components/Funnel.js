@@ -21,7 +21,7 @@ class Funnel extends Component {
             , lastMonday = new Date(beforeOneWeek.setDate(diffToMonday))
             , lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
         this.state = {
-            currentStartDate: moment(new Date('2018-01-01T10:00:00')),//moment(lastMonday),
+            currentStartDate: moment(lastMonday),
             currentEndDate: moment(), //moment(lastSunday),
             landingPage: 'Homepage Visits',
             deviceCategory: 'tablet',
