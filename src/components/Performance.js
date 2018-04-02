@@ -30,8 +30,6 @@ class Performance extends Component {
         this.state = {
             currentStartDate: moment(lastMonday), //moment(new Date('2018-01-15T10:00:00')),
             currentEndDate: moment(lastSunday), //moment(new Date('2018-01-28T10:00:00')),
-            // currentStartDate: moment(new Date('2018-03-01T10:00:00')),
-            // currentEndDate: moment(new Date('2018-03-08T10:00:00')),
             priorStartDate: moment(beforeTwoWeeksMonday), //moment(new Date('2018-01-01T10:00:00')),
             priorEndDate: moment(beforeTwoWeeksSunday), //moment(new Date('2018-01-14T10:00:00')), //moment().add(-7, 'days'),
             // priorStartDate: moment(new Date('2018-02-26T10:00:00')), //moment(new Date('2018-01-01T10:00:00')),
@@ -62,6 +60,13 @@ class Performance extends Component {
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
         this.handlePriorStartDateChange = this.handlePriorStartDateChange.bind(this);
         this.handlePriorEndDateChange = this.handlePriorEndDateChange.bind(this);
+    }
+
+    disablePrevDates(startDate) {
+        const startSeconds = Date.parse(startDate);
+        return (date) => {
+            return Date.parse(date) < startSeconds;
+        }
     }
 
     /**
@@ -367,6 +372,12 @@ class Performance extends Component {
         return analytics;
     }
 
+    /**
+     * Get fields from analytics array to the current date
+     * @param analyticsOverview
+     * @return return fields Array
+     * etc
+     */
     setPerformanceValuesForCurrent(analyticsOverview) {
         let per;
 
@@ -431,6 +442,12 @@ class Performance extends Component {
         return p4;
     }
 
+    /**
+     * Get fields from analytics array to the prior date
+     * @param analyticsOverview
+     * @return return fields Array
+     * etc
+     */
     setPerformanceValuesForPrior(analyticsOverview) {
         let per;
 
@@ -474,6 +491,12 @@ class Performance extends Component {
         return p4;
     }
 
+    /**
+     * Caculate chg value
+     * @param
+     * @return
+     * etc
+     */
     changeCalculation() {
         let currentReportTable = this.state.currentReportTable;
         let priorReportTable = this.state.priorReportTable;
@@ -502,6 +525,12 @@ class Performance extends Component {
         this.setState({chgReportTable: tmp});
     }
 
+    /**
+     * Get performance data range for current and prior date
+     * @param
+     * @return
+     * etc
+     */
     fetchPerformanceData() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
@@ -566,11 +595,23 @@ class Performance extends Component {
         });
     }
 
+    /**
+     * Convert first chracter of the string to capital
+     * @param string
+     * @return return converted string
+     * etc
+     */
     jsUcfirst(string)
     {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    /**
+     * Get Max Value of the fields in the array
+     * @param data, attribute
+     * @return return maximum value
+     * etc
+     */
     getMax(data, attribute) {
         let maxVal = _.maxBy(data, (o) => {
             return parseInt(o[attribute], 10);
@@ -580,10 +621,12 @@ class Performance extends Component {
     }
 
     render() {
+        // spin element
         const loading = (
             <div className="ui active centered inline loader"></div>
         );
 
+        // chart for medis spends
         const mediaSpendsChart = (
             <AmCharts.React
                 style={{
@@ -635,6 +678,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for media spends change
         const mediaSpendsChangeChart = (
             <AmCharts.React
                 style={{
@@ -684,6 +728,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for cpa
         const cpaChart = (
             <AmCharts.React
                 style={{
@@ -735,6 +780,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for cpa change
         const cpaChangeChart = (
             <AmCharts.React
                 style={{
@@ -784,6 +830,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for bounce rate
         const bounceRateChart = (
             <AmCharts.React
                 style={{
@@ -833,6 +880,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for bounce rate chg
         const bounceRateChgChart = (
             <AmCharts.React
                 style={{
@@ -883,6 +931,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for transaction
         const transactionsChart = (
             <AmCharts.React
                 style={{
@@ -931,6 +980,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for transaction chg
         const transactionsChgChart = (
             <AmCharts.React
                 style={{
@@ -980,6 +1030,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for visits
         const visitsChart = (
             <AmCharts.React
                 style={{
@@ -1028,6 +1079,7 @@ class Performance extends Component {
                 }} />
         );
 
+        // chart for visits change
         const visitsChgChart = (
             <AmCharts.React
                 style={{
@@ -1090,6 +1142,10 @@ class Performance extends Component {
                                     selected={this.state.currentStartDate}
                                     onChange={this.handleCurrentStartDateChange}
                                     className="form-control date-box"
+                                    // minDate={moment()}
+                                    // maxDate={moment().add(5, "months")}
+                                    maxDate={moment()}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                             <div className="col-md-6">
@@ -1097,6 +1153,9 @@ class Performance extends Component {
                                     selected={this.state.currentEndDate}
                                     onChange={this.handleCurrentEndDateChange}
                                     className="form-control date-box"
+                                    minDate={this.state.currentStartDate}
+                                    maxDate={moment()}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                         </div>
@@ -1111,6 +1170,8 @@ class Performance extends Component {
                                     selected={this.state.priorStartDate}
                                     onChange={this.handlePriorStartDateChange}
                                     className="form-control date-box"
+                                    maxDate={this.state.currentStartDate}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                             <div className="col-md-6">
@@ -1118,6 +1179,9 @@ class Performance extends Component {
                                     selected={this.state.priorEndDate}
                                     onChange={this.handlePriorEndDateChange}
                                     className="form-control date-box"
+                                    minDate={this.state.priorStartDate}
+                                    maxDate={this.state.currentStartDate}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                         </div>

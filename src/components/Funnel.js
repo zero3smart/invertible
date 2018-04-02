@@ -21,10 +21,10 @@ class Funnel extends Component {
             , lastMonday = new Date(beforeOneWeek.setDate(diffToMonday))
             , lastSunday = new Date(beforeOneWeek.setDate(diffToMonday + 6));
         this.state = {
-            currentStartDate: moment(new Date('2018-01-01T10:00:00')), //moment(lastMonday),
-            currentEndDate: moment(new Date('2018-01-02T10:00:00')), //moment(lastSunday),
-            landingPage: 'Add to Bag',
-            deviceCategory: 'mobile',
+            currentStartDate: moment(new Date('2018-01-01T10:00:00')),//moment(lastMonday),
+            currentEndDate: moment(), //moment(lastSunday),
+            landingPage: 'Homepage Visits',
+            deviceCategory: 'tablet',
             channel: 'direct',
             currentAnalytics: [],
             optionsLandingPage: [],
@@ -35,14 +35,11 @@ class Funnel extends Component {
             maxValues: {
                 u_s: -1,
             },
-            // homepage> shop pages> product pages> shipping pages> billing pages> purchase
+            // homepage> shop pages> product pages> add to bag> shipping pages> billing pages> purchase
             sortWeight: {
                 homepage: 1,
                 shop: 2,
-                product: 3,
-                shipping: 4,
-                billing: 5,
-                purchase: 6
+                product: 3
             }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
@@ -52,14 +49,28 @@ class Funnel extends Component {
         this.handleCurrentEndDateChange = this.handleCurrentEndDateChange.bind(this);
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps, nextState
+     * @return
+     * etc
+     */
     componentWillUpdate(nextProps, nextState) {
         if (this.state.currentStartDate !== nextState.currentStartDate ||
             this.state.currentEndDate !== nextState.currentEndDate ||
-            this.state.landingPage !== nextState.landingPage) {
+            this.state.landingPage !== nextState.landingPage ||
+            this.state.deviceCategory !== nextState.deviceCategory ||
+            this.state.channel !== nextState.channel) {
             this.setState({ loading: true });
         }
     }
 
+    /**
+     * Event which listen to current start date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentStartDateChange(date) {
         this.setState({
             currentStartDate: date
@@ -68,6 +79,12 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * Event which listen to current end date changes
+     * @param date
+     * @return
+     * etc
+     */
     handleCurrentEndDateChange(date) {
         this.setState({
             currentEndDate: date
@@ -76,26 +93,54 @@ class Funnel extends Component {
         });
     }
 
+    /**
+     * update the value of landing page drop down
+     * @param
+     * @return
+     * etc
+     */
     updateLandingPage(newValue) {
         this.setState({
             landingPage: newValue,
         }, () => {
-            this.fetchFunnel();
+            this.fetchFromStore();
         });
     }
 
+    /**
+     * update the value of device category drop down
+     * @param
+     * @return
+     * etc
+     */
     updateDeviceCategory(newValue) {
         this.setState({
             deviceCategory: newValue,
+        }, () => {
+            this.fetchFromStore();
         });
     }
 
+    /**
+     * update the value of channel drop down
+     * @param
+     * @return
+     * etc
+     */
     updateChannel(newValue) {
         this.setState({
             channel: newValue,
+        }, () => {
+            this.fetchFromStore();
         });
     }
 
+    /**
+     * get max value in users_total and sessions_total of the data array
+     * @param data
+     * @return maximum value
+     * etc
+     */
     getMax(data) {
         let maxValUsersTotal = _.maxBy(data, (o) => {
             return Math.abs(parseInt(o['users_total'], 10))
@@ -108,80 +153,144 @@ class Funnel extends Component {
         return Math.max(Math.abs(maxValUsersTotal.users_total), Math.abs(maxValSessionsTotal.sessions_total));
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps
+     * @return
+     * etc
+     */
     componentWillReceiveProps(nextProps) {
 
     }
 
+    /**
+     * component life cycle method
+     * @param nextProps, nextState
+     * @return
+     * etc
+     */
     shouldComponentUpdate(nextProps, nextState) {
         return true;
     }
 
+    /**
+     * component life cycle method
+     * @param prevProps, prevState
+     * @return
+     * etc
+     */
     componentDidUpdate(prevProps, prevState) {
 
     }
 
+    fetchFromStore() {
+        let {
+            analytics
+        } = this.props;
+
+        let channelAnalytics = this.getFilteredList(analytics, 'channel');
+        let deviceAnalytics = this.getFilteredList(analytics, 'device');
+        let landingAnalytics = this.getFilteredList(analytics, 'funnel_entry_page');
+
+        let dateAnalytics = this.getFilteredList(analytics, 'date');
+        let entireAnalytics = this.getFilteredList(analytics, '');
+
+        landingAnalytics = landingAnalytics.map((elm) => {
+            let users_value, sessions_value;
+
+            if (elm.label == 'Homepage Visits') {
+                users_value = elm.users_homepage;
+                sessions_value = elm.sessions_homepage;
+            } else if (elm.label == 'Shop Pages') {
+                users_value = elm.users_shop;
+                sessions_value = elm.sessions_shop;
+            } else if (elm.label == 'Product Pages') {
+                users_value = elm.users_product;
+                sessions_value = elm.sessions_product;
+            }
+
+            let _obj = Object.assign({}, elm, {
+                users_value: users_value,
+                sessions_value: sessions_value,
+                sessions_total_percentage: (sessions_value / entireAnalytics[0].sessions_total * 100).toFixed(2),
+                users_total_percentage: (users_value / entireAnalytics[0].users_total * 100).toFixed(2)
+            });
+            return _obj;
+        });
+
+        this.setState({
+            optionsChannel: channelAnalytics
+        });
+        this.setState({
+            optionsDeviceCategory: deviceAnalytics
+        });
+
+        let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
+
+        let findIdx, lp = this.state.landingPage;
+
+        for (let i = 0; i < sortedLA.length; i++) {
+            if (sortedLA[i].label == lp) {
+                findIdx = i;
+                break;
+            }
+        }
+
+        let newLA = sortedLA.slice(findIdx);
+
+        this.setState({
+            optionsLandingPage: newLA
+        });
+        this.setState({
+            optionsLandingPageAll: sortedLA
+        });
+
+        this.setState({
+            maxValues: {
+                u_s: this.getMax(newLA)
+            }
+        });
+
+        let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
+        this.setState({
+            currentAnalytics: tmp
+        });
+        this.setState({
+            loading: false
+        });
+    }
+
+    /**
+     * fetch funnel data
+     * @param
+     * @return
+     * etc
+     */
     fetchFunnel() {
         let currentStartDate = this.state.currentStartDate.format('YYYYMMDD').replace(/-/gi, '');
         let currentEndDate = this.state.currentEndDate.format('YYYYMMDD').replace(/-/gi, '');
 
         this.props.fetchFunnel(currentStartDate, currentEndDate).then(() => {
-            let { analytics } = this.props;
-
-            let channelAnalytics = this.getFilteredList(analytics, 'channel');
-            let deviceAnalytics = this.getFilteredList(analytics, 'device');
-            let landingAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
-            let dateAnalytics = this.getFilteredList(analytics, 'date');
-            let entireAnalytics = this.getFilteredList(analytics, '');
-
-            landingAnalytics = landingAnalytics.map((elm) => {
-                let _obj = Object.assign({}, elm, {
-                    sessions_total_percentage: (elm.sessions_total / entireAnalytics[0].sessions_total * 100).toFixed(2),
-                    users_total_percentage: (elm.users_total / entireAnalytics[0].users_total * 100).toFixed(2)
-                });
-                return _obj;
-            });
-
-            this.setState({ optionsChannel: channelAnalytics });
-            this.setState({ optionsDeviceCategory: deviceAnalytics });
-
-
-            let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
-            let findIdx, lp = this.state.landingPage;
-
-            for (let i = 0; i < sortedLA.length; i++) {
-                if (sortedLA[i].label == lp) {
-                    findIdx = i;
-                    break;
-                }
-            }
-
-            let newLA = sortedLA.slice(findIdx);
-
-            this.setState({ optionsLandingPage: newLA});
-            this.setState({ optionsLandingPageAll: landingAnalytics });
-
-            debugger;
-
-            this.setState({
-                maxValues: {
-                    u_s: this.getMax(newLA)
-                }
-            });
-
-            let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
-            this.setState({ currentAnalytics: tmp });
-            this.setState({ loading: false });
+            this.fetchFromStore();
         }, err => {
             console.log(err);
         });
     }
 
+    /**
+     * get filtered list by groupByAttr
+     * @param analytics, groupByAttr
+     * @return filtered list
+     * etc
+     */
     getFilteredList(analytics, groupByAttr) {
         let _filteredList = [];
         let minus = 1;
 
-        if (groupByAttr == 'funnel_step_name')
+        if (groupByAttr == 'funnel_entry_page') {
             minus = -1;
+            // analytics = analytics.filter(o => o.device == this.state.deviceCategory && o.channel == this.state.channel);
+        }
 
         _filteredList = _(analytics)
             .groupBy(groupByAttr)
@@ -209,17 +318,85 @@ class Funnel extends Component {
                     'weight': weight,
                     'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
-                        return parseFloat(s.sessions_total, 10);
-                    }) * minus,
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_total, 10);
+                        return 0;
+                    }),
                     'sessions_purchase': _.sumBy(objs, (s) => {
-                        return parseFloat(s.sessions_purchase, 10);
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_purchase, 10);
+                        return 0;
+                    }),
+                    'sessions_homepage': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_homepage, 10);
+                        return 0;
+                    }),
+                    'sessions_shop': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_shop, 10);
+                        return 0;
+                    }),
+                    'sessions_product': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_product, 10);
+                        return 0;
+                    }),
+                    'sessions_addtobag': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_addtobag, 10);
+                        return 0;
+                    }),
+                    'sessions_shipping': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_shipping, 10);
+                        return 0;
+                    }),
+                    'sessions_billing': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.sessions_billing, 10);
+                        return 0;
                     }),
                     'users_total': _.sumBy(objs, (s) => {
-                        return parseFloat(s.users_total, 10);
-                    }),
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_total, 10);
+                        return 0;
+                    }) * minus,
                     'users_purchase': _.sumBy(objs, (s) => {
-                        return parseFloat(s.users_purchase, 10);
-                    }),
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_purchase, 10);
+                        return 0;
+                    }) * minus,
+                    'users_homepage': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_homepage, 10);
+                        return 0;
+                    }) * minus,
+                    'users_shop': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_shop, 10);
+                        return 0;
+                    }) * minus,
+                    'users_product': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_product, 10);
+                        return 0;
+                    }) * minus,
+                    'users_addtobag': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_addtobag, 10);
+                        return 0;
+                    }) * minus,
+                    'users_shipping': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_shipping, 10);
+                        return 0;
+                    }) * minus,
+                    'users_billing': _.sumBy(objs, (s) => {
+                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                            return parseFloat(s.users_billing, 10);
+                        return 0;
+                    }) * minus
                 };
             })
             .value();
@@ -227,19 +404,33 @@ class Funnel extends Component {
         return _filteredList;
     }
 
+    /**
+     * return the string converted first character into capital
+     * @param string
+     * @return converted string
+     * etc
+     */
     jsUcfirst(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    /**
+     * component life cycle method
+     * @param prevProps, prevState
+     * @return
+     * etc
+     */
     componentDidMount() {
         this.fetchFunnel();
     }
 
     render() {
+        // loading element
         const loading = (
             <div className="ui active centered inline loader"></div>
         );
 
+        // line chart for funnel
         const funnelLineChart = (
             <AmCharts.React
                 style={{
@@ -308,6 +499,7 @@ class Funnel extends Component {
                 }} />
         );
 
+        // stackbar chart for funnel
         const funnelStackBarChart = (
             <AmCharts.React
                 style={{
@@ -326,7 +518,7 @@ class Funnel extends Component {
                         "lineAlpha": 0.2,
                         "lineColor": "#3962B7",
                         "type": "column",
-                        "valueField": "users_total",
+                        "valueField": "users_value",
                         "title": "Users",
                         "labelText": "[[value]]",
                         "clustered": false,
@@ -341,7 +533,7 @@ class Funnel extends Component {
                         "lineAlpha": 0.2,
                         "lineColor": "#008000",
                         "type": "column",
-                        "valueField": "sessions_total",
+                        "valueField": "sessions_value",
                         "title": "Sessions",
                         "labelText": "[[value]]",
                         "clustered": false,
@@ -412,6 +604,8 @@ class Funnel extends Component {
                                     selected={this.state.currentStartDate}
                                     onChange={this.handleCurrentStartDateChange}
                                     className="form-control date-box"
+                                    maxDate={moment()}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                             <div className="col-md-5 nomargin pl-0">
@@ -419,6 +613,9 @@ class Funnel extends Component {
                                     selected={this.state.currentEndDate}
                                     onChange={this.handleCurrentEndDateChange}
                                     className="form-control date-box"
+                                    minDate={this.state.currentStartDate}
+                                    maxDate={moment()}
+                                    showDisabledMonthNavigation
                                 />
                             </div>
                         </div>
@@ -510,13 +707,12 @@ class Funnel extends Component {
                         </div>
                     </div>
                 }
-
             </div>
         );
     }
 }
 
-Funnel.PropTypes = {
+Funnel.propTypes = {
     analytics: PropTypes.array.isRequired,
     fetchFunnel: PropTypes.func.isRequired
 }

@@ -61,6 +61,12 @@ class Explorer extends PureComponent {
         this.setGroup2Active = this.setGroup2Active.bind(this);
     }
 
+    /**
+     * convert numbers to comma separated string
+     * @param obj
+     * @return converted string
+     * etc
+     */
     convertObjectToComma(obj) {
         for (var key in obj) {
             obj[key] = this.numberWithCommas(obj[key]);
@@ -69,6 +75,12 @@ class Explorer extends PureComponent {
         return obj;
     }
 
+    /**
+     * get filtered list by groupByAttr
+     * @param analytics, groupByAttr
+     * @return filtered list
+     * etc
+     */
     getFilteredList(analytics, groupByAttr) {
         let _filteredList = [];
 
@@ -83,8 +95,7 @@ class Explorer extends PureComponent {
                     'xValue': key,
                     'sessions': _.sumBy(objs, (s) => {
                         return parseInt(s.sessions, 10);
-                    }),
-                    'transactions': _.sumBy(objs, (s) => {
+                    }),                    'transactions': _.sumBy(objs, (s) => {
                         return parseInt(s.transactions, 10);
                     }),
                     'bounceRate': _.sumBy(objs, (s) => {
@@ -109,6 +120,12 @@ class Explorer extends PureComponent {
         return _filteredList;
     }
 
+    /**
+     * set RawData values
+     * @param
+     * @return
+     * etc
+     */
     setRawDataValues() {
         let groupBy = this.state.reportMappings[this.state.group2Active];
 
