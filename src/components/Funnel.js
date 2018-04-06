@@ -200,6 +200,8 @@ class Funnel extends Component {
         let dateAnalytics = this.getFilteredList(analytics, 'date');
         let entireAnalytics = this.getFilteredList(analytics, '');
 
+        debugger;
+
         chartAnalytics = chartAnalytics.map((elm) => {
             let users_value, sessions_value;
 
@@ -275,6 +277,7 @@ class Funnel extends Component {
         this.setState({
             currentAnalytics: tmp
         });
+
         this.setState({
             loading: false
         });
@@ -350,7 +353,7 @@ class Funnel extends Component {
                     'sessions_total': _.sumBy(objs, (s) => {
                         if (s.device == this.state.deviceCategory &&
                             s.channel == this.state.channel &&
-                            s.funnel_entry_page == this.state.landingPage)
+                            parseInt(s.funnel_step) == 1)
                             return parseFloat(s.sessions_total, 10);
                         return 0;
                     }),
@@ -420,7 +423,7 @@ class Funnel extends Component {
                     'users_total': _.sumBy(objs, (s) => {
                         if (s.device == this.state.deviceCategory &&
                             s.channel == this.state.channel &&
-                            s.funnel_entry_page == this.state.landingPage)
+                            parseInt(s.funnel_step) == 1)
                             return parseFloat(s.users_total, 10);
                         return 0;
                     }) * minus,
@@ -613,7 +616,7 @@ class Funnel extends Component {
                         "labelText": "[[value]]",
                         "clustered": false,
                         "labelFunction": function (item) {
-                            return Math.abs(item.values.value) + " (" + item.dataContext.sessions_total_percentage + "%)";
+                            return Math.abs(item.values.value) + " (" + item.dataContext.users_total_percentage + "%)";
                         },
                         "balloonFunction": function (item) {
                             return item.category + ": " + Math.abs(item.values.value);
@@ -628,7 +631,7 @@ class Funnel extends Component {
                         "labelText": "[[value]]",
                         "clustered": false,
                         "labelFunction": function (item) {
-                            return Math.abs(item.values.value) + " (" + item.dataContext.users_total_percentage + "%)";
+                            return Math.abs(item.values.value) + " (" + item.dataContext.sessions_total_percentage + "%)";
                         },
                         "balloonFunction": function (item) {
                             return item.category + ": " + Math.abs(item.values.value);
