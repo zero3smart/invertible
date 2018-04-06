@@ -307,17 +307,16 @@ class Funnel extends Component {
      * etc
      */
     getFilteredList(analytics, groupByAttr) {
-        let _filteredList = [];
+        let _filteredList = analytics;
         let minus = 1;
 
         if (groupByAttr == 'funnel_step_name') {
             minus = -1;
             // analytics = analytics.filter(o => o.device == this.state.deviceCategory && o.channel == this.state.channel);
+            _filteredList = analytics.filter((elm) => {
+                return elm.device == this.state.deviceCategory && elm.channel == this.state.channel;
+            });
         }
-
-        _filteredList = analytics.filter((elm) => {
-            return elm.device == this.state.deviceCategory && elm.channel == this.state.channel;
-        });
 
         _filteredList = _(_filteredList)
             .groupBy(groupByAttr)
