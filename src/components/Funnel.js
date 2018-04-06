@@ -39,7 +39,11 @@ class Funnel extends Component {
             sortWeight: {
                 homepage: 1,
                 shop: 2,
-                product: 3
+                product: 3,
+                add: 4,
+                shipping: 5,
+                billing: 6,
+                purchase: 7
             }
         }
         this.updateLandingPage = this.updateLandingPage.bind(this);
@@ -191,11 +195,12 @@ class Funnel extends Component {
         let channelAnalytics = this.getFilteredList(analytics, 'channel');
         let deviceAnalytics = this.getFilteredList(analytics, 'device');
         let landingAnalytics = this.getFilteredList(analytics, 'funnel_entry_page');
+        let chartAnalytics = this.getFilteredList(analytics, 'funnel_step_name');
 
         let dateAnalytics = this.getFilteredList(analytics, 'date');
         let entireAnalytics = this.getFilteredList(analytics, '');
 
-        landingAnalytics = landingAnalytics.map((elm) => {
+        chartAnalytics = chartAnalytics.map((elm) => {
             let users_value, sessions_value;
 
             if (elm.label == 'Homepage Visits') {
@@ -207,6 +212,18 @@ class Funnel extends Component {
             } else if (elm.label == 'Product Pages') {
                 users_value = elm.users_product;
                 sessions_value = elm.sessions_product;
+            } else if (elm.label == 'Shipping Page') {
+                users_value = elm.users_shipping;
+                sessions_value = elm.sessions_shipping;
+            } else if (elm.label == 'Billing Page') {
+                users_value = elm.users_billing;
+                sessions_value = elm.sessions_billing;
+            } else if (elm.label == 'Purchase') {
+                users_value = elm.users_purchase;
+                sessions_value = elm.sessions_purchase;
+            } else if (elm.label == 'Add to Bag') {
+                users_value = elm.users_addtobag;
+                sessions_value = elm.sessions_addtobag;
             }
 
             let _obj = Object.assign({}, elm, {
@@ -221,22 +238,24 @@ class Funnel extends Component {
         this.setState({
             optionsChannel: channelAnalytics
         });
+
         this.setState({
             optionsDeviceCategory: deviceAnalytics
         });
 
         let sortedLA = _.orderBy(landingAnalytics, ['weight'], ['asc']);
+        let chartLA = _.orderBy(chartAnalytics, ['weight'], ['asc']);
 
         let findIdx, lp = this.state.landingPage;
 
-        for (let i = 0; i < sortedLA.length; i++) {
-            if (sortedLA[i].label == lp) {
+        for (let i = 0; i < chartLA.length; i++) {
+            if (chartLA[i].label == lp) {
                 findIdx = i;
                 break;
             }
         }
 
-        let newLA = sortedLA.slice(findIdx);
+        let newLA = chartLA.slice(findIdx);
 
         this.setState({
             optionsLandingPage: newLA
@@ -252,6 +271,7 @@ class Funnel extends Component {
         });
 
         let tmp = _.orderBy(dateAnalytics, ['rValue'], ['asc']);
+
         this.setState({
             currentAnalytics: tmp
         });
@@ -287,7 +307,7 @@ class Funnel extends Component {
         let _filteredList = [];
         let minus = 1;
 
-        if (groupByAttr == 'funnel_entry_page') {
+        if (groupByAttr == 'funnel_step_name') {
             minus = -1;
             // analytics = analytics.filter(o => o.device == this.state.deviceCategory && o.channel == this.state.channel);
         }
@@ -302,12 +322,22 @@ class Funnel extends Component {
                     return o.usertype == 'New Visitor';
                 });
 
-                let weight = 0;
+                let weight = 0, landWeight = 0;
+                let flag1 = false, flag2 = false;
                 for (let k in this.state.sortWeight) {
                     if (!this.state.sortWeight.hasOwnProperty(k)) continue;
 
                     if (key.toLowerCase().includes(k)) {
                         weight = this.state.sortWeight[k];
+                        flag1 = true;
+                    }
+
+                    if (this.state.landingPage.toLowerCase().includes(k)) {
+                        landWeight = this.state.sortWeight[k];
+                        flag2 = true;
+                    }
+
+                    if (flag1 && flag2) {
                         break;
                     }
                 }
@@ -318,82 +348,142 @@ class Funnel extends Component {
                     'weight': weight,
                     'label': this.jsUcfirst(key),
                     'sessions_total': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage)
                             return parseFloat(s.sessions_total, 10);
                         return 0;
                     }),
                     'sessions_purchase': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 7 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_purchase, 10);
                         return 0;
                     }),
                     'sessions_homepage': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 1 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_homepage, 10);
                         return 0;
                     }),
                     'sessions_shop': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 2 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_shop, 10);
                         return 0;
                     }),
                     'sessions_product': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 3 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_product, 10);
                         return 0;
                     }),
                     'sessions_addtobag': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 4 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_addtobag, 10);
                         return 0;
                     }),
                     'sessions_shipping': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 5 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_shipping, 10);
                         return 0;
                     }),
                     'sessions_billing': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 6 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.sessions_billing, 10);
                         return 0;
                     }),
                     'users_total': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage)
                             return parseFloat(s.users_total, 10);
                         return 0;
                     }) * minus,
                     'users_purchase': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 7 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_purchase, 10);
                         return 0;
                     }) * minus,
                     'users_homepage': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 1 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_homepage, 10);
                         return 0;
                     }) * minus,
                     'users_shop': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 2 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_shop, 10);
                         return 0;
                     }) * minus,
                     'users_product': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 3 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_product, 10);
                         return 0;
                     }) * minus,
                     'users_addtobag': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 4 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_addtobag, 10);
                         return 0;
                     }) * minus,
                     'users_shipping': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 5 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_shipping, 10);
                         return 0;
                     }) * minus,
                     'users_billing': _.sumBy(objs, (s) => {
-                        if (s.device == this.state.deviceCategory && s.channel == this.state.channel)
+                        let funnel_step = 6 - landWeight + 1;
+                        if (s.device == this.state.deviceCategory &&
+                            s.channel == this.state.channel &&
+                            s.funnel_entry_page == this.state.landingPage &&
+                            parseInt(s.funnel_step) == funnel_step)
                             return parseFloat(s.users_billing, 10);
                         return 0;
                     }) * minus
