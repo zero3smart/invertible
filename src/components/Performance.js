@@ -18,6 +18,7 @@ class Performance extends Component {
     constructor(props) {
         super(props);
 
+        /* Crowdbotics */
         let beforeOneWeek = new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
             , day = beforeOneWeek.getDay()
             , diffToMonday = beforeOneWeek.getDate() - day
